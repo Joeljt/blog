@@ -1,0 +1,38 @@
+favicon: http://p5zd0id9p.bkt.clouddn.com/18-3-22/55865119.jpg
+
+
+# Nav Menus
+menu:
+    Now: /
+    Last Days: /archives
+
+# Nav Shortcut Icons
+nav_icons:
+    - ['/images/github.svg', 'https://github.com/JoeLjt']
+    # - ['/images/rss.svg', '/atom.xml']
+    # - ['', '']
+    
+# Friend Links
+friend_links:
+    - ['Blog', 'http://joeljt.top','http://joeljt.top']
+    - ['GitHub', 'https://github.com/Joeljt','https://github.com/Joeljt']
+    - ['JianShu', 'https://www.jianshu.com/u/6b51f840977d','https://www.jianshu.com/u/6b51f840977d']
+
+
+# About
+about_info:
+    name: "Joseph_L"
+    bio: "慢慢来，比较快。"
+    avatar: "http://p5zd0id9p.bkt.clouddn.com/18-3-22/55865119.jpg"
+
+# Comment
+# e.g disqus: seansun
+disqus: JoeLjt
+duoshuo: 
+
+# Analytics
+google_analytics: JoeLjt
+tencent_analytics: 
+ 
+# Copyright Infomation
+startyear: 2018
