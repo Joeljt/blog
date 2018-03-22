@@ -1,0 +1,2 @@
+# blog
+Hexo + Github Pages
