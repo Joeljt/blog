@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 解决可视化工具对于 MySQL 8.0 + 无法连接的问题 · Joe's blog</title><meta name="description" content="解决可视化工具对于 MySQL 8.0 + 无法连接的问题 - Joe Ljt"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="http://p5zd0id9p.bkt.clouddn.com/18-3-22/55865119.jpg"><link rel="stylesheet" href="/css/prontera.css"><link rel="search" type="application/opensearchdescription+xml" href="http://joeljt.top/atom.xml" title="Joe's blog"></head><body><header class="feature-header"><nav class="component-nav"><ul><div class="logo-container"><a href="/"><h2 class="title">Joe's blog</h2></a></div><a href="/" target="_self" class="li component-nav-item"><p>NOW</p></a><a href="/archives" target="_self" class="li component-nav-item"><p>LAST DAYS</p></a><ul class="shortcut-icons"><a href="https://github.com/JoeLjt" target="_blank"><div id="img" src="/images/github.svg" class="icon"></div></a></ul></ul></nav></header><main class="container"><div id="post-container"><div class="post"><article class="post-block"><h1 class="post-title">解决可视化工具对于 MySQL 8.0 + 无法连接的问题</h1><div class="post-info">May 28, 2018</div><div class="post-content"><p>MySQL 8.0 版本去除了 password 字段，改用 authentication_string 字段，导致网上可以搜到的各种问题的各种解决方法完全没有效果。</p>
+<a id="more"></a>
+<p>同时还更改了加密方式，之前版本的加密方式是「mysql_native_password」，8.0 之后的加密规则更改为「caching_sha2_password 」，这里需要把用户密码加密规则更改为原来的加密方式即可。</p>
+<p>具体方法步骤如下，记录备忘：</p>
+<blockquote>
+<p> 打开终端，输入命令</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要注意的是，MySQL 设置的密码中必须至少包含一个大写字母、一个小写字母、一个特殊符号、一个数字，至少 8 个字符；密码是在最开始安装 MySQL 的时候设置的，如果忘记了，上网查询解决方法。</p>
+</blockquote>
+<blockquote>
+<p>输入密码后，进入 &gt;mysql 的命令行模式</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 切换到 mysql 数据库</span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line"># 设置用户密码永不过期</span><br><span class="line">alter user &apos;root&apos;@&apos;localhost&apos; identified by &apos;your pwd&apos; password expire never;</span><br><span class="line"></span><br><span class="line"># 用「mysql_native_password」加密方式更新 root 用户密码</span><br><span class="line">alter user &apos;root&apos;@&apos;localhost&apos; identified with mysql_native_password by &apos;your pwd&apos;;</span><br><span class="line"></span><br><span class="line"># 刷新</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+</div></article></div><div id="disqus_thread"></div></div><script>var disqus_shortname = 'JoeLjt';
+var disqus_identifier = '2018/05/28/解决可视化工具对于 MySQL 8.0 + 无法连接的问题/';
+var disqus_title = '解决可视化工具对于 MySQL 8.0 + 无法连接的问题';
+var disqus_url = 'http://joeljt.top/2018/05/28/解决可视化工具对于 MySQL 8.0 + 无法连接的问题/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//JoeLjt.disqus.com/count.js" async></script></main><footer class="footer-container"><div class="paginator"><a href="/2018/03/09/java中多态的具体应用/" class="next">NEXT</a></div><div class="copyright"><p>© 2018 <a href="http://joeljt.top">Joe Ljt</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/AngryPowman/hexo-theme-prontera" target="_blank">hexo-theme-prontera</a>.</p></div></footer><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"JoeLjt",'auto');ga('send','pageview');</script></body></html>
