@@ -72,7 +72,7 @@ pagination_dir: page
 # prontera
 # material
 # apollo
-theme: prontera
+theme: material
 
 Plugins:
 - hexo-generator-feed
