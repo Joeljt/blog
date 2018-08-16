@@ -1,16 +1,13 @@
 ---
 title: onCreate() 和 onResume() 里获取不到 View 的高度
-date: 2018-08-14
+date: 2018-08-13
 ---
 
+经历过一段时间的开发以后，我们都会发现 onCreate() 和 onResume() 里无法获取到 View 的宽高信息，但是为什么呢？明明 setContentView 了不是吗？今天我们就来看一下这个问题。
 
+<!--more-->
 
-## 为什么 onCreate() 和 onResume() 里获取不到 View 的高度
-
-
-onCreate() 和 onResume() 里获取不到 View 的高度，具体代码如下：
-
-<!-- more -->
+具体代码如下：
 
 ```java
 public class MainActivity extends AppCompatActivity {
