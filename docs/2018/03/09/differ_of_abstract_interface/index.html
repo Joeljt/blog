@@ -21,6 +21,8 @@
     <!-- dns prefetch -->
     <meta http-equiv="x-dns-prefetch-control" content="on">
 
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source"/>
+
 
 
 
@@ -43,7 +45,7 @@
     
     <title>
         
-            解决可视化工具对于 MySQL 8.0 + 无法连接的问题 | 
+            抽象类和接口的区别 | 
         
         Joe&#39;s blog
     </title>
@@ -53,8 +55,8 @@
     <link rel="icon" href="/img/favicon.png">
 
     <meta name="format-detection" content="telephone=no"/>
-    <meta name="description" itemprop="description" content="MySQL 8.0 版本去除了 password 字段，改用 authentication_string 字段，导致网上可以搜到的各种问题的各种解决方法完全没有效果。">
-    <meta name="keywords" content="">
+    <meta name="description" itemprop="description" content="今でもあなたは私の光">
+    <meta name="keywords" content=",java基础">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -77,8 +79,8 @@
 
     <!-- Import CSS -->
     
-        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","/css/material.min.css?Z7a72R1E4SxzBKR/WGctOA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
-        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","/css/style.min.css?MKetZV3cUTfDxvMffaOezg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/material.min.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/style.min.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
 
         
 
@@ -86,7 +88,7 @@
 
     
         
-            <link rel="stylesheet" href="/css/fontawesome.min.css">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/fontawesome.min.css">
         
     
 
@@ -206,20 +208,20 @@
 <!-- Import Material Icons -->
 
 
-    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","/css/material-icons.css?pqhB/Rd/ab0H2+kZp0RDmw==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/material-icons.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
 
 
 
 
     <!-- Import jQuery -->
     
-        <script>lsloader.load("jq_js","/js/jquery.min.js?qcusAULNeBksqffqUM2+Ig==", true)</script>
+        <script>lsloader.load("jq_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/jquery.min.js", true)</script>
     
 
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Joe&#39;s blog">
-    <meta name="msapplication-starturl" content="http://joeljt.top/2018/05/28/解决可视化工具对于 MySQL 8.0 + 无法连接的问题/">
+    <meta name="msapplication-starturl" content="http://joeljt.top/2018/03/09/differ_of_abstract_interface/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Joe&#39;s blog">
@@ -234,15 +236,15 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://joeljt.top/2018/05/28/解决可视化工具对于 MySQL 8.0 + 无法连接的问题/">
+    <meta property="og:url" content="http://joeljt.top/2018/03/09/differ_of_abstract_interface/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="解决可视化工具对于 MySQL 8.0 + 无法连接的问题 | Joe&#39;s blog">
+    <meta property="og:title" content="抽象类和接口的区别 | Joe&#39;s blog">
     <meta property="og:image" content="/img/favicon.png">
-    <meta property="og:description" content="MySQL 8.0 版本去除了 password 字段，改用 authentication_string 字段，导致网上可以搜到的各种问题的各种解决方法完全没有效果。">
-    
+    <meta property="og:description" content="今でもあなたは私の光">
+    <meta property="og:article:tag" content="java基础"> 
 
     
-        <meta property="article:published_time" content="Mon May 28 2018 00:00:00 GMT+0800">
+        <meta property="article:published_time" content="Fri Mar 09 2018 00:00:00 GMT+0800">
         <meta property="article:modified_time" content="Tue Aug 14 2018 18:11:51 GMT+0800">
     
 
@@ -251,7 +253,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://joeljt.top/2018/05/28/解决可视化工具对于 MySQL 8.0 + 无法连接的问题/index.html" />
+        <link rel="canonical" href="http://joeljt.top/2018/03/09/differ_of_abstract_interface/index.html" />
     
 
     <!-- Structured-data for SEO -->
@@ -263,9 +265,9 @@
 {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "http://joeljt.top/2018/05/28/解决可视化工具对于 MySQL 8.0 + 无法连接的问题/index.html",
-    "headline": "解决可视化工具对于 MySQL 8.0 + 无法连接的问题",
-    "datePublished": "Mon May 28 2018 00:00:00 GMT+0800",
+    "mainEntityOfPage": "http://joeljt.top/2018/03/09/differ_of_abstract_interface/index.html",
+    "headline": "抽象类和接口的区别",
+    "datePublished": "Fri Mar 09 2018 00:00:00 GMT+0800",
     "dateModified": "Tue Aug 14 2018 18:11:51 GMT+0800",
     "author": {
         "@type": "Person",
@@ -274,7 +276,7 @@
             "@type": "ImageObject",
             "url": "/img/portrait.jpeg"
         },
-        "description": "慢慢来，比较快。"
+        "description": "今でもあなたは私の光。"
     },
     "publisher": {
         "@type": "Organization",
@@ -284,8 +286,8 @@
             "url": "/img/favicon.png"
         }
     },
-    "keywords": "",
-    "description": "MySQL 8.0 版本去除了 password 字段，改用 authentication_string 字段，导致网上可以搜到的各种问题的各种解决方法完全没有效果。",
+    "keywords": ",java基础",
+    "description": "今でもあなたは私の光",
 }
 </script>
 
@@ -344,7 +346,7 @@
         <p class="header-slogan header-item">
         
             
-                慢慢来，比较快。
+                今でもあなたは私の光。
             
         
         </p>
@@ -360,8 +362,8 @@
             <!-- Pages  -->
             
                 <span class="header-nav-item">
-                    <a href="/about" title="About">
-                        <span>About</span>
+                    <a href="/tags" title="归档">
+                        <span>归档</span>
                     </a>
                 </span>
             
@@ -459,24 +461,53 @@
     
         <div class="post-content_wrapper">
             <p class="post-title">
-                解决可视化工具对于 MySQL 8.0 + 无法连接的问题
+                抽象类和接口的区别
             </p>
-            <p>MySQL 8.0 版本去除了 password 字段，改用 authentication_string 字段，导致网上可以搜到的各种问题的各种解决方法完全没有效果。</p>
-<a id="more"></a>
-<p>同时还更改了加密方式，之前版本的加密方式是「mysql_native_password」，8.0 之后的加密规则更改为「caching_sha2_password 」，这里需要把用户密码加密规则更改为原来的加密方式即可。</p>
-<p>具体方法步骤如下，记录备忘：</p>
-<blockquote>
-<p> 打开终端，输入命令</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>需要注意的是，MySQL 设置的密码中必须至少包含一个大写字母、一个小写字母、一个特殊符号、一个数字，至少 8 个字符；密码是在最开始安装 MySQL 的时候设置的，如果忘记了，上网查询解决方法。</p>
-</blockquote>
-<blockquote>
-<p>输入密码后，进入 &gt;mysql 的命令行模式</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 切换到 mysql 数据库</span><br><span class="line">use mysql;</span><br><span class="line"></span><br><span class="line"># 设置用户密码永不过期</span><br><span class="line">alter user &apos;root&apos;@&apos;localhost&apos; identified by &apos;your pwd&apos; password expire never;</span><br><span class="line"></span><br><span class="line"># 用「mysql_native_password」加密方式更新 root 用户密码</span><br><span class="line">alter user &apos;root&apos;@&apos;localhost&apos; identified with mysql_native_password by &apos;your pwd&apos;;</span><br><span class="line"></span><br><span class="line"># 刷新</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+            <p>先来一个问题，java中允许多继承吗？</p>
+<h2 id="抽象类-单继承"><a href="#抽象类-单继承" class="headerlink" title="抽象类 - 单继承"></a>抽象类 - 单继承</h2><ul>
+<li>关键字为abstract, extends, 被类所继承</li>
+<li>不可以被final修饰</li>
+<li>抽象方法不可以被private修饰，但其他三个不受限制</li>
+<li>抽象方法一定存在于抽象类中，但是抽象类中不一定有抽象方法</li>
+<li>抽象类的子类必须全部重写抽象方法，如果只重写部分抽象方法，则该子类同样为抽象方法</li>
+<li>抽象类中不一定全部都是抽象方法，方法可以有方法体</li>
+<li>抽象类不可以实例化对象</li>
+<li>抽象类可以实现接口，因为接口的内容也都是抽象的</li>
+</ul>
+<h2 id="接口-多实现"><a href="#接口-多实现" class="headerlink" title="接口 - 多实现"></a>接口 - 多实现</h2><ul>
+<li>关键字为interface, implements, 被类所实现</li>
+<li>同样不可以被final修饰</li>
+<li>接口只允许三种成员存在：<ol>
+<li>公共的静态常量 public final static</li>
+<li>公共的抽象方法 public abstract</li>
+<li>静态内部类 static class</li>
+</ol>
+</li>
+<li>由上可知，接口的作用域必须为public</li>
+<li>接口的抽象方法也必须全部被实现类所重写，否则实现类为抽象类</li>
+<li>不同的接口之间为继承关系，而且可以多继承</li>
+<li>接口不可以实例化对象</li>
+<li>接口不可以继承抽象类，因为抽象类中有可能存在非抽象方法，与接口的概念相悖</li>
+</ul>
+<h2 id="二者区别"><a href="#二者区别" class="headerlink" title="二者区别"></a>二者区别</h2><ul>
+<li>每个类只能继承一个抽象类，但是可以实现多个接口</li>
+<li>抽象类可以有非抽象方法，接口全部为抽象方法</li>
+<li>从作用域角度看，抽象类中抽象方法不能为private，而接口强制为public abstract</li>
+<li>抽象类可以实现接口，但是接口不能继承抽象类</li>
+<li>不同的接口可以多继承，但是不同的抽象类只能单继承</li>
+</ul>
+<p>以上。</p>
 
+            
+                <blockquote>
+                    <p>
+                         
+                            转载请注明出处
+                        
+                        <br>
+                        Link to this article:  http://joeljt.top/2018/03/09/differ_of_abstract_interface/
+                    </p>
+                </blockquote>
             
         </div>
     
@@ -498,7 +529,7 @@
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
-        <a href="/2018/08/12/字体变色效果实现分析/" id="post_nav-newer" class="prev-content">
+        <a href="/2018/05/28/bug_of_mysql/" id="post_nav-newer" class="prev-content">
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
                 <i class="material-icons">arrow_back</i>
             </button>
@@ -512,7 +543,7 @@
 
     <!-- Next Nav -->
     
-        <a href="/2018/03/09/java中多态的具体应用/" id="post_nav-older" class="next-content">
+        <a href="/2018/03/09/polymorphism_of_java/" id="post_nav-older" class="next-content">
             Older
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
@@ -539,15 +570,15 @@
 
                     <!-- Import JS File -->
 
-    <script>lsloader.load("lazyload_js","/js/lazyload.min.js?1BcfzuNXqV+ntF6gq+5X3Q==", true)</script>
+    <script>lsloader.load("lazyload_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/lazyload.min.js", true)</script>
 
 
 
-    <script>lsloader.load("js_js","/js/js.min.js?V/53wGualMuiPM3xoetD5Q==", true)</script>
+    <script>lsloader.load("js_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/js.min.js", true)</script>
 
 
 
-    <script>lsloader.load("np_js","/js/nprogress.js?pl3Qhb9lvqR1FlyLUna1Yw==", true)</script>
+    <script>lsloader.load("np_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/nprogress.js", true)</script>
 
 
 <script type="text/ls-javascript" id="NProgress-script">

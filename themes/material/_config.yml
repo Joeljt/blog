@@ -34,7 +34,7 @@ scheme: Isolation
 
 # UI & UX: slogan, color, effect
 uiux:
-    slogan: "今でもあなたは私の光"
+    slogan: "今でもあなたは私の光。"
     theme_color: "#0097A7"
     theme_sub_color: "#00838F"
     hyperlink_color: "#00838F"
@@ -99,7 +99,7 @@ card_elevation: 2
 # Copyright
 # Specify the date when the site was setup.
 #    For example, if you set it as 2015, then footer will show '© 2015 - 2017'
-copyright_since:
+copyright_since: 2016
 
 # Footer Text
 # You can specify the text you want to show in footer, HTML tag is supported.
@@ -143,7 +143,7 @@ hanabi:
 #   For example, you can setup a CC license as:
 #       'This blog is under a <a href="/creativecommons.html" target="_blank">CC BY-NC-SA 3.0 Unported License</a>'
 # You can also use Front-Matter `license` to override this setting.
-license: 
+license: 转载请注明出处
 
 # ---------------------------------------------------------------
 # Menu Settings
@@ -201,16 +201,16 @@ sidebar:
         icon: chrome_reader_mode
         divider: false
     pages:
-        About:
-            link: "/about"
+        归档:
+            link: "/tags"
             icon: person
             divider: false
     article_num:
-        use: false
+        use: true
         divider: false
     footer:
         divider: true
-        theme: true
+        theme: false
         support: false
         feedback: false
         material: false
@@ -283,12 +283,13 @@ busuanzi:
 # Set a CDN for the files src you want to customize. The url should with protocol.
 # Default(empty) will load the files from the origin server.
 vendors:
+
 # MaterialCDN
 #   You can load theme unique files from your private cdn or oss.
 #   The new src will have the base domain you configured below.
 #   For example
 #       materialcdn: https://cdn.jsdelivr.net/npm/hexo-material@1.4.0/source
-    materialcdn:
+    materialcdn: https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source
 
 # Third party library
 #   You can load these files from public cdn.
