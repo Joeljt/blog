@@ -1,5 +1,5 @@
 ---
-thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-25/78521256.jpg
+thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-30/54395897.jpg
 title: Java 中的多线程
 tags: [读书笔记, Efficient.Android.Threading]
 date: 2018-08-25
