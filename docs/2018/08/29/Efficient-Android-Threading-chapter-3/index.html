@@ -249,7 +249,7 @@ Efficient.Android.Threading 第三章读书笔记
 
     
         <meta property="article:published_time" content="Wed Aug 29 2018 00:00:00 GMT+0800">
-        <meta property="article:modified_time" content="Thu Aug 30 2018 08:22:42 GMT+0800">
+        <meta property="article:modified_time" content="Thu Aug 30 2018 12:45:24 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -272,7 +272,7 @@ Efficient.Android.Threading 第三章读书笔记
     "mainEntityOfPage": "http://joeljt.top/2018/08/29/Efficient-Android-Threading-chapter-3/index.html",
     "headline": "Android 系统中的线程",
     "datePublished": "Wed Aug 29 2018 00:00:00 GMT+0800",
-    "dateModified": "Thu Aug 30 2018 08:22:42 GMT+0800",
+    "dateModified": "Thu Aug 30 2018 12:45:24 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "joe",
@@ -537,7 +537,8 @@ Process.setThreadPriority(int threadId, int priority);
 <p>如图所示，如果某个进程执行在前台页面或者其他前台进程中，那么该进程创建的线程就会属于前台组，同时得到绝大部分的执行时间；而剩下的时间就会被分配给后台组来执行任务。</p>
 <p>当用户进行应用切换操作时，某个线程的控制组也会实时跟着更新：按下 Home 键时，原本的前台进程会退居后台，其内部线程也会进入后台控制组；而原来的后台组也会来到前台，占据大部分的 cpu 执行时间。</p>
 <p>这种方式极大的提高了前台应用的执行效率，一定程度上也降低了后台应用抢占系统资源的可能性，从而提高应用的性能。</p>
-<p>尽管控制组可以一定程度上避免后台进程过分抢占资源，但是用户仍然可以在后台进程中创建大量线程来和 UI 线程抢占 cpu 资源。由于其在主线程创建，所以那些子线程与 UI 线程有着同样的优先级和控制组，所以这部分线程会极大的威胁到 UI 线程的正确执行。因此，有时候用户创建大量的后台进程来处理任务，本意可能是不影响 UI 线程正常工作，但是很有可能会适得其反。为解决这个问题，开发者可以通过将后台线程与其创建时的控制组，也就是 UI 线程所在的控制组，进行解耦分离。这个过程可以通过给线程设置足够低的优先级来实现，这样一来，这些后台线程会永远属于后台控制组，即使是其所在的进程当前是处于前台界面展示的。</p>
+<p>尽管控制组可以一定程度上避免后台应用进程过分抢占资源，但是用户仍然可以在后台进程中创建大量线程来和 UI 线程抢占 cpu 资源。由于其在主线程创建，所以那些子线程与 UI 线程有着同样的优先级和控制组，所以这部分线程会极大的威胁到 UI 线程的正确执行。因此，有时候用户创建大量的后台进程来处理任务，本意可能是不影响 UI 线程正常工作，但是很有可能会适得其反。</p>
+<p>像我们之前说到的，前台组和后台组是根据当前应用是否处于用户可见来界定划分的，也就是说，用户可见的应用程序中的后台线程，也是属于前台组的，会获得大部分的执行机会。在这种情况下，大量的后台线程就会影响到 UI 线程的工作，为解决这个问题，开发者可以通过将后台线程与其创建时的控制组，也就是 UI 线程所在的控制组，进行解耦分离。这个过程可以通过给线程设置足够低的优先级来实现，这样一来，这些后台线程会永远属于后台控制组，即使是其所在的进程当前是处于前台界面展示的。</p>
 <pre><code class="java">// 这个方法不但可以降低优先级；
 // 还能保证当前线程与进程解耦分离，保证其永远处于后台控制组
 Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
