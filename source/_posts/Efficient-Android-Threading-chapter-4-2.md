@@ -1,11 +1,11 @@
 ---
-thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-30/53348155.jpg
-title: 线程间通信 [下篇]
+thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-30/57038989.jpg
+title: 线程间通信 下篇
 tags: [读书笔记, Efficient.Android.Threading]
 date: 2018-09-09
 ---
 
-> Efficient.Android.Threading 第四章读书笔记 [下篇]
+> Efficient.Android.Threading 第四章读书笔记 下篇
 
 <!--more-->
 
