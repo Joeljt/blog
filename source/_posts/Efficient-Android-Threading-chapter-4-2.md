@@ -120,3 +120,129 @@ public class LooperActivity extends Activity {
 
 如果当前 Looper 获取消息时，消息队列中还没有消息穿越过 `dispatch barrier` ，此时消费者线程就会阻塞，直到有消息越过 `dispatch barrier` 。而生产者线程可以在任何时间、任意位置插入消息，因为消息列表的排列只和消息发送的时间有关系，如果需要插入一条立即发送的消息，则即使消息队列中有一百条待发送的消息，但它们都是一分钟后才发送，那刚插入的这条消息也会在链表的首位，也就是下一个被分发的消息。
 
+##### MessageQueue.IdleHandler
+
+正常来讲，如果 Looper 获取不到应分发的消息时，线程就会阻塞等待；但是除了干等以外，还可以将这段时间利用起来，用来执行一些其他的任务。而这个任务则由 `android.os.MessageQueue.IdleHandler` 来完成。
+
+```java
+/**
+ * 当线程等待新消息，即将进入阻塞（闲置）状态时的回调接口
+ */
+public static interface IdleHandler {  
+    boolean queueIdle();
+}
+
+// 具体使用：
+// 获取当前线程的消息队列
+MessageQueue myQueue = Looper.myQueue();
+// 声明一个 IdleHandler 对象
+MessageQueue.IdleHandler idleHandler = new MessageQueue.IdleHandler() {
+    @Override
+    public boolean queueIdle() {
+        return false;
+    }
+};
+// 与消息队列进行绑定
+myQueue.addIdleHandler(idleHandler);
+// 与消息队列解除绑定
+myQueue.removeIdleHandler(idleHandler);
+
+```
+
+当消息队列检测到分发消息的空闲时间时，它会唤醒所有注册到当前消息队列的 IdleHandler 实例，并调用他们的 `queueIdle` 方法，而具体的回调由应用自身来进行实现。
+
+ `queueIdle` 方法返回值为布尔类型：
+
+- true
+
+  当前 IdleHandler 实例保持存活，下次再有 time slots 时，MessageQueue 还会唤醒该实例
+
+- false
+
+  当前 IdleHandler 实例不再存活，处理完消息后就会主动调用 MessageQueue.removeIdleHandler() 将该实例与 MessageQueue 解绑
+
+##### 使用 IdleHandler 来终止闲置线程的运行
+
+假定现在有多个生产者线程要连续不断的向消费者线程发送消息，那就可以在消费者线程将所有任务的处理完以偶胡，使用 IdleHandler 来终止线程的执行，从而保证该线程对象不会在内存中游荡。
+
+在这种情况下使用 IdleHandler ，就不用追踪最后一条插入队列的消息，以期得到回收该线程的确切时间。
+
+不过这种场景只适用于生产者线程连续不断地向消费者线程插入消息，从而保证在处理完所有消息之前，消费者线程都没有 time slots.
+
+```java
+public class ConsumeAndQuitThreadActivity extends Activity {
+    
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        final ConsumeAndQuitThread consumeAndQuitThread = new ConsumeAndQuitThread();
+        consumeAndQuitThread.start();
+        for (int i = 0; i < 10; i++) {
+            // 由多个线程并发向消费者线程发送消息，随机模拟发送的时间
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < 10; i++) {
+                        SystemClock.sleep(new Random().nextInt(10));
+                        consumeAndQuitThread.enqueueData(i);
+                    }
+                }
+            }).start();
+        }
+    }
+
+    /**
+     * 此线程为绑定了 Looper 对象的消费者线程，接收生产者线程的消息并进行处理；
+     * 处理完消息后，会终止 Looper.loop() 方法，结束线程的执行
+     */
+    private static class ConsumeAndQuitThread extends Thread implements MessageQueue.IdleHandler {
+
+        private static final String THREAD_NAME = "ConsumeAndQuitThread";
+
+        public Handler mConsumerHandler;
+        private boolean mIsFirstIdle = true;
+
+        public ConsumeAndQuitThread() {
+            super(THREAD_NAME);
+        }
+
+        @Override
+        public void run() {
+            Looper.prepare();
+
+            mConsumerHandler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    // Consume data
+                }
+            };
+            // 1. 为当前线程初始化 Looper，并为该线程的消息队列绑定 IdleHandler 对象
+            Looper.myQueue().addIdleHandler(this);
+            Looper.loop();
+        }
+
+
+        @Override
+        public boolean queueIdle() {
+            // 2. 第一次 queueIdle() 的调用会发生在接收消息之前
+            // 因此需要让首次调用返回 true，从而保证此对象仍然与消息队列绑定
+            if (mIsFirstIdle) { 
+                mIsFirstIdle = false;
+                return true;
+            }
+            // 3. 结束消费者线程的执行
+            mConsumerHandler.getLooper().quit();
+            return false;
+        }
+
+        public void enqueueData(int i) {
+            mConsumerHandler.sendEmptyMessage(i);
+        }
+    }
+}
+```
+
+
+
+##### Message
+
