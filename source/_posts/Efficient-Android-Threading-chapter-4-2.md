@@ -246,3 +246,84 @@ public class ConsumeAndQuitThreadActivity extends Activity {
 
 ##### Message
 
+Message 是一个容器类，可以承载各种类型的数据或者一个 Runnable 对象，但是不能同时携带二者。所携带的数据会在消费者线程被处理，但任务则会在消息分发时直接得到执行，而不需要调用者做其他额外的工作。
+
+正常来讲，Message 的插入由 Handler 来完成，因为它在插入消息时有更多的选择，更加灵活；但是实际上每条消息对象都知道自己对应的处理器是谁，也就是知道自己对应的 Handler 对象，所以一条消息可以自己实现入队操作。
+
+```java
+// 通过 obtain() 传递一个 Handler 对象进去，赋值给 Message.target 属性
+Message m = Message.obtain(handler, runnbale);
+m.sendToTarget();
+
+public void sendToTarget() {
+    // target 是 Handler 对象，此方法会调用 Handler 的 sendMessage 方法
+	target.sendMessage(this);
+}
+```
+
+如之前所说，Message 可以携带数据或者任务，具体如下图所示：
+
+![](http://p5zd0id9p.bkt.clouddn.com/18-11-14/7124044.jpg)
+
+消息队列可以包含任何数据和任务消息的组合，消费者线程具体在处理消息的时候，也仅仅是按照消息的排序顺序，而不和消息的类型有任何关系。如果消息携带的是数据，那消费者线程就会在 handleMessage 中处理数据；如果消息携带的是任务，则该 Runnable 的 run 方法则会在消费者线程得到执行，但是不会再触发 handleMessage 方法的回调。
+
+Message 的生命周期大概可以分为四个方面：初始化，等待，分发，回收。需要注意的是，系统并没有对消息的状态进行监听，尽管这在技术上也是可行的，所以应用在处理消息不该对该消息的当前状态做出任何假设。
+
+- Initialized
+
+  在初始化状态下，应用程序可以使用以下方法来创建 Message 对象：
+
+  - 使用构造器初始化
+
+    ```java
+    Message m = new Message();
+    ```
+
+  - 工厂方法
+
+    - 空消息
+
+      ```java
+      Message m = Message.obtain();
+      ```
+
+    - 数据消息
+
+      ```java
+      Message m = Message.obtain(Handler h);
+      Message m = Message.obtain(Handler h, int what);
+      Message m = Message.obtain(Handler h, int what, Object o);
+      Message m = Message.obtain(Handler h, int what, int arg1, int arg2); 
+      Message m = Message.obtain(Handler h, int what, int arg1, int arg2, Object o);
+      ```
+
+    - 任务消息
+
+      ```java
+      Message m = Message.obtain(Handler h, Runnable task);
+      ```
+
+    - 复制构造器
+
+      ```java
+      Message m = Message.obtain(Message originalMsg);
+      ```
+
+- Pending
+
+  消息已经被插入消息队列中，但还没到发送时间，正在等待分发
+
+- Disptached
+
+  在这个阶段，Looper 已经从消息队列中取出了消息，消息队列也将其移除。Looper 在 loop 方法中，会通过访问 Message.target 属性，来获取到该消息对应的 Handler ，然后将消息发送到对应的回调中进行处理。
+
+- Recycled
+
+  在这个阶段，Message 的状态被清除，该实例也回到了消息池中等待复用。在消费者线程完成数据处理后，Looper 负责 Message 的回收工作。这个回收过程由虚拟机来完成，而不应该由应用程序来主动处理。
+
+  > 需要注意的是，一旦消息入队后，其携带的数据就不应该再被更改。理论上来讲，在消息被分发之前，对数据做出的更改都是有效的。但由于 Handler 机制在设计之初就没有对 Message 的处理状态进行监听，因此调用者正在对数据进行更改时，消费者线程正在处理数据，从而导致线程安全的问题。而如果该消息对象已经被回收了，问题则会更加严重，因为该对象回到消息池后，会在之后被应用程序所复用，有可能会携带之前的数据到新的消息队列中。
+
+
+
+##### Looper
+
