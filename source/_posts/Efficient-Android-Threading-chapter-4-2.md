@@ -2,7 +2,7 @@
 thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-30/57038989.jpg
 title: 线程间通信 下篇
 tags: [读书笔记, Efficient.Android.Threading]
-date: 2018-09-09
+date: 2018-10-09
 ---
 
 > Efficient.Android.Threading 第四章读书笔记 下篇
@@ -326,4 +326,47 @@ Message 的生命周期大概可以分为四个方面：初始化，等待，分
 
 
 ##### Looper
+
+`android.os.Looper` 复杂将队列中的消息分发给对应的 Handler 去处理。所有越过分发栅栏的消息都可以被 Looper 所分发。所有待分发的消息一定是越过分发栅栏的，当没有消息待分发时，消费线程则会阻塞，直至有消息等待处理。
+
+消费线程并不直接与消息队列发生关系，而是通过 Looper 作为中间者来协调消息的分发与处理：消费电车绑定 Looper，而 Looper 会绑定一个 MessageQueue。默认只有 UI 线程自带 Looper ，其他子线程需要调用者显式声明 Looper 。
+
+```java
+new Thread() {
+    @Override
+    public void run() {
+        // prepare() 方法会初始化一个消息队列，并将其与当前线程绑定
+        // 在此时，该消息队列已经可以插入消息，但是无法分发到消费线程处理
+        Looper.prepare();
+        
+        // ... ...
+        
+        // 此方法为一个 blocking call，确保 run() 方法不会结束执行
+        // 当 run() 方法阻塞的时候，Looper 可以循环消息队列，然后向消费线程分发消息
+        Looper.loop();
+    }
+}.start();
+```
+
+一个线程只能绑定一个 Looper，而 Looper 会绑定一个 MessageQueue，也就是说一个线程只能有一个消息队列；这也就保证了无论多少工作线程向主线程发送消息，主线程也只能按照一定顺序来处理消息。因此，当前执行的消息处理时间的长短会影响到之后的消息，我们在实际使用时，应该规避处理耗时过长的消息。
+
+##### Looper 的终止
+
+- quit()
+
+  丢弃消息队列中所有未分发的消息，不管其有没有越过分发栅栏
+
+- quitSafely()
+
+  丢弃还没越过分发栅栏的消息，Looper 会等到已经处于待分发状态的消息正确分发后再结束
+
+终止 Looper 并不会终止线程的执行，它只是将 loop() 方法结束了；但需要注意的是，终止 Looper 后此线程将不再是 Looper 线程，既不能重新绑定新的 Looper ，也无法唤醒已经终止的 Looper。调用 Looper.prepare() 会抛异常，提示已经绑定；重新调用 Looper.loop() 会进入阻塞状态，但是消息队列中的消息不会再得到分发。
+
+##### UI 线程的 Looper
+
+UI 线程是唯一一个自带 Looper 的线程，其与其他线程有以下几点不同：
+
+- 在程序任何位置都可以通过调用 Looper.getMainLooper() 来获取 UI Looper
+- UI 线程的 Looper 不能被终止
+- Java 虚拟机通过 Looper.prepareMainLooper() 为 UI 线程初始化 Looper，此动作只能执行一次，因此尝试将 main looper 与其他子线程关联会抛异常。
 
