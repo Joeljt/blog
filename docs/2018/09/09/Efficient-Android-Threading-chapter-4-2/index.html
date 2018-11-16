@@ -223,7 +223,7 @@ Efficient.Android.Threading 第四章读书笔记 下篇
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Joe&#39;s blog">
-    <meta name="msapplication-starturl" content="http://joeljt.top/2018/10/09/Efficient-Android-Threading-chapter-4-2/">
+    <meta name="msapplication-starturl" content="http://joeljt.top/2018/09/09/Efficient-Android-Threading-chapter-4-2/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Joe&#39;s blog">
@@ -238,7 +238,7 @@ Efficient.Android.Threading 第四章读书笔记 下篇
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://joeljt.top/2018/10/09/Efficient-Android-Threading-chapter-4-2/">
+    <meta property="og:url" content="http://joeljt.top/2018/09/09/Efficient-Android-Threading-chapter-4-2/">
     <meta property="og:type" content="blog">
     <meta property="og:title" content="线程间通信 下篇 | Joe&#39;s blog">
     <meta property="og:image" content="/img/favicon.png">
@@ -248,8 +248,8 @@ Efficient.Android.Threading 第四章读书笔记 下篇
     <meta property="og:article:tag" content="读书笔记"> <meta property="og:article:tag" content="Efficient.Android.Threading"> 
 
     
-        <meta property="article:published_time" content="Tue Oct 09 2018 00:00:00 GMT+0800">
-        <meta property="article:modified_time" content="Thu Nov 15 2018 15:25:33 GMT+0800">
+        <meta property="article:published_time" content="Sun Sep 09 2018 00:00:00 GMT+0800">
+        <meta property="article:modified_time" content="Fri Nov 16 2018 14:44:29 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -257,7 +257,7 @@ Efficient.Android.Threading 第四章读书笔记 下篇
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://joeljt.top/2018/10/09/Efficient-Android-Threading-chapter-4-2/index.html">
+        <link rel="canonical" href="http://joeljt.top/2018/09/09/Efficient-Android-Threading-chapter-4-2/index.html">
     
 
     <!-- Structured-data for SEO -->
@@ -269,10 +269,10 @@ Efficient.Android.Threading 第四章读书笔记 下篇
 {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "http://joeljt.top/2018/10/09/Efficient-Android-Threading-chapter-4-2/index.html",
+    "mainEntityOfPage": "http://joeljt.top/2018/09/09/Efficient-Android-Threading-chapter-4-2/index.html",
     "headline": "线程间通信 下篇",
-    "datePublished": "Tue Oct 09 2018 00:00:00 GMT+0800",
-    "dateModified": "Thu Nov 15 2018 15:25:33 GMT+0800",
+    "datePublished": "Sun Sep 09 2018 00:00:00 GMT+0800",
+    "dateModified": "Fri Nov 16 2018 14:44:29 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "joe",
@@ -759,6 +759,76 @@ Message m = Message.obtain(Handler h, int what, int arg1, int arg2, Object o);
 <li>UI 线程的 Looper 不能被终止</li>
 <li>Java 虚拟机通过 Looper.prepareMainLooper() 为 UI 线程初始化 Looper，此动作只能执行一次，因此尝试将 main looper 与其他子线程关联会抛异常。</li>
 </ul>
+<h5 id="Handler"><a href="#Handler" class="headerlink" title="Handler"></a>Handler</h5><p>Android 系统中使用 <code>android.os.Handler</code> 来协调工作线程与 UI 线程的调度，消息的插入和处理都由它来完成，具体工作包括以下几点：</p>
+<ul>
+<li>消息的创建</li>
+<li>插入消息</li>
+<li>在消费线程中处理消息</li>
+<li>管理消息队列中的消息</li>
+</ul>
+<p>Handler 的工作需要 Looper 和 MQ 的支持，因此 Handler 在声明时就应该绑定 Looper 对象：</p>
+<ol>
+<li><p>构造器中不接收 Looper 的，该 Handler 与当前线程绑定</p>
+<pre><code class="java">// 这种与当前线程绑定的，如果当前不是 Looper 线程，就会抛出异常
+new Handler();
+new Handler(Handler.Callback);
+</code></pre>
+</li>
+<li><p>构造器明确需要传入 Looper 对象的</p>
+<pre><code class="java">new Handler(Looper);
+new Handler(Looper, Handler.Callback);
+</code></pre>
+</li>
+</ol>
+<p>一个线程可以有多个 Handler ，不同 Handler 发送的消息可以在消息队列中共存，并不会有什么冲突；具体在分发的时候又会通过 Message 的 target 属性发送回该消息对应的 Handler：</p>
+<p><img src="http://p5zd0id9p.bkt.clouddn.com/18-11-16/56491345.jpg" alt=""></p>
+<blockquote>
+<p>多个 Handler 发出的消息也不会导致并发，Message 的处理仍然是按顺序执行的。</p>
+</blockquote>
+<h5 id="Message-creation"><a href="#Message-creation" class="headerlink" title="Message creation"></a>Message creation</h5><p>Handler 可以通过以下几个包装方法直接获取 Message 对象，而这些对象则会和 Handler 发生绑定关系：</p>
+<pre><code class="java">// 这些方法内部都会调用 Message.obtain() 方法，并将 Handler 传入，从而产生绑定关系
+Message obtainMessage(int what, int arg1, int arg2)
+Message obtainMessage()
+Message obtainMessage(int what, int arg1, int arg2, Object obj) 
+Message obtainMessage(int what)
+Message obtainMessage(int what, Object obj)
+</code></pre>
+<h5 id="Message-insertion"><a href="#Message-insertion" class="headerlink" title="Message insertion"></a>Message insertion</h5><p>根据消息类型的不同，Handler 插入消息的方式也略有差别。</p>
+<pre><code class="java">// 携带任务的消息，使用 postXxx() 方法
+boolean post(Runnable r)
+boolean postAtFrontOfQueue(Runnable r)
+boolean postAtTime(Runnable r, Object token, long uptimeMillis) 
+boolean postAtTime(Runnable r, long uptimeMillis)
+boolean postDelayed(Runnable r, long delayMillis)
+
+// 携带数据的消息或者空消息，使用 sendXxx() 方法
+// 默认，立即分发
+boolean sendMessage(Message msg) 
+// 下一个分发
+boolean sendMessageAtFrontOfQueue(Message msg)
+// 指定某个确切的时间进行分发
+boolean sendMessageAtTime(Message msg, long uptimeMillis) 
+boolean sendMessageDelayed(Message msg, long delayMillis)
+boolean sendEmptyMessage(int what)
+boolean sendEmptyMessageAtTime(int what, long uptimeMillis) 
+boolean sendEmptyMessageDelayed(int what, long delayMillis)
+</code></pre>
+<p>每条消息都有会有一个 when 属性，用来记录当前消息应该何时被分发；该属性也是唯一一个会影响分发顺序的因素。需要注意的是，尽管我们可以指定确定的时机分发，但是由于之前消息的处理也会影响到后一条消息的分发，因此这个时间还是不确定的。</p>
+<p>向消息队列中插入消息时，有可能导致某些错误的产生：</p>
+<ul>
+<li><p>Message has no Handler</p>
+<p>Message was created from a Message.obtain() method without a specified Handler.</p>
+</li>
+<li><p>Message has already been disptached and is being processed</p>
+<p>The same message instance was inserted twice.</p>
+</li>
+<li><p>Looper has exited</p>
+<p>Message is inserted after Looper.quit() has been called.</p>
+</li>
+</ul>
+<blockquote>
+<p>Looper 在分发消息时，会调用 Handler 的 dispatchMessage 方法。如果此方法被应用程序主动调用，那该消息会在发起调用的线程立即得到执行，而不是在消费线程执行。</p>
+</blockquote>
 
             
                 <blockquote>
@@ -767,7 +837,7 @@ Message m = Message.obtain(Handler h, int what, int arg1, int arg2, Object o);
                             转载请注明出处
                         
                         <br>
-                        Link to this article:  http://joeljt.top/2018/10/09/Efficient-Android-Threading-chapter-4-2/
+                        Link to this article:  http://joeljt.top/2018/09/09/Efficient-Android-Threading-chapter-4-2/
                     </p>
                 </blockquote>
             
@@ -791,13 +861,21 @@ Message m = Message.obtain(Handler h, int what, int arg1, int arg2, Object o);
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
+        <a href="/2018/09/09/Efficient-Android-Threading-chapter-4-1/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
 
     <!-- Section Spacer -->
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
     
-        <a href="/2018/09/09/Efficient-Android-Threading-chapter-4-1/" id="post_nav-older" class="next-content">
+        <a href="/2018/08/29/Efficient-Android-Threading-chapter-3/" id="post_nav-older" class="next-content">
             Older
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">

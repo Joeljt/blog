@@ -2,7 +2,7 @@
 thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-30/57038989.jpg
 title: 线程间通信 下篇
 tags: [读书笔记, Efficient.Android.Threading]
-date: 2018-10-09
+date: 2018-09-09
 ---
 
 > Efficient.Android.Threading 第四章读书笔记 下篇
@@ -370,3 +370,92 @@ UI 线程是唯一一个自带 Looper 的线程，其与其他线程有以下几
 - UI 线程的 Looper 不能被终止
 - Java 虚拟机通过 Looper.prepareMainLooper() 为 UI 线程初始化 Looper，此动作只能执行一次，因此尝试将 main looper 与其他子线程关联会抛异常。
 
+
+
+##### Handler
+
+Android 系统中使用 `android.os.Handler` 来协调工作线程与 UI 线程的调度，消息的插入和处理都由它来完成，具体工作包括以下几点：
+
+- 消息的创建
+- 插入消息
+- 在消费线程中处理消息
+- 管理消息队列中的消息
+
+Handler 的工作需要 Looper 和 MQ 的支持，因此 Handler 在声明时就应该绑定 Looper 对象：
+
+1. 构造器中不接收 Looper 的，该 Handler 与当前线程绑定
+
+   ```java
+   // 这种与当前线程绑定的，如果当前不是 Looper 线程，就会抛出异常
+   new Handler();
+   new Handler(Handler.Callback);
+   ```
+
+2. 构造器明确需要传入 Looper 对象的
+
+   ```java
+   new Handler(Looper);
+   new Handler(Looper, Handler.Callback);
+   ```
+
+一个线程可以有多个 Handler ，不同 Handler 发送的消息可以在消息队列中共存，并不会有什么冲突；具体在分发的时候又会通过 Message 的 target 属性发送回该消息对应的 Handler：
+
+![](http://p5zd0id9p.bkt.clouddn.com/18-11-16/56491345.jpg)
+
+> 多个 Handler 发出的消息也不会导致并发，Message 的处理仍然是按顺序执行的。
+
+##### Message creation
+
+Handler 可以通过以下几个包装方法直接获取 Message 对象，而这些对象则会和 Handler 发生绑定关系：
+
+```java
+// 这些方法内部都会调用 Message.obtain() 方法，并将 Handler 传入，从而产生绑定关系
+Message obtainMessage(int what, int arg1, int arg2)
+Message obtainMessage()
+Message obtainMessage(int what, int arg1, int arg2, Object obj) 
+Message obtainMessage(int what)
+Message obtainMessage(int what, Object obj)
+```
+
+##### Message insertion
+
+根据消息类型的不同，Handler 插入消息的方式也略有差别。
+
+```java
+// 携带任务的消息，使用 postXxx() 方法
+boolean post(Runnable r)
+boolean postAtFrontOfQueue(Runnable r)
+boolean postAtTime(Runnable r, Object token, long uptimeMillis) 
+boolean postAtTime(Runnable r, long uptimeMillis)
+boolean postDelayed(Runnable r, long delayMillis)
+    
+// 携带数据的消息或者空消息，使用 sendXxx() 方法
+// 默认，立即分发
+boolean sendMessage(Message msg) 
+// 下一个分发
+boolean sendMessageAtFrontOfQueue(Message msg)
+// 指定某个确切的时间进行分发
+boolean sendMessageAtTime(Message msg, long uptimeMillis) 
+boolean sendMessageDelayed(Message msg, long delayMillis)
+boolean sendEmptyMessage(int what)
+boolean sendEmptyMessageAtTime(int what, long uptimeMillis) 
+boolean sendEmptyMessageDelayed(int what, long delayMillis)
+```
+
+每条消息都有会有一个 when 属性，用来记录当前消息应该何时被分发；该属性也是唯一一个会影响分发顺序的因素。需要注意的是，尽管我们可以指定确定的时机分发，但是由于之前消息的处理也会影响到后一条消息的分发，因此这个时间还是不确定的。
+
+向消息队列中插入消息时，有可能导致某些错误的产生：
+
+- Message has no Handler
+
+  Message was created from a Message.obtain() method without a specified Handler.
+
+- Message has already been disptached and is being processed
+
+  The same message instance was inserted twice.
+
+- Looper has exited
+
+  Message is inserted after Looper.quit() has been called.
+
+> Looper 在分发消息时，会调用 Handler 的 dispatchMessage 方法。如果此方法被应用程序主动调用，那该消息会在发起调用的线程立即得到执行，而不是在消费线程执行。
