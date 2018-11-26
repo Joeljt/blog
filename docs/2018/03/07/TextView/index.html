@@ -45,7 +45,7 @@
     
     <title>
         
-            java中多态的具体应用 | 
+            自定义 TextView | 
         
         Joe&#39;s blog
     </title>
@@ -56,7 +56,7 @@
 
     <meta name="format-detection" content="telephone=no">
     <meta name="description" itemprop="description" content="今でもあなたは私の光">
-    <meta name="keywords" content=",java基础">
+    <meta name="keywords" content=",android">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -221,7 +221,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Joe&#39;s blog">
-    <meta name="msapplication-starturl" content="http://joeljt.top/2018/03/09/polymorphism-of-java/">
+    <meta name="msapplication-starturl" content="http://joeljt.top/2018/03/07/TextView/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Joe&#39;s blog">
@@ -236,16 +236,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://joeljt.top/2018/03/09/polymorphism-of-java/">
+    <meta property="og:url" content="http://joeljt.top/2018/03/07/TextView/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="java中多态的具体应用 | Joe&#39;s blog">
+    <meta property="og:title" content="自定义 TextView | Joe&#39;s blog">
     <meta property="og:image" content="/img/favicon.png">
     <meta property="og:description" content="今でもあなたは私の光">
-    <meta property="og:article:tag" content="java基础"> 
+    <meta property="og:article:tag" content="android"> 
 
     
-        <meta property="article:published_time" content="Fri Mar 09 2018 00:00:00 GMT+0800">
-        <meta property="article:modified_time" content="Tue Aug 14 2018 18:11:51 GMT+0800">
+        <meta property="article:published_time" content="Wed Mar 07 2018 00:00:00 GMT+0800">
+        <meta property="article:modified_time" content="Mon Nov 26 2018 18:42:37 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -253,7 +253,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://joeljt.top/2018/03/09/polymorphism-of-java/index.html">
+        <link rel="canonical" href="http://joeljt.top/2018/03/07/TextView/index.html">
     
 
     <!-- Structured-data for SEO -->
@@ -265,10 +265,10 @@
 {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "http://joeljt.top/2018/03/09/polymorphism-of-java/index.html",
-    "headline": "java中多态的具体应用",
-    "datePublished": "Fri Mar 09 2018 00:00:00 GMT+0800",
-    "dateModified": "Tue Aug 14 2018 18:11:51 GMT+0800",
+    "mainEntityOfPage": "http://joeljt.top/2018/03/07/TextView/index.html",
+    "headline": "自定义 TextView",
+    "datePublished": "Wed Mar 07 2018 00:00:00 GMT+0800",
+    "dateModified": "Mon Nov 26 2018 18:42:37 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "joe",
@@ -286,7 +286,7 @@
             "url": "/img/favicon.png"
         }
     },
-    "keywords": ",java基础",
+    "keywords": ",android",
     "description": "今でもあなたは私の光",
 }
 </script>
@@ -461,65 +461,161 @@
     
         <div class="post-content_wrapper">
             <p class="post-title">
-                java中多态的具体应用
+                自定义 TextView
             </p>
-            <p>实际使用多态时，关于成员变量和成员函数的调用，在编译期和运行时有所不同，具体代码示例</p>
-<pre><code>// 父类
-public class Parent {
-    public int aInt = -1;
-    public void func1() {
-        System.err.print(&quot; Parent func1 &quot;);
-    }
-    public void func2() {
-        System.err.print(&quot; Parent func2 &quot;);
-    }
-}
-</code></pre><pre><code>// 子类
-public class Child extends Parent {
-    public int aInt = 1;
-    public void func1() {
-        System.err.print(&quot; Child func1 &quot;);
-    }
-    public void func3() {
-        System.err.print(&quot; Child func3 &quot;);
-    }
-}
-</code></pre><h4 id="成员函数"><a href="#成员函数" class="headerlink" title="成员函数"></a>成员函数</h4><pre><code>// test main()
-public static void main(String[] args) {
-    Child child = new Child();
-    child.func1();
-    child.func2();
-    child.func3();
-
-    Parent parent = new Child();
-    parent.func1();
-    parent.func2();
-    parent.func3();
-}
-</code></pre><p>如上所示，将对象声明为Child对象时，三个方法都编译通过，且输入结果如下：</p>
-<pre><code>Child func1
-Parent func2
-Child func3
-</code></pre><p>Child类重写了父类的func1()方法，则在运行时匹配了子类自身的重写方法，即，「运行时遵循右侧声明」。<br>但是，如果将对象声明为Parent对象时，parent.fun3()则会报错，因为「编译期遵循左侧实例」，当前对象被声明为Parent实例，而Parent中没有func3()方法，所以编译不通过。同时也正因为「运行时遵循右侧声明」，所以其运行结果如下：</p>
-<pre><code>Child func1 // 尽管声明为Parent实例，但实际调用Child的方法
-Parent func2
-</code></pre><p>综上所述，在多态使用时，成员函数遵循两个原则，即「编译期遵循左侧实例，运行时遵循右侧声明」</p>
-<h4 id="成员变量"><a href="#成员变量" class="headerlink" title="成员变量"></a>成员变量</h4><pre><code>// test main()
-public static void main(String[] args) {
-    Parent parent = new Child();
-    Child child = new Child();
-    System.err.println(parent.aInt);
-    System.err.println(child.aInt);
-}
-</code></pre><p>运行结果如下：</p>
-<pre><code>-1
-1
-</code></pre><p>可以发现，打印结果与成员函数有所不同。因为如果是成员函数，运行时遵循右侧声明的话，打印结果应该相等，同为1才对。因此，成员变量在多态情境下的使用，无论编译还是运行，通通遵循左侧实例。</p>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
-<li>成员函数<br>编译时遵循左侧实例，运行时遵循右侧声明</li>
-<li>成员变量<br>编译或者运行一律遵循左侧实例</li>
+            <h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><ul>
+<li><p>一个参数</p>
+<p>在代码中初始化时使用</p>
+</li>
+<li><p>两个参数</p>
+<p>在布局文件中使用时，会经过这个方法；第二个参数 <strong>attrs</strong> 就是传入的自定义属性</p>
+</li>
+<li><p>三个参数</p>
+<p>同样是在布局文件中使用，但是当文件中使用到 style 文件时才会使用，第三个参数是 style 文件</p>
+</li>
 </ul>
-<p>其实也比较好理解，编译期间，当前类下不存在的成员函数或成员变量，肯定是无法被实例对象获取到的；<br>而在运行时，java中子类可以重写父类的方法，因此成员函数运行时会正确指向子类的方法，但是，子类并不可以重写父类的变量，当子类与父类有同名变量时，需要使用this和super关键字进行区分。在这种情况下，成员变量的访问则不可能像方法一样使用多态访问，因此只能是遵循左侧的实例了。</p>
+<h3 id="测量规格"><a href="#测量规格" class="headerlink" title="测量规格"></a>测量规格</h3><p>MeasureSpec 是一个 32 位的 int 值，前 2 位表示 SpecMode，后 30 位表示 SpecSize。</p>
+<p>MeasureSpec 通过将 SpecMode 和 SpecSize 打包成一个 int 值来避免过多的对象内存分配，同样在使用到具体的属性时，可以通过解包的方式来获取原始值。</p>
+<pre><code> @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // 具体在测量控件大小时，宽高的 MeasureSpec 都是由父布局一层层传递下来的
+        // MeasureSpec 可以理解为是父 View 对子 View 的的测量要求
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+</code></pre><ul>
+<li><p>MeasureSpec 的三种情况</p>
+<ul>
+<li><p>AT_MOST</p>
+<p>父容器指定了一个可用大小，即 SpecSize，当前子 View 大小不能超过这个值</p>
+<p>对应布局文件中的 wrap_content</p>
+</li>
+<li><p>EXACTLY</p>
+<p>父容器已经测量出 View 所需要的精确大小，子 View 最终的大小就是测量到的值</p>
+<p>对应布局文件中的 match_parent 或者固定数值</p>
+</li>
+<li><p>UNSECIFIED</p>
+<p>一般系统的控件才会使用到这个，自己自定义 View 的话，很少用到</p>
+</li>
+</ul>
+</li>
+<li><p>ScrollView 嵌套 ListView 的解决方法的原理</p>
+<pre><code>public class ListViewForScrollView extends ListView {
+    public ListViewForScrollView(Context context) {
+        super(context);
+    }
+    public ListViewForScrollView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+    public ListViewForScrollView(Context context, AttributeSet attrs,
+        int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
+    @Override
+    /**
+     * 重写该方法，达到使ListView适应ScrollView的效果
+     */
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // 打包方法，重新构造 heightMeasureSpec
+        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE &gt;&gt; 2,
+        MeasureSpec.AT_MOST);
+        super.onMeasure(widthMeasureSpec, expandSpec);
+    }
+}
+
+</code></pre><p>我们知道，Android 的测绘机制是一个递归的流程，从最顶层的开始，依次递归向下测量子 View ，即调用 measureChild() 方法，一层层测量后，最后再测量最外层的 ViewGroup .</p>
+<p>查看 ScrollView 的源码：</p>
+<pre><code>@Override
+    protected void measureChild(View child, int parentWidthMeasureSpec,
+            int parentHeightMeasureSpec) {
+        ViewGroup.LayoutParams lp = child.getLayoutParams();
+
+        int childWidthMeasureSpec;
+        int childHeightMeasureSpec;
+
+        childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec, mPaddingLeft
+                + mPaddingRight, lp.width);
+        final int verticalPadding = mPaddingTop + mPaddingBottom;
+
+        // ScrollView 在具体测量子 View 时，向下传递的测量规格为 MeasureSpec.UNSPECIFIED
+        childHeightMeasureSpec = MeasureSpec.makeSafeMeasureSpec(
+                Math.max(0, MeasureSpec.getSize(parentHeightMeasureSpec) - verticalPadding),
+                MeasureSpec.UNSPECIFIED);
+
+        child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+    }
+
+</code></pre><p>理论上讲，这时候代码会走到 ListView 的 onMeasure() 方法中：</p>
+<pre><code>@Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        int childHeight = 0;
+
+        ... ...
+
+        // 获取 ListView 的高度，此时应该只有一个条目的高度
+        childHeight = child.getMeasuredHeight();
+
+         ... ...
+
+        // 重点就在这里
+        // 如果测量模式为 MeasureSpec.UNSPECIFIED，则最终的高度就是已测量的高度 + padding
+        if (heightMode == MeasureSpec.UNSPECIFIED) {
+            heightSize = mListPadding.top + mListPadding.bottom + childHeight +
+                    getVerticalFadingEdgeLength() * 2;
+        }
+
+        // 如果为 AT_MOST ，则会调用 measureHeightOfChildren() 方法，重新计算 View 高度
+        if (heightMode == MeasureSpec.AT_MOST) {
+            heightSize = measureHeightOfChildren(widthMeasureSpec, 0, NO_POSITION, heightSize, -1);
+        }
+
+        setMeasuredDimension(widthSize, heightSize);
+    }
+
+</code></pre><p>而至于 Integer.MAX_VALUE &gt;&gt; 2，则是因为 SpecSize 是一个 30 位的值，使用 Integer.MAX_VALUE 是希望这个值尽可能的大，在后续为各个条目指定测量模式时，因为传下来的是 AT_MOST, 因此 resultSize 即为传下来的 Integer.MAX_VALUE &gt;&gt; 2，保证每个条目的高度自适应。</p>
+<pre><code class="java">public static int getChildMeasureSpec(int spec, int padding, int childDimension) {
+        int specMode = MeasureSpec.getMode(spec);
+        int specSize = MeasureSpec.getSize(spec);
+
+        int size = Math.max(0, specSize - padding);
+
+        int resultSize = 0;
+        int resultMode = 0;
+
+        switch (specMode) { 
+                // Parent has imposed a maximum size on us
+            case MeasureSpec.AT_MOST:
+                if (childDimension &gt;= 0) {
+                    // Child wants a specific size... so be it
+                    resultSize = childDimension;
+                    resultMode = MeasureSpec.EXACTLY;
+                } else if (childDimension == LayoutParams.MATCH_PARENT) {
+                    // Child wants to be our size, but our size is not fixed.
+                    // Constrain child to not be bigger than us.
+                    resultSize = size;
+                    resultMode = MeasureSpec.AT_MOST;
+                } else if (childDimension == LayoutParams.WRAP_CONTENT) {
+                    // Child wants to determine its own size. It can&#39;t be
+                    // bigger than us.
+                    resultSize = size;
+                    resultMode = MeasureSpec.AT_MOST;
+                }
+                break;
+        }
+
+        //noinspection ResourceType
+        return MeasureSpec.makeMeasureSpec(resultSize, resultMode);
+}
+</code></pre>
+<p>​</p>
+</li>
+</ul>
 
             
                 <blockquote>
@@ -528,7 +624,7 @@ public static void main(String[] args) {
                             转载请注明出处
                         
                         <br>
-                        Link to this article:  http://joeljt.top/2018/03/09/polymorphism-of-java/
+                        Link to this article:  http://joeljt.top/2018/03/07/TextView/
                     </p>
                 </blockquote>
             
@@ -552,7 +648,7 @@ public static void main(String[] args) {
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
-        <a href="/2018/03/09/differ-of-abstract-interface/" id="post_nav-newer" class="prev-content">
+        <a href="/2018/03/09/polymorphism-of-java/" id="post_nav-newer" class="prev-content">
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
                 <i class="material-icons">arrow_back</i>
             </button>
@@ -565,14 +661,6 @@ public static void main(String[] args) {
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
-    
-        <a href="/2018/03/07/TextView/" id="post_nav-older" class="next-content">
-            Older
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
-                <i class="material-icons">arrow_forward</i>
-            </button>
-        </a>
     
 </nav>
 

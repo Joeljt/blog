@@ -45,7 +45,7 @@
     
     <title>
         
-            java中多态的具体应用 | 
+            Android Paint .measureText() VS .getTextBounds() | 
         
         Joe&#39;s blog
     </title>
@@ -55,8 +55,8 @@
     <link rel="icon" href="/img/favicon.png">
 
     <meta name="format-detection" content="telephone=no">
-    <meta name="description" itemprop="description" content="今でもあなたは私の光">
-    <meta name="keywords" content=",java基础">
+    <meta name="description" itemprop="description" content="两个方法可以用来测量文字宽高信息的，只不过 .getTextBounds() 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 .measureText() 则只是返回宽度信息。">
+    <meta name="keywords" content="">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -221,7 +221,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Joe&#39;s blog">
-    <meta name="msapplication-starturl" content="http://joeljt.top/2018/03/09/polymorphism-of-java/">
+    <meta name="msapplication-starturl" content="http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Joe&#39;s blog">
@@ -236,16 +236,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://joeljt.top/2018/03/09/polymorphism-of-java/">
+    <meta property="og:url" content="http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="java中多态的具体应用 | Joe&#39;s blog">
+    <meta property="og:title" content="Android Paint .measureText() VS .getTextBounds() | Joe&#39;s blog">
     <meta property="og:image" content="/img/favicon.png">
-    <meta property="og:description" content="今でもあなたは私の光">
-    <meta property="og:article:tag" content="java基础"> 
+    <meta property="og:description" content="两个方法可以用来测量文字宽高信息的，只不过 .getTextBounds() 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 .measureText() 则只是返回宽度信息。">
+    
 
     
-        <meta property="article:published_time" content="Fri Mar 09 2018 00:00:00 GMT+0800">
-        <meta property="article:modified_time" content="Tue Aug 14 2018 18:11:51 GMT+0800">
+        <meta property="article:published_time" content="Thu Mar 29 2018 00:00:00 GMT+0800">
+        <meta property="article:modified_time" content="Mon Nov 26 2018 18:43:06 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -253,7 +253,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://joeljt.top/2018/03/09/polymorphism-of-java/index.html">
+        <link rel="canonical" href="http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/index.html">
     
 
     <!-- Structured-data for SEO -->
@@ -265,10 +265,10 @@
 {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "http://joeljt.top/2018/03/09/polymorphism-of-java/index.html",
-    "headline": "java中多态的具体应用",
-    "datePublished": "Fri Mar 09 2018 00:00:00 GMT+0800",
-    "dateModified": "Tue Aug 14 2018 18:11:51 GMT+0800",
+    "mainEntityOfPage": "http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/index.html",
+    "headline": "Android Paint .measureText() VS .getTextBounds()",
+    "datePublished": "Thu Mar 29 2018 00:00:00 GMT+0800",
+    "dateModified": "Mon Nov 26 2018 18:43:06 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "joe",
@@ -286,8 +286,8 @@
             "url": "/img/favicon.png"
         }
     },
-    "keywords": ",java基础",
-    "description": "今でもあなたは私の光",
+    "keywords": "",
+    "description": "两个方法可以用来测量文字宽高信息的，只不过 .getTextBounds() 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 .measureText() 则只是返回宽度信息。",
 }
 </script>
 
@@ -461,65 +461,44 @@
     
         <div class="post-content_wrapper">
             <p class="post-title">
-                java中多态的具体应用
+                Android Paint .measureText() VS .getTextBounds()
             </p>
-            <p>实际使用多态时，关于成员变量和成员函数的调用，在编译期和运行时有所不同，具体代码示例</p>
-<pre><code>// 父类
-public class Parent {
-    public int aInt = -1;
-    public void func1() {
-        System.err.print(&quot; Parent func1 &quot;);
-    }
-    public void func2() {
-        System.err.print(&quot; Parent func2 &quot;);
-    }
-}
-</code></pre><pre><code>// 子类
-public class Child extends Parent {
-    public int aInt = 1;
-    public void func1() {
-        System.err.print(&quot; Child func1 &quot;);
-    }
-    public void func3() {
-        System.err.print(&quot; Child func3 &quot;);
-    }
-}
-</code></pre><h4 id="成员函数"><a href="#成员函数" class="headerlink" title="成员函数"></a>成员函数</h4><pre><code>// test main()
-public static void main(String[] args) {
-    Child child = new Child();
-    child.func1();
-    child.func2();
-    child.func3();
+            <p>两个方法可以用来测量文字宽高信息的，只不过 <strong>.getTextBounds()</strong> 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 <strong>.measureText()</strong> 则只是返回宽度信息。</p>
+<a id="more"></a>
+<p>具体使用方法如下：</p>
+<pre><code class="java">final String someText = &quot;Hello. I&#39;m some text!&quot;;
 
-    Parent parent = new Child();
-    parent.func1();
-    parent.func2();
-    parent.func3();
-}
-</code></pre><p>如上所示，将对象声明为Child对象时，三个方法都编译通过，且输入结果如下：</p>
-<pre><code>Child func1
-Parent func2
-Child func3
-</code></pre><p>Child类重写了父类的func1()方法，则在运行时匹配了子类自身的重写方法，即，「运行时遵循右侧声明」。<br>但是，如果将对象声明为Parent对象时，parent.fun3()则会报错，因为「编译期遵循左侧实例」，当前对象被声明为Parent实例，而Parent中没有func3()方法，所以编译不通过。同时也正因为「运行时遵循右侧声明」，所以其运行结果如下：</p>
-<pre><code>Child func1 // 尽管声明为Parent实例，但实际调用Child的方法
-Parent func2
-</code></pre><p>综上所述，在多态使用时，成员函数遵循两个原则，即「编译期遵循左侧实例，运行时遵循右侧声明」</p>
-<h4 id="成员变量"><a href="#成员变量" class="headerlink" title="成员变量"></a>成员变量</h4><pre><code>// test main()
-public static void main(String[] args) {
-    Parent parent = new Child();
-    Child child = new Child();
-    System.err.println(parent.aInt);
-    System.err.println(child.aInt);
-}
-</code></pre><p>运行结果如下：</p>
-<pre><code>-1
-1
-</code></pre><p>可以发现，打印结果与成员函数有所不同。因为如果是成员函数，运行时遵循右侧声明的话，打印结果应该相等，同为1才对。因此，成员变量在多态情境下的使用，无论编译还是运行，通通遵循左侧实例。</p>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
-<li>成员函数<br>编译时遵循左侧实例，运行时遵循右侧声明</li>
-<li>成员变量<br>编译或者运行一律遵循左侧实例</li>
-</ul>
-<p>其实也比较好理解，编译期间，当前类下不存在的成员函数或成员变量，肯定是无法被实例对象获取到的；<br>而在运行时，java中子类可以重写父类的方法，因此成员函数运行时会正确指向子类的方法，但是，子类并不可以重写父类的变量，当子类与父类有同名变量时，需要使用this和super关键字进行区分。在这种情况下，成员变量的访问则不可能像方法一样使用多态访问，因此只能是遵循左侧的实例了。</p>
+Paint mPaint = new Paint();
+
+// .measureText()
+float measuredWidth = mPaint.measureText(someText);
+
+// .getTextBounds()
+Rect mBounds = new Rect();
+mPaint.getTextBounds(someText, 0, someText.length, mBounds);
+int measuredWidth = mBounds.width();
+int measuredHeight = mBounds.height();
+
+</code></pre>
+<p>但是，当我们把两个结果打印出来，我们会发现，对于同一个文本信息，使用两个方法得到的宽度是不同的：</p>
+<pre><code class="java">// 打印宽度信息
+Log.d(&quot;Test&quot;, String.format(
+        &quot;Text is &#39;%s&#39;, measureText %f, getTextBounds %d&quot;,
+        someText,
+        measuredWidth,
+        mBounds.width())
+    );
+
+// 打印结果如下
+// Text is &#39;Hello. I&#39;m some text!&#39;, measureText 115.000000, getTextBounds 105
+</code></pre>
+<p>经过一系列的探究和资料查看，最后得到的结论是：</p>
+<blockquote>
+<p>二者返回结果确实不同，且 measureText() 返回结果会略微大于 getTextBounds() 所得到的宽度信息</p>
+<p>measureText() 会在文本的左右两侧加上一些额外的宽度，这部分额外的宽度叫做 Glyph’s AdvanceX （具体应该是属于字型方面的范畴，我猜测这部分宽度是类似字间距之类的东西）</p>
+<p>getTextBounds() 返回的则是当前文本所需要的最小宽度，也就是整个文本外切矩形的宽度</p>
+</blockquote>
+<p>实际上，这两个方法在具体调用时虽然都是不同的方法，但在 native 层的测量算法都是一致的，只不过在最后返回时，measureText() 会在左右两侧加上一些额外的宽度值，而 getTextBounds() 则是返回需要的最小宽度而已。</p>
 
             
                 <blockquote>
@@ -528,7 +507,7 @@ public static void main(String[] args) {
                             转载请注明出处
                         
                         <br>
-                        Link to this article:  http://joeljt.top/2018/03/09/polymorphism-of-java/
+                        Link to this article:  http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/
                     </p>
                 </blockquote>
             
@@ -552,7 +531,7 @@ public static void main(String[] args) {
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
-        <a href="/2018/03/09/differ-of-abstract-interface/" id="post_nav-newer" class="prev-content">
+        <a href="/2018/05/28/bug-of-mysql/" id="post_nav-newer" class="prev-content">
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
                 <i class="material-icons">arrow_back</i>
             </button>
@@ -566,7 +545,7 @@ public static void main(String[] args) {
 
     <!-- Next Nav -->
     
-        <a href="/2018/03/07/TextView/" id="post_nav-older" class="next-content">
+        <a href="/2018/03/19/TrackColorTextView/" id="post_nav-older" class="next-content">
             Older
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">

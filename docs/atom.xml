@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joeljt.top/"/>
-  <updated>2018-09-10T02:46:42.994Z</updated>
+  <updated>2018-11-20T04:52:50.000Z</updated>
   <id>http://joeljt.top/</id>
   
   <author>
@@ -15,30 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>线程间通信 上篇</title>
-    <link href="http://joeljt.top/2018/09/09/Efficient-Android-Threading-chapter-4-1/"/>
-    <id>http://joeljt.top/2018/09/09/Efficient-Android-Threading-chapter-4-1/</id>
-    <published>2018-09-08T16:00:00.000Z</published>
-    <updated>2018-09-10T02:46:42.994Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>Efficient.Android.Threading 第四章读书笔记 上篇</p></blockquote><a id="more"></a><p>在多进程应用中，各个任务可以并行执行协作以产出结果。因此，各个线程之间必须进行通信才能满足协作执行的目的。在 Android 系统中，可以使用传统的 Java 线程通信技术，也可以使用 Android 专属的 Handler / Looper 消息机制。基于此，本章的主要内容为：</p><ul><li>使用单向传输的管道来进行数据传输</li><li>共享内存通信</li><li>使用 <code>BlockingQueue</code> 实现生产者消费者</li><li>消息队列的具体操作</li><li>将具体任务发回 UI 线程</li></ul><h3 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h3><p>管道 <code>Pipes</code> 从属于 <code>java.io</code> 包，也就是说，严格意义上讲，它是属于 Java 语言范畴，而非 Android 系统的。一个管道为同一进程的两个线程提供一种交互方式，为二者建立连接，搭建一个单向传输的数据传输通道：生产者线程向管道中写入数据，同时消费者线程从中取数据。</p><p>Java 管道与 Unix 系统管道命令 <code>|</code> 相比较起来有所不同。Java 管道用来为同一进程中的不同线程提供通信服务；而 Unix 系统管道命令用来将某个命令的输入重定向为另一命令的输入。</p><p>管道在内存中表现为一个循环缓冲区，仅适用于两个连接的线程，其他线程无法接触到其中的数据。同时，管道是单向的，只允许一个线程线程写入数据，另一线程读取数据，在这种情况下，线程安全是可以确定的。</p><p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-4/53154183.jpg" alt="Pipes"></p><p>管道的典型使用场景为，并行的两个耗时任务，其中一个线程需要不停地给另一个线程传输数据。管道可以用来为 UI 线程减压，从而保证用户界面响应的及时性，从而提升用户体验。</p><p>管道可以传输二进制数据或者字节数据。其中，二进制数据的代表为 <code>PipedOutputStream</code> 和 <code>PipedInputStream</code> ，字节数据的代表为 <code>PipedWriter</code> 和 <code>PipedReader</code> 。除了传输数据类型的不同以外，以上两种类型的管道没有任何不同。管道的生命周期自两个线程建立连接开始，断开连接时生命周期结束。</p><h4 id="管道的基本使用"><a href="#管道的基本使用" class="headerlink" title="管道的基本使用"></a>管道的基本使用</h4><p>基本的管道生命周期可以归纳概括为三个步骤：建立连接，数据传输和断开连接。</p><pre><code class="java">// 1.建立连接 - int BUFFER_SIZE_IN_CHARS = 1024 * 4; // 默认为 1024，可以自定义PipedReader r = new PipedReader(BUFFER_SIZE_IN_CHARS);PipedWriter w = new PipedWriter();w.connect(r); // r.connect(w);// 2.将消费者传入线程中, 线程启动后，就准备好从管道中读取数据了Thread t = new MyReaderThread(r);t.start();// 3. 传输数据// 类似这种生产者-消费者模型的通信方式，一般都是带有阻塞机制的。// 如果管道已满，则 write() 会处于阻塞状态，直到管道中再次有空余空间；// 如果缓存为空，则 read() 会处于阻塞状态。// flush() 方法的调用是很有必要的// 因为当 read() 线程调用 wait() 后，默认会有至少一秒钟的超时时长// flush() 方法相当于 notify()，可以保证消费者马上对新加入的数据做出响应w.write(&#39;A&#39;);w.flush();int i; // 传输的数据会被转为 int 类型，以保证不同编码格式的统一性while((i = r.read()) != -1){    char c = (char)i;}// 4. 关闭连接// 如果关闭 writer, 管道关闭但缓存中的数据还会被读取到// 如果关闭 reader, 则缓存中的数据会被清除w.close();r.close();</code></pre><h4 id="管道在-Android-系统中的应用"><a href="#管道在-Android-系统中的应用" class="headerlink" title="管道在 Android 系统中的应用"></a>管道在 Android 系统中的应用</h4><p>使用管道来对用户输入进行一些简单处理：用户通过 EditText 输入内容，为了保证 UI 线程的即时性，使用管道将用户输入内容发送到工作线程进行某些耗时操作的处理：</p><pre><code class="java">private static class TextHandlerTask implements Runnable {    private final PipedReader reader;    private TextHandlerTask(PipedReader reader) {        this.reader = reader;    }    @Override    public void run() {        while (!Thread.currentThread().isInterrupted()) {            int i;            try {                while ((i = reader.read()) != -1) {                    char c = (char) i;                    Log.e(&quot;Test&quot;, &quot;char -&gt; &quot; + c);                }            } catch (IOException e) {                e.printStackTrace();            }        }    }}private PipedReader r = new PipedReader();private PipedWriter w = new PipedWriter();w.connect(r);etSearch.addTextChangedListener(new TextWatcher() {    @Override    public void onTextChanged(CharSequence s, int start, int before, int count) {        if (count &gt; before) { // 输入内容            try {                w.write(s.subSequence(before, count).toString());            } catch (IOException e) {                e.printStackTrace();            }        }    }});new Thread(new TextHandlerTask(r)).start();</code></pre><h3 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h3><p>共享内存是一种通用的线程间通信的方式。应用程序的地址空间存储在堆中，所有线程都可以对其进行访问，即某个线程操作某个数据，该数据同时可以被其他线程所读取。</p><p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-9/58643526.jpg" alt="不同线程利用共享内存进行通信"></p><p>如果某个线程将其数据存储为局部变量（本地变量），那么其他线程是无法对其进行访问的。只有将数据存储在共享内存中，才能够被其他线程访问到，从而完成不同线程间的协作。以下对象一般被认为是存储在共享内存中的：<code>实例变量</code>，<code>类变量</code>，<code>方法中声明的对象</code>。</p><p>对象的引用（指针）存储在线程的栈中，但是对象其本身（占用的内存）存储在共享内存中。不同方法之间如果想要互相操作对象，则需要将对象的引用进行传递才可以实现。<code>不同的线程通过定义实例属性以及类属性来实现通信和任务协作</code>。</p><h4 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h4><p>由于线程数据安全问题的存在，不同的线程在操作同一数据时需要有阻塞机制，来保证同一时间只有一个线程对共享数据进行操作。Java 内置的唤醒机制就很好的解决了这一问题。</p><p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-9/67516539.jpg" alt="Thread signal"></p><p>当某一线程除非满足某个条件，否则无法继续执行时，该线程可以调用 wait() / await() 方法。timeout 参数表示当前线程在下次执行前，需要等待多久。</p><p>当其他线程已经将状态更改，也就是现在正在等待的线程已经满足条件了，那么当前线程会通过调用 notify() / notifyAll() 来通知等待的线程；而收到消息的线程则可以继续向下执行。</p><p>需要注意的是，很可能并不是只有一个线程在等待，但是只能有一个线程进入同步代码块，也就是说，收到通知消息的消息也并不一定可以继续向下执行。这就要求等待线程需要遵循一定的设计模式，即<code>在同步代码块中，重复检查条件是否已经满足</code>。</p><pre><code class="java">synchronized(this){    while(isConditionFulfilled == false){        wait();    }    // 代码执行到这里时，才说明状态是对的}</code></pre><p>以上代码在同步代码块中再次检查了条件是否满足。如果不满足条件，则当前线程挂起等待；当收到通知消息，等待线程被唤醒，它在执行关键代码前会再次校验同步条件是否满足，因为有可能被其他线程捷足先登，如果不满足条件，则其会继续挂起，等待下一个唤醒信号。</p><p>以上机制很好的协同了多线程的通信，但是不适合 Android 平台，因为 UI 线程绝不能挂起等待工作线程完成任务后唤醒，之后的文章中介绍 Android 消息分发机制。</p><h3 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h3><p>线程信令是一种低级，高度可配置的机制，尽管它可以应用在很多场景，但同时这也是一种极容易出错的技术。因此，Java 平台基于线程信令机制，重新构建了一套抽象概念，以期解决线程之间多对象的单向切换。</p><p>在这一机制中，线程的挂起和唤醒不再通过消费者和生产者本身来控制，而是通过一个带有阻塞特性的队列来完成，例如，<code>java.util.concurrent.BlockingQueue</code>。</p><p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-10/20259807.jpg" alt="BlockingQueue"></p><p>阻塞队列扮演着生产者线程和消费者线程中间的协调者，内部维护一个实现了线程信令机制，可自定义大小的列表。具体使用的时候，如果队列中数据已满，则生产者线程 put() 方法会阻塞，直到消费者从队列中取出数据；如果队列为空，则消费者线程 take() 方法会阻塞，直到生产者向队列中插入数据。</p><pre><code class="java">public class ConsumerProducer{    private final int LIMIT = 10;    private BlockingQueue&lt;Integer&gt; blockingQueue =         new LinkedBlockingQueue&lt;Integer&gt;(LIMIT);    public void produce() throws InterruptedException{        int value = 0;        while(true){            blockingQueue.put(value++);        }    }    public void consume() throws InterruptedException{        while(true){            int value = blockingQueue.take();        }    }}</code></pre><p>以上是第四章前半部分内容，由于篇幅较长，准备分为两篇来记录。</p><p>接下来会介绍 Android 平台的消息分发机制，下篇再见，大家加油~</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;Efficient.Android.Threading 第四章读书笔记 上篇&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-    
-      <category term="读书笔记" scheme="http://joeljt.top/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
-    
-      <category term="Efficient.Android.Threading" scheme="http://joeljt.top/tags/Efficient-Android-Threading/"/>
-    
-  </entry>
   
   <entry>
     <title>线程间通信 下篇</title>
@@ -53,6 +29,30 @@
     
       &lt;blockquote&gt;
 &lt;p&gt;Efficient.Android.Threading 第四章读书笔记 下篇&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="读书笔记" scheme="http://joeljt.top/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="Efficient.Android.Threading" scheme="http://joeljt.top/tags/Efficient-Android-Threading/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>线程间通信 上篇</title>
+    <link href="http://joeljt.top/2018/09/09/Efficient-Android-Threading-chapter-4-1/"/>
+    <id>http://joeljt.top/2018/09/09/Efficient-Android-Threading-chapter-4-1/</id>
+    <published>2018-09-08T16:00:00.000Z</published>
+    <updated>2018-09-10T02:46:42.994Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>Efficient.Android.Threading 第四章读书笔记 上篇</p></blockquote><a id="more"></a><p>在多进程应用中，各个任务可以并行执行协作以产出结果。因此，各个线程之间必须进行通信才能满足协作执行的目的。在 Android 系统中，可以使用传统的 Java 线程通信技术，也可以使用 Android 专属的 Handler / Looper 消息机制。基于此，本章的主要内容为：</p><ul><li>使用单向传输的管道来进行数据传输</li><li>共享内存通信</li><li>使用 <code>BlockingQueue</code> 实现生产者消费者</li><li>消息队列的具体操作</li><li>将具体任务发回 UI 线程</li></ul><h3 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h3><p>管道 <code>Pipes</code> 从属于 <code>java.io</code> 包，也就是说，严格意义上讲，它是属于 Java 语言范畴，而非 Android 系统的。一个管道为同一进程的两个线程提供一种交互方式，为二者建立连接，搭建一个单向传输的数据传输通道：生产者线程向管道中写入数据，同时消费者线程从中取数据。</p><p>Java 管道与 Unix 系统管道命令 <code>|</code> 相比较起来有所不同。Java 管道用来为同一进程中的不同线程提供通信服务；而 Unix 系统管道命令用来将某个命令的输入重定向为另一命令的输入。</p><p>管道在内存中表现为一个循环缓冲区，仅适用于两个连接的线程，其他线程无法接触到其中的数据。同时，管道是单向的，只允许一个线程线程写入数据，另一线程读取数据，在这种情况下，线程安全是可以确定的。</p><p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-4/53154183.jpg" alt="Pipes"></p><p>管道的典型使用场景为，并行的两个耗时任务，其中一个线程需要不停地给另一个线程传输数据。管道可以用来为 UI 线程减压，从而保证用户界面响应的及时性，从而提升用户体验。</p><p>管道可以传输二进制数据或者字节数据。其中，二进制数据的代表为 <code>PipedOutputStream</code> 和 <code>PipedInputStream</code> ，字节数据的代表为 <code>PipedWriter</code> 和 <code>PipedReader</code> 。除了传输数据类型的不同以外，以上两种类型的管道没有任何不同。管道的生命周期自两个线程建立连接开始，断开连接时生命周期结束。</p><h4 id="管道的基本使用"><a href="#管道的基本使用" class="headerlink" title="管道的基本使用"></a>管道的基本使用</h4><p>基本的管道生命周期可以归纳概括为三个步骤：建立连接，数据传输和断开连接。</p><pre><code class="java">// 1.建立连接 - int BUFFER_SIZE_IN_CHARS = 1024 * 4; // 默认为 1024，可以自定义PipedReader r = new PipedReader(BUFFER_SIZE_IN_CHARS);PipedWriter w = new PipedWriter();w.connect(r); // r.connect(w);// 2.将消费者传入线程中, 线程启动后，就准备好从管道中读取数据了Thread t = new MyReaderThread(r);t.start();// 3. 传输数据// 类似这种生产者-消费者模型的通信方式，一般都是带有阻塞机制的。// 如果管道已满，则 write() 会处于阻塞状态，直到管道中再次有空余空间；// 如果缓存为空，则 read() 会处于阻塞状态。// flush() 方法的调用是很有必要的// 因为当 read() 线程调用 wait() 后，默认会有至少一秒钟的超时时长// flush() 方法相当于 notify()，可以保证消费者马上对新加入的数据做出响应w.write(&#39;A&#39;);w.flush();int i; // 传输的数据会被转为 int 类型，以保证不同编码格式的统一性while((i = r.read()) != -1){    char c = (char)i;}// 4. 关闭连接// 如果关闭 writer, 管道关闭但缓存中的数据还会被读取到// 如果关闭 reader, 则缓存中的数据会被清除w.close();r.close();</code></pre><h4 id="管道在-Android-系统中的应用"><a href="#管道在-Android-系统中的应用" class="headerlink" title="管道在 Android 系统中的应用"></a>管道在 Android 系统中的应用</h4><p>使用管道来对用户输入进行一些简单处理：用户通过 EditText 输入内容，为了保证 UI 线程的即时性，使用管道将用户输入内容发送到工作线程进行某些耗时操作的处理：</p><pre><code class="java">private static class TextHandlerTask implements Runnable {    private final PipedReader reader;    private TextHandlerTask(PipedReader reader) {        this.reader = reader;    }    @Override    public void run() {        while (!Thread.currentThread().isInterrupted()) {            int i;            try {                while ((i = reader.read()) != -1) {                    char c = (char) i;                    Log.e(&quot;Test&quot;, &quot;char -&gt; &quot; + c);                }            } catch (IOException e) {                e.printStackTrace();            }        }    }}private PipedReader r = new PipedReader();private PipedWriter w = new PipedWriter();w.connect(r);etSearch.addTextChangedListener(new TextWatcher() {    @Override    public void onTextChanged(CharSequence s, int start, int before, int count) {        if (count &gt; before) { // 输入内容            try {                w.write(s.subSequence(before, count).toString());            } catch (IOException e) {                e.printStackTrace();            }        }    }});new Thread(new TextHandlerTask(r)).start();</code></pre><h3 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h3><p>共享内存是一种通用的线程间通信的方式。应用程序的地址空间存储在堆中，所有线程都可以对其进行访问，即某个线程操作某个数据，该数据同时可以被其他线程所读取。</p><p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-9/58643526.jpg" alt="不同线程利用共享内存进行通信"></p><p>如果某个线程将其数据存储为局部变量（本地变量），那么其他线程是无法对其进行访问的。只有将数据存储在共享内存中，才能够被其他线程访问到，从而完成不同线程间的协作。以下对象一般被认为是存储在共享内存中的：<code>实例变量</code>，<code>类变量</code>，<code>方法中声明的对象</code>。</p><p>对象的引用（指针）存储在线程的栈中，但是对象其本身（占用的内存）存储在共享内存中。不同方法之间如果想要互相操作对象，则需要将对象的引用进行传递才可以实现。<code>不同的线程通过定义实例属性以及类属性来实现通信和任务协作</code>。</p><h4 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h4><p>由于线程数据安全问题的存在，不同的线程在操作同一数据时需要有阻塞机制，来保证同一时间只有一个线程对共享数据进行操作。Java 内置的唤醒机制就很好的解决了这一问题。</p><p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-9/67516539.jpg" alt="Thread signal"></p><p>当某一线程除非满足某个条件，否则无法继续执行时，该线程可以调用 wait() / await() 方法。timeout 参数表示当前线程在下次执行前，需要等待多久。</p><p>当其他线程已经将状态更改，也就是现在正在等待的线程已经满足条件了，那么当前线程会通过调用 notify() / notifyAll() 来通知等待的线程；而收到消息的线程则可以继续向下执行。</p><p>需要注意的是，很可能并不是只有一个线程在等待，但是只能有一个线程进入同步代码块，也就是说，收到通知消息的消息也并不一定可以继续向下执行。这就要求等待线程需要遵循一定的设计模式，即<code>在同步代码块中，重复检查条件是否已经满足</code>。</p><pre><code class="java">synchronized(this){    while(isConditionFulfilled == false){        wait();    }    // 代码执行到这里时，才说明状态是对的}</code></pre><p>以上代码在同步代码块中再次检查了条件是否满足。如果不满足条件，则当前线程挂起等待；当收到通知消息，等待线程被唤醒，它在执行关键代码前会再次校验同步条件是否满足，因为有可能被其他线程捷足先登，如果不满足条件，则其会继续挂起，等待下一个唤醒信号。</p><p>以上机制很好的协同了多线程的通信，但是不适合 Android 平台，因为 UI 线程绝不能挂起等待工作线程完成任务后唤醒，之后的文章中介绍 Android 消息分发机制。</p><h3 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h3><p>线程信令是一种低级，高度可配置的机制，尽管它可以应用在很多场景，但同时这也是一种极容易出错的技术。因此，Java 平台基于线程信令机制，重新构建了一套抽象概念，以期解决线程之间多对象的单向切换。</p><p>在这一机制中，线程的挂起和唤醒不再通过消费者和生产者本身来控制，而是通过一个带有阻塞特性的队列来完成，例如，<code>java.util.concurrent.BlockingQueue</code>。</p><p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-10/20259807.jpg" alt="BlockingQueue"></p><p>阻塞队列扮演着生产者线程和消费者线程中间的协调者，内部维护一个实现了线程信令机制，可自定义大小的列表。具体使用的时候，如果队列中数据已满，则生产者线程 put() 方法会阻塞，直到消费者从队列中取出数据；如果队列为空，则消费者线程 take() 方法会阻塞，直到生产者向队列中插入数据。</p><pre><code class="java">public class ConsumerProducer{    private final int LIMIT = 10;    private BlockingQueue&lt;Integer&gt; blockingQueue =         new LinkedBlockingQueue&lt;Integer&gt;(LIMIT);    public void produce() throws InterruptedException{        int value = 0;        while(true){            blockingQueue.put(value++);        }    }    public void consume() throws InterruptedException{        while(true){            int value = blockingQueue.take();        }    }}</code></pre><p>以上是第四章前半部分内容，由于篇幅较长，准备分为两篇来记录。</p><p>接下来会介绍 Android 平台的消息分发机制，下篇再见，大家加油~</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;Efficient.Android.Threading 第四章读书笔记 上篇&lt;/p&gt;
 &lt;/blockquote&gt;
     
     </summary>
@@ -179,6 +179,28 @@
   </entry>
   
   <entry>
+    <title></title>
+    <link href="http://joeljt.top/2018/08/07/Canvas.drawPath()/"/>
+    <id>http://joeljt.top/2018/08/07/Canvas.drawPath()/</id>
+    <published>2018-08-07T07:49:23.537Z</published>
+    <updated>2018-08-07T07:49:23.537Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Canvas-drawPath"><a href="#Canvas-drawPath" class="headerlink" title="Canvas.drawPath()"></a>Canvas.drawPath()</h1><blockquote><p>Path类将多种复合路径（多个轮廓，如直线段、二次曲线、立方曲线）封装在其内部的几何路径。</p><p>也就是说，我们可以使用 drawPath() 来绘制一个多边形或者不规则图形。</p></blockquote><p>下面以等边三角形为例：</p><pre><code class="java">// 假设在固定大小内绘制一个等边三角形private void drawTriangle(Canvas canvas, Paint paint) {    Path mPath = new Path();    // moveTo 移动到某一点，用于确定下笔坐标    mPath.moveTo(getWidth() / 2, 0);    // 连线到某一点，开始绘制，目标点 y 坐标是长直角边的长度    // 等边三角形，从顶点向下做高，短直角边:斜边:长直角边 = 1:2:√3    mPath.lineTo(0, getWidth() / 2 * Math.sqrt(3)));    mPath.lineTo(getWidth(), getWidth() / 2 * Math.sqrt(3)));    // 闭合多边形，即连线回到起始点，完成绘制    mPath.close();    canvas.drawPath(mPath, mPaint);}</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Canvas-drawPath&quot;&gt;&lt;a href=&quot;#Canvas-drawPath&quot; class=&quot;headerlink&quot; title=&quot;Canvas.drawPath()&quot;&gt;&lt;/a&gt;Canvas.drawPath()&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;P
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>解决可视化工具对于 MySQL 8.0 + 无法连接的问题</title>
     <link href="http://joeljt.top/2018/05/28/bug-of-mysql/"/>
     <id>http://joeljt.top/2018/05/28/bug-of-mysql/</id>
@@ -190,6 +212,49 @@
     <summary type="html">
     
       &lt;p&gt;MySQL 8.0 版本去除了 password 字段，改用 authentication_string 字段，导致网上可以搜到的各种问题的各种解决方法完全没有效果。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Android Paint .measureText() VS .getTextBounds()</title>
+    <link href="http://joeljt.top/2018/03/29/Android%20Paint-%20.measureText()%20VS%20.getTextBounds()/"/>
+    <id>http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/</id>
+    <published>2018-03-28T16:00:00.000Z</published>
+    <updated>2018-11-26T10:43:06.981Z</updated>
+    
+    <content type="html"><![CDATA[<p>两个方法可以用来测量文字宽高信息的，只不过 <strong>.getTextBounds()</strong> 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 <strong>.measureText()</strong> 则只是返回宽度信息。</p><a id="more"></a><p>具体使用方法如下：</p><pre><code class="java">final String someText = &quot;Hello. I&#39;m some text!&quot;;Paint mPaint = new Paint();// .measureText()float measuredWidth = mPaint.measureText(someText);// .getTextBounds()Rect mBounds = new Rect();mPaint.getTextBounds(someText, 0, someText.length, mBounds);int measuredWidth = mBounds.width();int measuredHeight = mBounds.height();</code></pre><p>但是，当我们把两个结果打印出来，我们会发现，对于同一个文本信息，使用两个方法得到的宽度是不同的：</p><pre><code class="java">// 打印宽度信息Log.d(&quot;Test&quot;, String.format(        &quot;Text is &#39;%s&#39;, measureText %f, getTextBounds %d&quot;,        someText,        measuredWidth,        mBounds.width())    );// 打印结果如下// Text is &#39;Hello. I&#39;m some text!&#39;, measureText 115.000000, getTextBounds 105</code></pre><p>经过一系列的探究和资料查看，最后得到的结论是：</p><blockquote><p>二者返回结果确实不同，且 measureText() 返回结果会略微大于 getTextBounds() 所得到的宽度信息</p><p>measureText() 会在文本的左右两侧加上一些额外的宽度，这部分额外的宽度叫做 Glyph’s AdvanceX （具体应该是属于字型方面的范畴，我猜测这部分宽度是类似字间距之类的东西）</p><p>getTextBounds() 返回的则是当前文本所需要的最小宽度，也就是整个文本外切矩形的宽度</p></blockquote><p>实际上，这两个方法在具体调用时虽然都是不同的方法，但在 native 层的测量算法都是一致的，只不过在最后返回时，measureText() 会在左右两侧加上一些额外的宽度值，而 getTextBounds() 则是返回需要的最小宽度而已。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;两个方法可以用来测量文字宽高信息的，只不过 &lt;strong&gt;.getTextBounds()&lt;/strong&gt; 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 &lt;strong&gt;.measureText()&lt;/strong&gt; 则只是返回宽度信息。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>字体变色效果实现分析</title>
+    <link href="http://joeljt.top/2018/03/19/TrackColorTextView/"/>
+    <id>http://joeljt.top/2018/03/19/TrackColorTextView/</id>
+    <published>2018-03-18T16:00:00.000Z</published>
+    <updated>2018-11-26T10:40:37.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>主要技术点：Canvas.clipRect()</p></blockquote><p>实际上，这个方法可以理解成裁剪画布；</p><p>方法接收一个 Rect 对象，而 Rect 对象同样接收左上顶点和右下顶点两个坐标作为参数，用于确认一块区域；</p><p>而这块区域，就是接下来将要进行绘制的区域。</p><p>通过对画布进行不断的裁剪，同时对左右两侧使用不同颜色的画笔对相同的文字进行绘制，来实现一个文本两种颜色的效果。</p><pre><code class="java">@Overrideprotected void onDraw(Canvas canvas) {    // 绘制前一半内容    drawText(canvas, mChangePaint, 0, getWidth()/2);    // 使用另一颜色的画笔绘制后一半内容    drawText(canvas, mOriginPaint, getWidth() / 2, getWidth());}private void drawText(Canvas canvas, Paint paint, int start, int end) {    paint.setTextSize(getTextSize());    // 保存当前画布状态    canvas.save();    // 使用 .clipRect() 方法切割画布，然后使用不同颜色的画笔对目标文字进行绘制    Rect rect = new Rect(start, 0, end, getHeight());    canvas.clipRect(rect);    // 获取文字的基本宽高信息    String text = getText().toString();    Rect textBounds = new Rect();    paint.getTextBounds(text, 0, text.length(), textBounds);    Paint.FontMetricsInt metrics = paint.getFontMetricsInt();    // 获取起始位置    int x = getWidth() / 2 - textBounds.width() / 2;    int y = getHeight() / 2 + (metrics.bottom - metrics.top) / 2 - metrics.bottom;    canvas.drawText(text, x, y, paint);    // 清空画布属性，方便接下来绘制变色的部分    canvas.restore();}</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;blockquote&gt;
+&lt;p&gt;主要技术点：Canvas.clipRect()&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;实际上，这个方法可以理解成裁剪画布；&lt;/p&gt;
+&lt;p&gt;方法接收一个 Rect 对象，而 Rect 对象同样接收左上顶点和右下顶点两个坐标作为参数，用于确认一块区
+      
     
     </summary>
     
@@ -245,6 +310,34 @@ public class Parent {
     
     
       <category term="java基础" scheme="http://joeljt.top/tags/java%E5%9F%BA%E7%A1%80/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>自定义 TextView</title>
+    <link href="http://joeljt.top/2018/03/07/TextView/"/>
+    <id>http://joeljt.top/2018/03/07/TextView/</id>
+    <published>2018-03-06T16:00:00.000Z</published>
+    <updated>2018-11-26T10:42:37.807Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><ul><li><p>一个参数</p><p>在代码中初始化时使用</p></li><li><p>两个参数</p><p>在布局文件中使用时，会经过这个方法；第二个参数 <strong>attrs</strong> 就是传入的自定义属性</p></li><li><p>三个参数</p><p>同样是在布局文件中使用，但是当文件中使用到 style 文件时才会使用，第三个参数是 style 文件</p></li></ul><h3 id="测量规格"><a href="#测量规格" class="headerlink" title="测量规格"></a>测量规格</h3><p>MeasureSpec 是一个 32 位的 int 值，前 2 位表示 SpecMode，后 30 位表示 SpecSize。</p><p>MeasureSpec 通过将 SpecMode 和 SpecSize 打包成一个 int 值来避免过多的对象内存分配，同样在使用到具体的属性时，可以通过解包的方式来获取原始值。</p><pre><code> @Override    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {        // 具体在测量控件大小时，宽高的 MeasureSpec 都是由父布局一层层传递下来的        // MeasureSpec 可以理解为是父 View 对子 View 的的测量要求        super.onMeasure(widthMeasureSpec, heightMeasureSpec);    }</code></pre><ul><li><p>MeasureSpec 的三种情况</p><ul><li><p>AT_MOST</p><p>父容器指定了一个可用大小，即 SpecSize，当前子 View 大小不能超过这个值</p><p>对应布局文件中的 wrap_content</p></li><li><p>EXACTLY</p><p>父容器已经测量出 View 所需要的精确大小，子 View 最终的大小就是测量到的值</p><p>对应布局文件中的 match_parent 或者固定数值</p></li><li><p>UNSECIFIED</p><p>一般系统的控件才会使用到这个，自己自定义 View 的话，很少用到</p></li></ul></li><li><p>ScrollView 嵌套 ListView 的解决方法的原理</p><pre><code>public class ListViewForScrollView extends ListView {    public ListViewForScrollView(Context context) {        super(context);    }    public ListViewForScrollView(Context context, AttributeSet attrs) {        super(context, attrs);    }    public ListViewForScrollView(Context context, AttributeSet attrs,        int defStyle) {        super(context, attrs, defStyle);    }    @Override    /**     * 重写该方法，达到使ListView适应ScrollView的效果     */    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {        // 打包方法，重新构造 heightMeasureSpec        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE &gt;&gt; 2,        MeasureSpec.AT_MOST);        super.onMeasure(widthMeasureSpec, expandSpec);    }}</code></pre><p>我们知道，Android 的测绘机制是一个递归的流程，从最顶层的开始，依次递归向下测量子 View ，即调用 measureChild() 方法，一层层测量后，最后再测量最外层的 ViewGroup .</p><p>查看 ScrollView 的源码：</p><pre><code>@Override    protected void measureChild(View child, int parentWidthMeasureSpec,            int parentHeightMeasureSpec) {        ViewGroup.LayoutParams lp = child.getLayoutParams();        int childWidthMeasureSpec;        int childHeightMeasureSpec;        childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec, mPaddingLeft                + mPaddingRight, lp.width);        final int verticalPadding = mPaddingTop + mPaddingBottom;        // ScrollView 在具体测量子 View 时，向下传递的测量规格为 MeasureSpec.UNSPECIFIED        childHeightMeasureSpec = MeasureSpec.makeSafeMeasureSpec(                Math.max(0, MeasureSpec.getSize(parentHeightMeasureSpec) - verticalPadding),                MeasureSpec.UNSPECIFIED);        child.measure(childWidthMeasureSpec, childHeightMeasureSpec);    }</code></pre><p>理论上讲，这时候代码会走到 ListView 的 onMeasure() 方法中：</p><pre><code>@Override    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {        super.onMeasure(widthMeasureSpec, heightMeasureSpec);        final int heightMode = MeasureSpec.getMode(heightMeasureSpec);        int heightSize = MeasureSpec.getSize(heightMeasureSpec);        int childHeight = 0;        ... ...        // 获取 ListView 的高度，此时应该只有一个条目的高度        childHeight = child.getMeasuredHeight();         ... ...        // 重点就在这里        // 如果测量模式为 MeasureSpec.UNSPECIFIED，则最终的高度就是已测量的高度 + padding        if (heightMode == MeasureSpec.UNSPECIFIED) {            heightSize = mListPadding.top + mListPadding.bottom + childHeight +                    getVerticalFadingEdgeLength() * 2;        }        // 如果为 AT_MOST ，则会调用 measureHeightOfChildren() 方法，重新计算 View 高度        if (heightMode == MeasureSpec.AT_MOST) {            heightSize = measureHeightOfChildren(widthMeasureSpec, 0, NO_POSITION, heightSize, -1);        }        setMeasuredDimension(widthSize, heightSize);    }</code></pre><p>而至于 Integer.MAX_VALUE &gt;&gt; 2，则是因为 SpecSize 是一个 30 位的值，使用 Integer.MAX_VALUE 是希望这个值尽可能的大，在后续为各个条目指定测量模式时，因为传下来的是 AT_MOST, 因此 resultSize 即为传下来的 Integer.MAX_VALUE &gt;&gt; 2，保证每个条目的高度自适应。</p><pre><code class="java">public static int getChildMeasureSpec(int spec, int padding, int childDimension) {        int specMode = MeasureSpec.getMode(spec);        int specSize = MeasureSpec.getSize(spec);        int size = Math.max(0, specSize - padding);        int resultSize = 0;        int resultMode = 0;        switch (specMode) {                 // Parent has imposed a maximum size on us            case MeasureSpec.AT_MOST:                if (childDimension &gt;= 0) {                    // Child wants a specific size... so be it                    resultSize = childDimension;                    resultMode = MeasureSpec.EXACTLY;                } else if (childDimension == LayoutParams.MATCH_PARENT) {                    // Child wants to be our size, but our size is not fixed.                    // Constrain child to not be bigger than us.                    resultSize = size;                    resultMode = MeasureSpec.AT_MOST;                } else if (childDimension == LayoutParams.WRAP_CONTENT) {                    // Child wants to determine its own size. It can&#39;t be                    // bigger than us.                    resultSize = size;                    resultMode = MeasureSpec.AT_MOST;                }                break;        }        //noinspection ResourceType        return MeasureSpec.makeMeasureSpec(resultSize, resultMode);}</code></pre><p>​</p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;构造方法&quot;&gt;&lt;a href=&quot;#构造方法&quot; class=&quot;headerlink&quot; title=&quot;构造方法&quot;&gt;&lt;/a&gt;构造方法&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;一个参数&lt;/p&gt;
+&lt;p&gt;在代码中初始化时使用&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;两个参数&lt;/p&gt;
+&lt;p&gt;在
+      
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://joeljt.top/tags/android/"/>
     
   </entry>
   
