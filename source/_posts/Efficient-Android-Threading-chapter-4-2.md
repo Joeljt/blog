@@ -459,3 +459,135 @@ boolean sendEmptyMessageDelayed(int what, long delayMillis)
   Message is inserted after Looper.quit() has been called.
 
 > Looper 在分发消息时，会调用 Handler 的 dispatchMessage 方法。如果此方法被应用程序主动调用，那该消息会在发起调用的线程立即得到执行，而不是在消费线程执行。
+
+##### Message processing
+
+Message 根据携带数据类型的不同，有不同的处理方式：
+
+- Task messages
+
+  如果携带的是 Runnbale 对象，那等轮到该条消息分发的时候，则该 Runnable 对象的 run 方法会直接得到执行，而不会再触发 `Handler.handMessage()` 方法。
+
+- Data messages
+
+  如果消息携带的是数据的话，那处理消息则需要重写 `Handler.handMessage()` 方法（两种方式）。
+
+一种是正常的实现自己的 Handler ，然后重写该方法；或者在初始化 Handler 的时候直接重写该方法，但需要注意的是，如果在子线程中，该方法的重写要在消息队列就绪以后立刻声明，否则 loop() 循环开启后，就无法再声明了：
+
+```java
+class ConsumerThread extends Thread{
+    Handler mHandler;
+    @Override
+    public void run(){
+        Looper.prepare();
+        mHandler = new Handler(){
+            public void handleMessage(Message msg){
+                // process data message here
+            }
+        };
+        Looper.loop();
+    }
+}
+```
+
+另一种方式是利用 `Handler.Callback` 接口，该接口方法为一个带布尔类型返回值的 `handleMessage` 方法：
+
+```java
+public interface Callback {
+    // true: 代表实现类处理完消息即终止
+    // false: 代表实现类处理完以后，还要继续下发到 Handler.handleMessage 方法
+	public boolean handleMessage(Message msg);
+}
+
+// 消息分发
+public void dispatchMessage(Message msg) {
+	if (msg.callback != null) {
+		handleCallback(msg);
+	} else {
+		if (mCallback != null) {
+            // 如果返回 true ，则不会继续向下分发了
+			if (mCallback.handleMessage(msg)) {
+				return;
+			}
+		}
+		handleMessage(msg);
+	}	
+}
+```
+
+使用这种方式，调用者不再需要继承自 Handler ，而只需要将 Callback 接口的实现类当做 Handler 构造器传入即可，然后该 Handler 就会回调到 handleMessage()：
+
+```java
+public class HandlerCallbackActivity extends Activity implements Handler.Callback {
+    Handler mUiHandler;
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        mUiHandler = new Handler(this); // 直接通过构造器传入，即可通过此类处理消息
+    }
+    
+    @Override
+    public boolean handleMessage(Message msg){
+        // process msg
+        return true;
+    }
+}
+```
+
+#### 与 UI 线程通信
+
+正如之前所说，UI 线程是唯一一个自带 Looper 的线程，其他线程可以向 UI 线程发送消息，但要注意避免耗时操作，因为 UI 线程是全局的，每个任务的时长都会对全局任务的执行产生影响。
+
+有以下几种方式将消息转交到 UI 线程处理：
+
+1. 为 Handler 指定 UI 线程的 Looper
+
+   ```java
+   Runnable task = new Runnable(){...};
+   new Handler(Looper.getMainLooper()).post(task);
+   ```
+
+   使用这种方式，不管调用线程，task 都会通过 UI Looper 直接插入 UI MessageQueue。
+
+2. 直接在 UI 线程向自身发送消息，该任务会在当前正在执行的消息处理完后得到执行
+
+   ```java
+   private void postFromUiThreadToUiThread(){
+       new Handler().post(new Runnable(){...})
+   }
+   ```
+
+3. Activity.runOnUiThread
+
+   ```java
+   private void postFromUiThreadToUiThread(){
+       runOnUiThread(new Runnable(){...})
+   }
+   ```
+
+   如果此方法在其他线程调用，则它会将消息插入到 UI 线程的消息队列中。此方法只能由 Activity 的实例来调用，但是也可以实现自己的 runOnUIThread 方法，只要追踪 UI 线程的 ID 即可：
+
+   ```java
+   public class MyApplication extends Application{
+       private long mUiThreadId;
+       private Handler mUiHandler;
+       
+       @Override
+       public void onCreate(){
+           super.onCreate();
+           mUiThread = Thread.currentThread().getId();
+           mUiHandler = new Handler();
+       }
+       
+       public void customRunOnUiThread(Runnable action){
+           if(Thread.currentThread().getId() != mUiThreadId){
+               mUiHandler.post(action);
+           } else{
+               action.run();
+           }
+       }
+   }
+   ```
+
+   ​
