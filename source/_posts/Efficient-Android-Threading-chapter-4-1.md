@@ -1,5 +1,5 @@
 ---
-thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-30/57038989.jpg
+thumbnail: https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321181341.jpg
 title: 线程间通信 上篇
 tags: [读书笔记, Efficient.Android.Threading]
 date: 2018-09-09
@@ -25,7 +25,7 @@ Java 管道与 Unix 系统管道命令 `|` 相比较起来有所不同。Java �
 
 管道在内存中表现为一个循环缓冲区，仅适用于两个连接的线程，其他线程无法接触到其中的数据。同时，管道是单向的，只允许一个线程线程写入数据，另一线程读取数据，在这种情况下，线程安全是可以确定的。
 
-![Pipes](http://p5zd0id9p.bkt.clouddn.com/18-9-4/53154183.jpg)
+![Pipes](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182548.jpg)
 
 管道的典型使用场景为，并行的两个耗时任务，其中一个线程需要不停地给另一个线程传输数据。管道可以用来为 UI 线程减压，从而保证用户界面响应的及时性，从而提升用户体验。
 
@@ -120,7 +120,7 @@ new Thread(new TextHandlerTask(r)).start();
 
 共享内存是一种通用的线程间通信的方式。应用程序的地址空间存储在堆中，所有线程都可以对其进行访问，即某个线程操作某个数据，该数据同时可以被其他线程所读取。
 
-![不同线程利用共享内存进行通信](http://p5zd0id9p.bkt.clouddn.com/18-9-9/58643526.jpg)
+![不同线程利用共享内存进行通信](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182555.jpg)
 
 如果某个线程将其数据存储为局部变量（本地变量），那么其他线程是无法对其进行访问的。只有将数据存储在共享内存中，才能够被其他线程访问到，从而完成不同线程间的协作。以下对象一般被认为是存储在共享内存中的：`实例变量`，`类变量`，`方法中声明的对象`。
 
@@ -130,7 +130,7 @@ new Thread(new TextHandlerTask(r)).start();
 
 由于线程数据安全问题的存在，不同的线程在操作同一数据时需要有阻塞机制，来保证同一时间只有一个线程对共享数据进行操作。Java 内置的唤醒机制就很好的解决了这一问题。
 
-![Thread signal](http://p5zd0id9p.bkt.clouddn.com/18-9-9/67516539.jpg)
+![Thread signal](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182553.jpg)
 
 当某一线程除非满足某个条件，否则无法继续执行时，该线程可以调用 wait() / await() 方法。timeout 参数表示当前线程在下次执行前，需要等待多久。
 
@@ -157,7 +157,7 @@ synchronized(this){
 
 在这一机制中，线程的挂起和唤醒不再通过消费者和生产者本身来控制，而是通过一个带有阻塞特性的队列来完成，例如，`java.util.concurrent.BlockingQueue`。
 
-![BlockingQueue](http://p5zd0id9p.bkt.clouddn.com/18-9-10/20259807.jpg)
+![BlockingQueue](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182555.jpg)
 
 阻塞队列扮演着生产者线程和消费者线程中间的协调者，内部维护一个实现了线程信令机制，可自定义大小的列表。具体使用的时候，如果队列中数据已满，则生产者线程 put() 方法会阻塞，直到消费者从队列中取出数据；如果队列为空，则消费者线程 take() 方法会阻塞，直到生产者向队列中插入数据。
 

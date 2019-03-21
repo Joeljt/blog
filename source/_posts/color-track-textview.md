@@ -1,5 +1,7 @@
 ---
-title: 字体变色效果实现分析
+thumbnail: https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321181341.jpg
+title: Android 字体变色
+tags: [Android]
 date: 2018-08-12
 ---
 

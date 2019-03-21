@@ -1,5 +1,7 @@
 ---
-title: onCreate() 和 onResume() 里获取不到 View 的高度
+thumbnail: https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321184908.jpg
+title: 为何 Android 在 onCreate 中获取不到宽高
+tags: [Android]
 date: 2018-08-13
 ---
 

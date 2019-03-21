@@ -1,4 +1,17 @@
-# Canvas.drawPath()
+---
+title: Canvas.drawPath() 简单使用记录
+
+tags: [Android]
+
+date: 2018-05-28
+---
+
+
+
+<!-- more -->
+
+
+
 
 > Path类将多种复合路径（多个轮廓，如直线段、二次曲线、立方曲线）封装在其内部的几何路径。
 >

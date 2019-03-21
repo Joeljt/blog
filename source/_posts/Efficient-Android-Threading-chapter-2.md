@@ -1,5 +1,5 @@
 ---
-thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-30/54395897.jpg
+thumbnail: https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321181408.jpg
 title: Java 中的多线程
 tags: [读书笔记, Efficient.Android.Threading]
 date: 2018-08-25
@@ -51,7 +51,7 @@ thread.start();
 
 具体的线程调度可以通过下图进行理解，图中的 C 就是上下文切换的过程。
 
-![线程调度示例](http://p5zd0id9p.bkt.clouddn.com/18-8-23/75211234.jpg)
+![线程调度示例](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182552.jpg)
 
 #### 单线程应用
 
@@ -125,7 +125,7 @@ Android 中的锁定机制主要包括两种：
 
    当前线程刚刚将临界区代码执行完毕，主动释放了锁；并等待下次获取内部锁；
 
-![Java监视器示例](http://p5zd0id9p.bkt.clouddn.com/18-8-24/6478868.jpg)
+![Java监视器示例](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182549.jpg)
 
 一个完整的线程锁工作流大体如下：
 

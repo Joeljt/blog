@@ -1,5 +1,5 @@
 ---
-thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-30/57038989.jpg
+thumbnail: https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321181341.jpg
 title: 线程间通信 下篇
 tags: [读书笔记, Efficient.Android.Threading]
 date: 2018-09-09
@@ -17,7 +17,7 @@ date: 2018-09-09
 
 Android 平台的消息机制相关的 API 从属于 `android.os` 包：
 
-![Android Message API](http://p5zd0id9p.bkt.clouddn.com/18-9-11/81397663.jpg)
+![Android Message API](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182551.jpg)
 
 `android.os.Looper`
 
@@ -39,7 +39,7 @@ Android 平台的消息机制相关的 API 从属于 `android.os` 包：
 
 消息机制的工作原理大抵如下图示意：
 
-![消息机制示意](http://p5zd0id9p.bkt.clouddn.com/18-9-16/18254263.jpg)
+![消息机制示意](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182556.jpg)
 
 生产者线程发送消息，消费者线程处理消息：
 
@@ -114,7 +114,7 @@ public class LooperActivity extends Activity {
 
 消息队列主要由 `android.os.MessageQueue` 类来实现，其内部实现一个没有绑定关系的单向链表，用于存储一系列待处理的消息。生产者线程插入消息，之后消息会分发到对应的消费者线程去处理。一般来讲，不同的消息是按照时间戳来排序的。也就是说，时间戳值越小，在消息队列中排序顺序就越靠前。但是只有到达当前时间的消息才会被分发；如果还没有到当前时间，则会等到当前时间才会对消息进行分发。
 
-![消息分发的时间点](http://p5zd0id9p.bkt.clouddn.com/18-11-8/3423119.jpg)
+![消息分发的时间点](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182557.jpg)
 
 上图展示了消息队列中按时间排序的消息是如何向下分发的，其中 t1 < t2 < t3，即 t1 的时间要早于 t3。现在只有一条消息越过了 `disptch barrier` , 实际上也就是当前时间点。可以被分发下去的消息所绑定的时间戳，一定比当前时间小，也就是已经到了分发的时间。
 
@@ -263,7 +263,7 @@ public void sendToTarget() {
 
 如之前所说，Message 可以携带数据或者任务，具体如下图所示：
 
-![](http://p5zd0id9p.bkt.clouddn.com/18-11-14/7124044.jpg)
+![](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182601.jpg)
 
 消息队列可以包含任何数据和任务消息的组合，消费者线程具体在处理消息的时候，也仅仅是按照消息的排序顺序，而不和消息的类型有任何关系。如果消息携带的是数据，那消费者线程就会在 handleMessage 中处理数据；如果消息携带的是任务，则该 Runnable 的 run 方法则会在消费者线程得到执行，但是不会再触发 handleMessage 方法的回调。
 
@@ -400,7 +400,7 @@ Handler 的工作需要 Looper 和 MQ 的支持，因此 Handler 在声明时就
 
 一个线程可以有多个 Handler ，不同 Handler 发送的消息可以在消息队列中共存，并不会有什么冲突；具体在分发的时候又会通过 Message 的 target 属性发送回该消息对应的 Handler：
 
-![](http://p5zd0id9p.bkt.clouddn.com/18-11-16/56491345.jpg)
+![](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182554.jpg)
 
 > 多个 Handler 发出的消息也不会导致并发，Message 的处理仍然是按顺序执行的。
 
@@ -590,4 +590,4 @@ public class HandlerCallbackActivity extends Activity implements Handler.Callbac
    }
    ```
 
-   ​
+   

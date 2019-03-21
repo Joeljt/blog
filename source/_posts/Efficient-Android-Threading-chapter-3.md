@@ -1,5 +1,5 @@
 ---
-thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-30/53348155.jpg
+thumbnail: https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321185255.png
 title: Android 系统中的线程
 tags: [读书笔记, Efficient.Android.Threading]
 date: 2018-08-29
@@ -64,7 +64,7 @@ Android 系统是基于 Linux 内核的，每个应用程序实际上都是一�
 
 一般来讲，应用启动以后，会创建不超过十个线程；第一个创建的线程便是我们所熟知的 UI 线程，之后所有的线程都是 UI 线程繁衍出来的。具体表现在，UI 线程的 PID 是 4257，之后所有线程的 PPID 都是 UI 线程的 PID：
 
-![adb shell ps](http://p5zd0id9p.bkt.clouddn.com/18-8-28/18335769.jpg)
+![adb shell ps](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182600.jpg)
 
 #### 线程的调度
 

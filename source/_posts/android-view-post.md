@@ -1,5 +1,5 @@
 ---
-thumbnail: http://p5zd0id9p.bkt.clouddn.com/18-8-16/9518033.jpg
+thumbnail: https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321181407.jpg
 title: Android View.post 浅析
 tags: [Android]
 date: 2018-08-14

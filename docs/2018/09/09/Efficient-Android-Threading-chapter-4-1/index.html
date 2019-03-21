@@ -249,7 +249,7 @@ Efficient.Android.Threading 第四章读书笔记 上篇
 
     
         <meta property="article:published_time" content="Sun Sep 09 2018 00:00:00 GMT+0800">
-        <meta property="article:modified_time" content="Mon Sep 10 2018 10:46:42 GMT+0800">
+        <meta property="article:modified_time" content="Thu Mar 21 2019 18:47:26 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -272,7 +272,7 @@ Efficient.Android.Threading 第四章读书笔记 上篇
     "mainEntityOfPage": "http://joeljt.top/2018/09/09/Efficient-Android-Threading-chapter-4-1/index.html",
     "headline": "线程间通信 上篇",
     "datePublished": "Sun Sep 09 2018 00:00:00 GMT+0800",
-    "dateModified": "Mon Sep 10 2018 10:46:42 GMT+0800",
+    "dateModified": "Thu Mar 21 2019 18:47:26 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "joe",
@@ -453,7 +453,7 @@ Efficient.Android.Threading 第四章读书笔记 上篇
 
         <!-- Custom thumbnail -->
         <div class="post_thumbnail-custom">
-            <img src="http://p5zd0id9p.bkt.clouddn.com/18-8-30/57038989.jpg">
+            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321181341.jpg">
     
         </div>
 
@@ -485,7 +485,7 @@ Efficient.Android.Threading 第四章读书笔记 上篇
 <h3 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h3><p>管道 <code>Pipes</code> 从属于 <code>java.io</code> 包，也就是说，严格意义上讲，它是属于 Java 语言范畴，而非 Android 系统的。一个管道为同一进程的两个线程提供一种交互方式，为二者建立连接，搭建一个单向传输的数据传输通道：生产者线程向管道中写入数据，同时消费者线程从中取数据。</p>
 <p>Java 管道与 Unix 系统管道命令 <code>|</code> 相比较起来有所不同。Java 管道用来为同一进程中的不同线程提供通信服务；而 Unix 系统管道命令用来将某个命令的输入重定向为另一命令的输入。</p>
 <p>管道在内存中表现为一个循环缓冲区，仅适用于两个连接的线程，其他线程无法接触到其中的数据。同时，管道是单向的，只允许一个线程线程写入数据，另一线程读取数据，在这种情况下，线程安全是可以确定的。</p>
-<p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-4/53154183.jpg" alt="Pipes"></p>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182548.jpg" alt="Pipes"></p>
 <p>管道的典型使用场景为，并行的两个耗时任务，其中一个线程需要不停地给另一个线程传输数据。管道可以用来为 UI 线程减压，从而保证用户界面响应的及时性，从而提升用户体验。</p>
 <p>管道可以传输二进制数据或者字节数据。其中，二进制数据的代表为 <code>PipedOutputStream</code> 和 <code>PipedInputStream</code> ，字节数据的代表为 <code>PipedWriter</code> 和 <code>PipedReader</code> 。除了传输数据类型的不同以外，以上两种类型的管道没有任何不同。管道的生命周期自两个线程建立连接开始，断开连接时生命周期结束。</p>
 <h4 id="管道的基本使用"><a href="#管道的基本使用" class="headerlink" title="管道的基本使用"></a>管道的基本使用</h4><p>基本的管道生命周期可以归纳概括为三个步骤：建立连接，数据传输和断开连接。</p>
@@ -564,11 +564,11 @@ new Thread(new TextHandlerTask(r)).start();
 
 </code></pre>
 <h3 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h3><p>共享内存是一种通用的线程间通信的方式。应用程序的地址空间存储在堆中，所有线程都可以对其进行访问，即某个线程操作某个数据，该数据同时可以被其他线程所读取。</p>
-<p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-9/58643526.jpg" alt="不同线程利用共享内存进行通信"></p>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182555.jpg" alt="不同线程利用共享内存进行通信"></p>
 <p>如果某个线程将其数据存储为局部变量（本地变量），那么其他线程是无法对其进行访问的。只有将数据存储在共享内存中，才能够被其他线程访问到，从而完成不同线程间的协作。以下对象一般被认为是存储在共享内存中的：<code>实例变量</code>，<code>类变量</code>，<code>方法中声明的对象</code>。</p>
 <p>对象的引用（指针）存储在线程的栈中，但是对象其本身（占用的内存）存储在共享内存中。不同方法之间如果想要互相操作对象，则需要将对象的引用进行传递才可以实现。<code>不同的线程通过定义实例属性以及类属性来实现通信和任务协作</code>。</p>
 <h4 id="发送信号"><a href="#发送信号" class="headerlink" title="发送信号"></a>发送信号</h4><p>由于线程数据安全问题的存在，不同的线程在操作同一数据时需要有阻塞机制，来保证同一时间只有一个线程对共享数据进行操作。Java 内置的唤醒机制就很好的解决了这一问题。</p>
-<p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-9/67516539.jpg" alt="Thread signal"></p>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182553.jpg" alt="Thread signal"></p>
 <p>当某一线程除非满足某个条件，否则无法继续执行时，该线程可以调用 wait() / await() 方法。timeout 参数表示当前线程在下次执行前，需要等待多久。</p>
 <p>当其他线程已经将状态更改，也就是现在正在等待的线程已经满足条件了，那么当前线程会通过调用 notify() / notifyAll() 来通知等待的线程；而收到消息的线程则可以继续向下执行。</p>
 <p>需要注意的是，很可能并不是只有一个线程在等待，但是只能有一个线程进入同步代码块，也就是说，收到通知消息的消息也并不一定可以继续向下执行。这就要求等待线程需要遵循一定的设计模式，即<code>在同步代码块中，重复检查条件是否已经满足</code>。</p>
@@ -583,7 +583,7 @@ new Thread(new TextHandlerTask(r)).start();
 <p>以上机制很好的协同了多线程的通信，但是不适合 Android 平台，因为 UI 线程绝不能挂起等待工作线程完成任务后唤醒，之后的文章中介绍 Android 消息分发机制。</p>
 <h3 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h3><p>线程信令是一种低级，高度可配置的机制，尽管它可以应用在很多场景，但同时这也是一种极容易出错的技术。因此，Java 平台基于线程信令机制，重新构建了一套抽象概念，以期解决线程之间多对象的单向切换。</p>
 <p>在这一机制中，线程的挂起和唤醒不再通过消费者和生产者本身来控制，而是通过一个带有阻塞特性的队列来完成，例如，<code>java.util.concurrent.BlockingQueue</code>。</p>
-<p><img src="http://p5zd0id9p.bkt.clouddn.com/18-9-10/20259807.jpg" alt="BlockingQueue"></p>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182555.jpg" alt="BlockingQueue"></p>
 <p>阻塞队列扮演着生产者线程和消费者线程中间的协调者，内部维护一个实现了线程信令机制，可自定义大小的列表。具体使用的时候，如果队列中数据已满，则生产者线程 put() 方法会阻塞，直到消费者从队列中取出数据；如果队列为空，则消费者线程 take() 方法会阻塞，直到生产者向队列中插入数据。</p>
 <pre><code class="java">public class ConsumerProducer{
     private final int LIMIT = 10;

@@ -249,7 +249,7 @@ Efficient.Android.Threading 第二章读书笔记
 
     
         <meta property="article:published_time" content="Sat Aug 25 2018 00:00:00 GMT+0800">
-        <meta property="article:modified_time" content="Thu Aug 30 2018 08:35:59 GMT+0800">
+        <meta property="article:modified_time" content="Thu Mar 21 2019 18:51:40 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -272,7 +272,7 @@ Efficient.Android.Threading 第二章读书笔记
     "mainEntityOfPage": "http://joeljt.top/2018/08/25/Efficient-Android-Threading-chapter-2/index.html",
     "headline": "Java 中的多线程",
     "datePublished": "Sat Aug 25 2018 00:00:00 GMT+0800",
-    "dateModified": "Thu Aug 30 2018 08:35:59 GMT+0800",
+    "dateModified": "Thu Mar 21 2019 18:51:40 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "joe",
@@ -453,7 +453,7 @@ Efficient.Android.Threading 第二章读书笔记
 
         <!-- Custom thumbnail -->
         <div class="post_thumbnail-custom">
-            <img src="http://p5zd0id9p.bkt.clouddn.com/18-8-30/54395897.jpg">
+            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321181408.jpg">
     
         </div>
 
@@ -499,7 +499,7 @@ thread.start();
 <p>但是，如果线程的调度是完全基于优先级的话，就有可能导致低优先级的线程任务永远得不到执行，也就是所谓的饥饿致死。为解决这个问题，Java 调度器在执行线程调度时，还会将线程的执行时间列入考虑的范围。</p>
 <p>每次不同线程的切换被称为上下文切换 <code>context switch</code> 。每次进行上下文切换时，CPU 会先将当前正在执行的线程状态进行保存，以方便下一次恢复当前线程的执行；其后暂停当前线程，同时恢复另一线程的执行。</p>
 <p>具体的线程调度可以通过下图进行理解，图中的 C 就是上下文切换的过程。</p>
-<p><img src="http://p5zd0id9p.bkt.clouddn.com/18-8-23/75211234.jpg" alt="线程调度示例"></p>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182552.jpg" alt="线程调度示例"></p>
 <h4 id="单线程应用"><a href="#单线程应用" class="headerlink" title="单线程应用"></a>单线程应用</h4><p>每个应用至少会有一个线程，也就是我们所熟知的主线程，默认情况下，编写的代码都将在这个线程中进行执行。</p>
 <p>单线程编程是最简单的编码方式，但是很多情况下这种方式并不能满足我们的需求，因此，我们就需要将代码分别运行在不同的线程中，从而保证代码执行的高效性以及程序的性能。</p>
 <h4 id="多线程应用"><a href="#多线程应用" class="headerlink" title="多线程应用"></a>多线程应用</h4><p>如果执行线程的数量超过处理器数量，则无法实现真正的并发，但调度程序在要处理的线程之间快速切换，以便将每个代码路径拆分为按顺序处理的执行间隔。尽管多线程编程会极大的提高应用的性能，但是这是有一定代价的。具体表现为：复杂性的提高，内存开销的增加，不确定的执行顺序等。</p>
@@ -537,7 +537,7 @@ thread.start();
 <p>当前线程刚刚将临界区代码执行完毕，主动释放了锁；并等待下次获取内部锁；</p>
 </li>
 </ol>
-<p><img src="http://p5zd0id9p.bkt.clouddn.com/18-8-24/6478868.jpg" alt="Java监视器示例"></p>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182549.jpg" alt="Java监视器示例"></p>
 <p>一个完整的线程锁工作流大体如下：</p>
 <ol>
 <li><p><code>Enter the monitor</code></p>
