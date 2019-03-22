@@ -1,5 +1,5 @@
 ---
-thumbnail: https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321181407.jpg
+thumbnail: https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190322185113.png
 title: ConstraintLayout 介绍
 tags: [Android]
 date: 2019-03-22
