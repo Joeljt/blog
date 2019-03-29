@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html style="display: none;" lang="en">
+    <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.5.2 -->
+    <script>
+        window.materialVersion = "1.5.2"
+        // Delete localstorage with these tags
+        window.oldVersion = [
+            'codestartv1',
+            '1.3.4',
+            '1.4.0',
+            '1.4.0b1',
+            '1.5.0'
+        ]
+    </script>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- Title -->
+    
+    <title>
+        
+            View.inflate() 的前世今生 | 
+        
+        Joe&#39;s blog
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" href="/img/favicon.png">
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" itemprop="description" content="误用 LayoutInflater 的 inflate() 方法已经不是什么稀罕事儿了……">
+    <meta name="keywords" content=",Android">
+    <meta name="theme-color" content="#0097A7">
+
+    <!-- Disable Fucking Bloody Baidu Tranformation -->
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(a){try{localStorage.removeItem(a)}catch(b){}};lsloader.setLS=function(a,c){try{localStorage.setItem(a,c)}catch(b){}};lsloader.getLS=function(a){var c="";try{c=localStorage.getItem(a)}catch(b){c=""}return c};versionString="/*"+(window.materialVersion||"unknownVersion")+"*/";lsloader.clean=function(){try{var b=[];for(var a=0;a<localStorage.length;a++){b.push(localStorage.key(a))}b.forEach(function(e){var f=lsloader.getLS(e);if(window.oldVersion){var d=window.oldVersion.reduce(function(g,h){return g||f.indexOf("/*"+h+"*/")!==-1},false);if(d){lsloader.removeLS(e)}}})}catch(c){}};lsloader.clean();lsloader.load=function(f,a,b,d){if(typeof b==="boolean"){d=b;b=undefined}d=d||false;b=b||function(){};var e;e=this.getLS(f);if(e&&e.indexOf(versionString)===-1){this.removeLS(f);this.requestResource(f,a,b,d);return}if(e){var c=e.split(versionString)[0];if(c!=a){console.log("reload:"+a);this.removeLS(f);this.requestResource(f,a,b,d);return}e=e.split(versionString)[1];if(d){this.jsRunSequence.push({name:f,code:e});this.runjs(a,f,e)}else{document.getElementById(f).appendChild(document.createTextNode(e));b()}}else{this.requestResource(f,a,b,d)}};lsloader.requestResource=function(b,e,a,c){var d=this;if(c){this.iojs(e,b,function(h,f,g){d.setLS(f,h+versionString+g);d.runjs(h,f,g)})}else{this.iocss(e,b,function(f){document.getElementById(b).appendChild(document.createTextNode(f));d.setLS(b,e+versionString+f)},a)}};lsloader.iojs=function(d,b,g){var a=this;a.jsRunSequence.push({name:b,code:""});try{var f=new XMLHttpRequest();f.open("get",d,true);f.onreadystatechange=function(){if(f.readyState==4){if((f.status>=200&&f.status<300)||f.status==304){if(f.response!=""){g(d,b,f.response);return}}a.jsfallback(d,b)}};f.send(null)}catch(c){a.jsfallback(d,b)}};lsloader.iocss=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.iofonts=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.runjs=function(f,c,e){if(!!c&&!!e){for(var b in this.jsRunSequence){if(this.jsRunSequence[b].name==c){this.jsRunSequence[b].code=e}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var a=document.createElement("script");a.appendChild(document.createTextNode(this.jsRunSequence[0].code));a.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(a);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else{if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var d=this;var a=document.createElement("script");a.src=this.jsRunSequence[0].path;a.type="text/javascript";this.jsRunSequence[0].status="loading";a.onload=function(){d.jsRunSequence.shift();if(d.jsRunSequence.length>0){d.runjs()}};document.body.appendChild(a)}}};lsloader.tagLoad=function(b,a){this.jsRunSequence.push({name:a,code:"",path:b,status:"failed"});this.runjs()};lsloader.jsfallback=function(c,b){if(!!this.jsnamemap[b]){return}else{this.jsnamemap[b]=b}for(var a in this.jsRunSequence){if(this.jsRunSequence[a].name==b){this.jsRunSequence[a].code="";this.jsRunSequence[a].status="failed";this.jsRunSequence[a].path=c}}this.runjs()};lsloader.cssfallback=function(e,c,b){if(!!this.cssnamemap[c]){return}else{this.cssnamemap[c]=1}var d=document.createElement("link");d.type="text/css";d.href=e;d.rel="stylesheet";d.onload=d.onerror=b;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(d,a)};lsloader.runInlineScript=function(c,b){var a=document.getElementById(b).innerText;this.jsRunSequence.push({name:c,code:a});this.runjs()}})();</script>
+
+    <!-- Import queue -->
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Import CSS -->
+    
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/material.min.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/style.min.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+        
+
+    
+
+    
+        
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/fontawesome.min.css">
+        
+    
+
+    <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    overflow-x: hidden !important;
+  }
+  
+  code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+<!-- Import Roboto -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+<!-- Import Material Icons -->
+
+
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/material-icons.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+
+
+
+    <!-- Import jQuery -->
+    
+        <script>lsloader.load("jq_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/jquery.min.js", true)</script>
+    
+
+    <!-- WebAPP Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Joe&#39;s blog">
+    <meta name="msapplication-starturl" content="http://joeljt.top/2019/03/29/View-inflate-analysis/">
+    <meta name="msapplication-navbutton-color" content="#0097A7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Joe&#39;s blog">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!-- Site Verification -->
+    
+    
+
+    <!-- RSS -->
+    
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://joeljt.top/2019/03/29/View-inflate-analysis/">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="View.inflate() 的前世今生 | Joe&#39;s blog">
+    <meta property="og:image" content="/img/favicon.png">
+    <meta property="og:description" content="误用 LayoutInflater 的 inflate() 方法已经不是什么稀罕事儿了……">
+    <meta property="og:article:tag" content="Android"> 
+
+    
+        <meta property="article:published_time" content="Fri Mar 29 2019 00:00:00 GMT+0800">
+        <meta property="article:modified_time" content="Fri Mar 29 2019 16:47:59 GMT+0800">
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="http://joeljt.top/2019/03/29/View-inflate-analysis/index.html">
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "http://joeljt.top/2019/03/29/View-inflate-analysis/index.html",
+    "headline": "View.inflate() 的前世今生",
+    "datePublished": "Fri Mar 29 2019 00:00:00 GMT+0800",
+    "dateModified": "Fri Mar 29 2019 16:47:59 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "joe",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/portrait.jpeg"
+        },
+        "description": "今でもあなたは私の光。"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Joe&#39;s blog",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": ",Android",
+    "description": "误用 LayoutInflater 的 inflate() 方法已经不是什么稀罕事儿了……",
+}
+</script>
+
+
+    
+
+    <!-- Analytics -->
+    
+    
+    
+
+    <!-- Custom Head -->
+    
+
+</head>
+
+
+    
+        <body id="scheme-Isolation" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+                    <!-- Isolation Header -->
+                    <header class="header">
+    <div class="header-wrapper">
+        <!-- Header Copyright -->
+        <div class="header-copyright">
+            <div class="header-site">
+                ©&nbsp;
+                <script type="text/javascript">
+                    var fd = new Date();
+                    document.write(fd.getFullYear());
+                </script>
+                &nbsp;Joe's blog
+            </div>
+            <!--
+            I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+            It will not impact the appearance and can give developers a lot of support :)
+
+            很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+            它不会影响美观并可以给开发者很大的支持。 :)
+            -->
+            <div>
+                Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a>
+                <br>
+                Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a>
+            </div>
+        </div>
+
+        <!-- Header Title -->
+        <span class="header-title header-item">
+            <a href="/" title="Joe&#39;s blog">
+                Joe&#39;s blog
+            </a>
+        </span>
+
+        <p class="header-slogan header-item">
+        
+            
+                今でもあなたは私の光。
+            
+        
+        </p>
+
+        <!-- Header Nav -->
+        <nav class="header-nav header-item">
+            <span class="header-nav-item">
+                <a href="/" title="Home">
+                    <span>Home</span>
+                </a>
+            </span>
+
+            <!-- Pages  -->
+            
+                <span class="header-nav-item">
+                    <a href="/tags" title="归档">
+                        <span>归档</span>
+                    </a>
+                </span>
+            
+            
+        </nav>
+
+        <!-- Header SNS -->
+        <div class="header-item header-sns_list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Joeljt" target="_blank">
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+        </a>
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+    </div>
+</header>
+
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+
+                    <!-- Post TOC -->
+
+    
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+
+
+    <!-- Isolation Post Header -->
+    <!-- Post thumbnail -->
+    
+        <!-- Post Header Info -->
+        <div class="post-header_info with-thumbnail">
+            <!-- Author Avatar & Name -->
+            <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
+            <span class="name-span">joe</span>
+        </div>
+
+        <!-- Custom thumbnail -->
+        <div class="post_thumbnail-custom">
+            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190329164506.jpg">
+    
+        </div>
+
+
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+
+    
+        <div class="post-content_wrapper">
+            <p class="post-title">
+                View.inflate() 的前世今生
+            </p>
+            <p>误用 LayoutInflater 的 inflate() 方法已经不是什么稀罕事儿了……</p>
+<a id="more"></a>
+<p>做 Android 开发做久了，一定会或多或少地对布局的渲染有一些懵逼：</p>
+<blockquote>
+<ol>
+<li><code>View.inflate()</code> 和 <code>LayoutInflator.from().inflate()</code> 有啥区别？</li>
+<li>调用 inflate() 方法的时候有时候传 null，有时候传 parent 是为啥？</li>
+<li>用 LayoutInflater 有时候还可能传个 attachToRoot ，这又是个啥？</li>
+</ol>
+</blockquote>
+<p>接下来我们就从源码的角度来寻找一下这几个问题的答案，后面再用几个示例来验证我们的猜想。</p>
+<p>话不多说，Let’s go !</p>
+<h3 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h3><p>先来看一下这个方法具体做了什么：</p>
+<pre><code class="java">/**
+ * Inflate a view from an XML resource.  This convenience method wraps the {@link
+ * LayoutInflater} class, which provides a full range of options for view inflation.
+ */
+public static View inflate(Context context, int resource, ViewGroup root) {
+    LayoutInflater factory = LayoutInflater.from(context);
+    return factory.inflate(resource, root);
+}
+</code></pre>
+<p>当我们查看源码，就会发现，这个方法的内部实际上就是调用了 <code>LayoutInflater</code> 的 inflate 方法。正如此方法的注释所言，这是一个方便开发者调用的 <code>LayoutInflater</code> 的包装方法，而 <code>LayoutInflater</code> 本身则为 View 的渲染提供了更多的选择。</p>
+<p>那么我们现在的问题就变成了， <code>LayoutInflater</code> 又做了什么？</p>
+<p>继续追踪代码，我们会发现， <code>LayoutInflator.from().inflate()</code>  是这个样子的：</p>
+<pre><code class="java">// LayoutInflator#inflate(int, ViewGroup)
+public View inflate(@LayoutRes int resource, @Nullable ViewGroup root) {
+        return inflate(resource, root, root != null);
+}
+</code></pre>
+<p>啥？重载？</p>
+<pre><code class="java">// LayoutInflator#inflate(int, ViewGroup, boolean)
+public View inflate(int resource, ViewGroup root, boolean attachToRoot) {
+    final Resources res = getContext().getResources();
+    final XmlResourceParser parser = res.getLayout(resource);
+    try {
+        return inflate(parser, root, attachToRoot);
+    } finally {
+        parser.close();
+    }
+}
+</code></pre>
+<p>这里我们看到，通过层层调用，最终会调用到 <code>LayoutInflator#inflate(int, ViewGroup, boolean)</code> 方法，很明显，这个方法会将我们传入的布局 id 转换为 XmlResourceParser，然后进行另一次，也是最后一次重载。</p>
+<p>这个方法就厉害了，这里基本上包括了我们所有问题的答案，我们继续往下看。</p>
+<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><p>话不多说，上代码。接下来我们来逐段分析下这个 <code>inflate</code> 方法：</p>
+<pre><code class="java">public View inflate(XmlPullParser parser, ViewGroup root, boolean attachToRoot) {
+    final Context inflaterContext = mContext;
+    final AttributeSet attrs = Xml.asAttributeSet(parser);
+
+    // 默认返回结果为传入的根布局
+    View result = root;
+
+    // 通过 createViewFromTag() 方法找到传入的 layoutId 的根布局，并赋值给 temp
+    final View temp = createViewFromTag(root, name, inflaterContext, attrs);
+    ViewGroup.LayoutParams params = null;
+
+    // 如果传入的父布局不为空
+    if (root != null) {
+        // 为这个 root 生成一套合适的 LayoutParams
+        params = root.generateLayoutParams(attrs);
+        if (!attachToRoot) {
+            // 如果没有 attachToRoot，那为根布局设置 layoutparams
+            temp.setLayoutParams(params);
+        }
+    }
+
+    // 如果传入的父布局不为空，且想要 attachToRoot
+    if (root != null &amp;&amp; attachToRoot) {
+        // 那就将传入的布局以及 layoutparams 通过 addView 方法添加到父布局中 
+        root.addView(temp, params);
+    }
+
+    // 如果传入的根布局为空，或者不想 attachToRoot，则返回要加载的 layoutId
+    if (root == null || !attachToRoot) {
+        result = temp;
+    }
+    return result;
+}
+</code></pre>
+<p>代码也分析完了，我再来总结一下：</p>
+<ul>
+<li><p><code>View#inflate</code> 只是个简易的包装方法，实际上还是调用的 <code>LayoutInflater#inflate</code> ;</p>
+</li>
+<li><p><code>LayoutInflater#inflate</code> 由于可以自己选择 root 和 attachToRoot 的搭配（后面有解释），使用起来更加灵活；</p>
+</li>
+<li><p>实际上的区别只是在于 <code>root</code> 是否传空，以及 <code>attachToRoot</code> 真假与否；</p>
+</li>
+<li><p>当  <code>root</code> 传空时，会直接返回要加载的 <code>layoutId</code>，返回的 View 没有父布局且没有 LayoutParams；</p>
+</li>
+<li><p>当  <code>root</code> 不传空时，又分为 <code>attachToRoot</code> 为真或者为假：</p>
+<ul>
+<li><p><code>attachToRoot = true</code> </p>
+<p>会为传入的 <code>layoutId</code> 直接设置参数，并将其添加到 <code>root</code> 中，然后将传入的 <code>root</code> 返回；</p>
+</li>
+<li><p><code>attachToRoot = false</code> </p>
+<p>会为传入的 <code>layoutId</code> 设置参数，但是不会添加到 <code>root</code> ，然后返回 <code>layoutId</code> 对应的 View；</p>
+<blockquote>
+<p>这里需要注意的是，虽然不马上将 View 添加到 parent 中，但是这里最好也传上 parent，而不是粗暴的传入 null；因为子 View 的 LayoutParams 需要由 parent 来确定；否则会在手动 addView 时调用 <code>generateDefaultLayoutParams()</code> 为子 View 生成一个宽高都为包裹内容的 LayoutParams，而这并不一定是我们想要的。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="测试-amp-检验"><a href="#测试-amp-检验" class="headerlink" title="测试 &amp; 检验"></a>测试 &amp; 检验</h3><p>单说起来可能有些抽象，下面使用代码来进行具体的测试与检验。</p>
+<h4 id="View-inflate-context-layoutId-null"><a href="#View-inflate-context-layoutId-null" class="headerlink" title="View.inflate(context, layoutId, null)"></a>View.inflate(context, layoutId, null)</h4><p>如之前所说，这实际上调用的是 <code>getLayoutInflater().inflate(layoutId, null)</code> ，结合之前的源码来看：</p>
+<pre><code class="java">public View inflate(XmlPullParser parser, ViewGroup root, boolean attachToRoot) {
+    View result = root;
+    final View temp = createViewFromTag(root, name, inflaterContext, attrs);
+    if (root == null || !attachToRoot) {
+        result = temp;
+    }
+    return result;
+}
+</code></pre>
+<p>很明显，传入的 <code>root</code> 为空，则会直接将加载好的 xml 布局返回，而这种情况下返回的这个 View 没有参数，也没有父布局。</p>
+<pre><code class="java">protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.layout_test);
+    View inflateView = View.inflate(this, R.layout.layout_basic_use_item, null);
+    Log.e(&quot;Test&quot;, &quot;LayoutParams -&gt; &quot; + inflateView.getLayoutParams());
+    Log.e(&quot;Test&quot;, &quot;Parent -&gt; &quot; + inflateView.getParent());
+}
+</code></pre>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190329145224.jpg" alt=""></p>
+<p>如图所示，正如我们想的，root 传 null 时，参数以及父布局返回结果均为 null。</p>
+<h4 id="View-inflate-context-layoutId-mParent"><a href="#View-inflate-context-layoutId-mParent" class="headerlink" title="View.inflate(context, layoutId, mParent)"></a>View.inflate(context, layoutId, mParent)</h4><p>按之前分析过的，此方法实际调用的是 <code>getLayoutInflater().inflate(layoutId, root, true)</code> ，再来看源码：</p>
+<pre><code class="java">public View inflate(XmlPullParser parser, ViewGroup root, boolean attachToRoot) {
+    final Context inflaterContext = mContext;
+    final AttributeSet attrs = Xml.asAttributeSet(parser);
+    View result = root; 
+    final View temp = createViewFromTag(root, name, inflaterContext, attrs);
+    ViewGroup.LayoutParams params = null;
+    if (root != null) {
+        params = root.generateLayoutParams(attrs);
+    }
+    if (root != null &amp;&amp; attachToRoot) {
+        root.addView(temp, params);
+    }
+    return result;
+}
+</code></pre>
+<p>如源码所示，返回的 result 会在最开始就被赋值为入参的 root，root 不为空，同时 attachToRoot 为 true，就会将加载好的布局直接通过 addView 方法添加到 root 布局中，然后将 root 返回。</p>
+<pre><code class="java">protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    setContentView(R.layout.layout_test);
+
+    LinearLayout mParent = findViewById(R.id.ll_root);
+    View inflateView = View.inflate(this, R.layout.layout_basic_use_item, mParent);
+
+    Log.e(&quot;Test&quot;, &quot;LayoutParams -&gt; &quot; + inflateView.getLayoutParams());
+    Log.e(&quot;Test&quot;, &quot;Parent -&gt; &quot; + inflateView.getParent());
+    Log.e(&quot;Test&quot;, &quot;inflateView -&gt; &quot; + inflateView);
+}
+</code></pre>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190329153240.jpg" alt=""></p>
+<p>如图示，返回的 View 正是我们传入的 mParent，对应的 id 是 ll_root，参数也不再为空。</p>
+<p>####getLayoutInflater().inflate(layoutId, root, false) </p>
+<p>也许会有人问了，现在要么是 root 传空，返回 layoutId 对应的布局；要么是 root 不传空，返回传入的 root 布局。那我要是想 root 不传空，但是还是返回 layoutId 对应的布局呢？</p>
+<p>这就是 <code>View#inflate</code> 的局限了，由于它是包装方法，因此 <code>attachToRoot</code> 并不能因需定制。这时候我们完全可以自己调用 <code>getLayoutInflater().inflate(layoutId, root, false)</code> 方法，手动的将第三个参数传为 false，同时为这个方法传入目标根布局。这样，我们就可以得到一个有 LayoutParams，但是没有 <code>parentView</code> 的 <code>layoutId</code> 布局了。</p>
+<pre><code class="java">protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.layout_test);
+    LinearLayout mParent = findViewById(R.id.ll_root);
+    View inflateView = getLayoutInflater().inflate(R.layout.main, mParent, false);
+    Log.e(&quot;Test&quot;, &quot;LayoutParams -&gt; &quot; + inflateView.getLayoutParams());
+    Log.e(&quot;Test&quot;, &quot;Parent -&gt; &quot; + inflateView.getParent());
+}
+</code></pre>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190329155230.jpg" alt=""></p>
+<p>与我们分析的一致，有参数，但是没有父布局，且返回的就是我们加载的布局 id。我们在之后可以通过 addView 方法手动将这个布局加入父布局中。</p>
+<p><strong>这里还有个要注意的点</strong>，那就是 <code>params = root.generateLayoutParams(attrs);</code> 这句代码，我们会发现，为 <code>layoutId</code> 设置的 params 参数，实际上是通过 root 来生成的。这也就告诉我们，虽然不马上添加到 parent 中，但是这里最好也传上 parent，而不是粗暴的传入 null，因为子 View 的 LayoutParams 需要由 parent 来确定；当然，传入 null 也不会有问题，因为在执行 <code>addView()</code> 方法的时候，如果当前 childView 没有参数，会调用 <code>generateDefaultLayoutParams()</code> 生成一个宽高都包裹的 LayoutParams 赋值给 childView，而这并不一定是我们想要的。</p>
+<h4 id="attachToRoot-必须为-false！"><a href="#attachToRoot-必须为-false！" class="headerlink" title="attachToRoot 必须为 false！"></a>attachToRoot 必须为 false！</h4><p>代码写多了，大家有时候会发现这个 <code>attachToRoot</code> 也不是想怎样就怎样的，有时候它还就必须是 false，不能为 true。下面我们就来看看这些情况。</p>
+<ul>
+<li><p>RecylerView#onCreateViewHolder()</p>
+<p>在为 RecyclerView 创建 ViewHolder 时，由于 View 复用的问题，是 RecyclerView 来决定什么时候展示它的子View，这个完全不由我们决定，这种情况下，attachToRoot 必须为 false：</p>
+<pre><code class="java">public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {  
+        LayoutInflater inflater = LayoutInflater.from(getActivity());  
+        View view = inflater.inflate(R.layout.item, parent, false);  
+        return new ViewHolder(view);  
+}
+</code></pre>
+</li>
+<li><p>Fragment#onCreateView()</p>
+<p>由于 Fragment 需要依赖于 Activity 展示，一般在 Activity 中也会有容器布局来盛放 Fragment：</p>
+<pre><code class="java">Fragment fragment = new Fragment();
+getSupportFragmentManager()
+        .beginTransaction()
+        .add(R.id.root_container, fragment)
+        .commit(); 
+</code></pre>
+<p>上述代码中的 <code>R.id.root_container</code> 便为容器，这个 View 会作为参数传递给 <code>Fragment#onCreateView()</code> :</p>
+<pre><code class="java">public View onCreateView(LayoutInflater inflater, ViewGroup container, 
+                         Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_layout, parentViewGroup, false); 
+}
+</code></pre>
+<p>它也是你在 inflate() 方法中传入的 ViewGroup，FragmentManager 会将 Fragment 的 View 添加到 ViewGroup 中，言外之意就是，Fragment 对应的布局展示或者说添加进 ViewGroup 时也不是我们来控制的，而是 FragmentManager 来控制的。</p>
+</li>
+</ul>
+<p>总结一下就是，<strong>当我们不为子 View 的展示负责时，attachToRoot 必须为 false；否则就会出现对应的负责人，比如上面说的 Rv 或者 FragmentManager，已经把布局 id 添加到 ViewGroup 了，我们还继续设置 attachToRoot 为 true，想要手动 addView，那必然会发生 child already has parent 的错误。</strong></p>
+<p>以上。</p>
+<h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><ul>
+<li><a href="https://juejin.im/entry/5a1513abf265da43052e4473" target="_blank" rel="noopener">深入理解LayoutInflater.inflate()</a></li>
+<li><a href="https://www.jianshu.com/p/cdc9d4c0826e" target="_blank" rel="noopener">LayoutInflater.inflate和View.inflate</a></li>
+<li><a href="">Android API 28 View.java / LayoutInflater.java / ViewGroup.java</a></li>
+</ul>
+
+            
+                <blockquote>
+                    <p>
+                         
+                            转载请注明出处
+                        
+                        <br>
+                        Link to this article:  http://joeljt.top/2019/03/29/View-inflate-analysis/
+                    </p>
+                </blockquote>
+            
+        </div>
+    
+</div>
+
+
+                
+                    <!-- Paradox Post Info -->
+                    
+                
+
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2019/03/22/ConstraintLayout-learning/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+</footer>
+
+
+                    <!-- Import JS File -->
+
+    <script>lsloader.load("lazyload_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/lazyload.min.js", true)</script>
+
+
+
+    <script>lsloader.load("js_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/js.min.js", true)</script>
+
+
+
+    <script>lsloader.load("np_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/nprogress.js", true)</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Import prettify js  -->
+
+
+
+<!-- Window Load -->
+<!-- add class for prettify -->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+
+    
+    
+</script>
+
+<!-- MathJax Load-->
+
+
+<!-- Bing Background -->
+
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Custom Footer -->
+
+
+
+<script>
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.5.2 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>
