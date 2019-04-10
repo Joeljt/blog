@@ -34,7 +34,7 @@ scheme: Isolation
 
 # UI & UX: slogan, color, effect
 uiux:
-    slogan: "今でもあなたは私の光。"
+    slogan: "慢慢来，比较快。"
     theme_color: "#0097A7"
     theme_sub_color: "#00838F"
     hyperlink_color: "#00838F"
