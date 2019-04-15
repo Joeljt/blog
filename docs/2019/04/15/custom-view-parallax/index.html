@@ -45,7 +45,7 @@
     
     <title>
         
-            抽象类和接口的区别 | 
+            一个自定义 View 的小效果 | 
         
         Joe&#39;s blog
     </title>
@@ -55,8 +55,8 @@
     <link rel="icon" href="/img/favicon.png">
 
     <meta name="format-detection" content="telephone=no">
-    <meta name="description" itemprop="description" content="慢慢来，比较快。">
-    <meta name="keywords" content=",java基础">
+    <meta name="description" itemprop="description" content="最近简单学了一个自定义 View 的小效果，本身代码并不算多，但是还是有些新东西，本着好记性不如烂笔头的想法，还是要记录下来备忘，说不上什么时候就会用到。">
+    <meta name="keywords" content=",Android">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -221,7 +221,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Joe&#39;s blog">
-    <meta name="msapplication-starturl" content="http://joeljt.top/2018/03/09/differ-of-abstract-interface/">
+    <meta name="msapplication-starturl" content="http://joeljt.top/2019/04/15/custom-view-parallax/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Joe&#39;s blog">
@@ -236,16 +236,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://joeljt.top/2018/03/09/differ-of-abstract-interface/">
+    <meta property="og:url" content="http://joeljt.top/2019/04/15/custom-view-parallax/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="抽象类和接口的区别 | Joe&#39;s blog">
+    <meta property="og:title" content="一个自定义 View 的小效果 | Joe&#39;s blog">
     <meta property="og:image" content="/img/favicon.png">
-    <meta property="og:description" content="慢慢来，比较快。">
-    <meta property="og:article:tag" content="java基础"> 
+    <meta property="og:description" content="最近简单学了一个自定义 View 的小效果，本身代码并不算多，但是还是有些新东西，本着好记性不如烂笔头的想法，还是要记录下来备忘，说不上什么时候就会用到。">
+    <meta property="og:article:tag" content="Android"> 
 
     
-        <meta property="article:published_time" content="Fri Mar 09 2018 00:00:00 GMT+0800">
-        <meta property="article:modified_time" content="Tue Aug 14 2018 18:11:51 GMT+0800">
+        <meta property="article:published_time" content="Mon Apr 15 2019 00:00:00 GMT+0800">
+        <meta property="article:modified_time" content="Mon Apr 15 2019 17:24:13 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -253,7 +253,7 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://joeljt.top/2018/03/09/differ-of-abstract-interface/index.html">
+        <link rel="canonical" href="http://joeljt.top/2019/04/15/custom-view-parallax/index.html">
     
 
     <!-- Structured-data for SEO -->
@@ -265,10 +265,10 @@
 {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "mainEntityOfPage": "http://joeljt.top/2018/03/09/differ-of-abstract-interface/index.html",
-    "headline": "抽象类和接口的区别",
-    "datePublished": "Fri Mar 09 2018 00:00:00 GMT+0800",
-    "dateModified": "Tue Aug 14 2018 18:11:51 GMT+0800",
+    "mainEntityOfPage": "http://joeljt.top/2019/04/15/custom-view-parallax/index.html",
+    "headline": "一个自定义 View 的小效果",
+    "datePublished": "Mon Apr 15 2019 00:00:00 GMT+0800",
+    "dateModified": "Mon Apr 15 2019 17:24:13 GMT+0800",
     "author": {
         "@type": "Person",
         "name": "joe",
@@ -286,8 +286,8 @@
             "url": "/img/favicon.png"
         }
     },
-    "keywords": ",java基础",
-    "description": "慢慢来，比较快。",
+    "keywords": ",Android",
+    "description": "最近简单学了一个自定义 View 的小效果，本身代码并不算多，但是还是有些新东西，本着好记性不如烂笔头的想法，还是要记录下来备忘，说不上什么时候就会用到。",
 }
 </script>
 
@@ -439,14 +439,15 @@
     <!-- Post thumbnail -->
     
         <!-- Post Header Info -->
-        <div class="post-header_info without-thumbnail">
+        <div class="post-header_info with-thumbnail">
             <!-- Author Avatar & Name -->
             <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
             <span class="name-span">joe</span>
         </div>
 
-        <!-- Null Thumbnail -->
-        <div class="post_thumbnail-null">
+        <!-- Custom thumbnail -->
+        <div class="post_thumbnail-custom">
+            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190415172255.jpg">
     
         </div>
 
@@ -461,42 +462,268 @@
     
         <div class="post-content_wrapper">
             <p class="post-title">
-                抽象类和接口的区别
+                一个自定义 View 的小效果
             </p>
-            <p>先来一个问题，java中允许多继承吗？</p>
-<h2 id="抽象类-单继承"><a href="#抽象类-单继承" class="headerlink" title="抽象类 - 单继承"></a>抽象类 - 单继承</h2><ul>
-<li>关键字为abstract, extends, 被类所继承</li>
-<li>不可以被final修饰</li>
-<li>抽象方法不可以被private修饰，但其他三个不受限制</li>
-<li>抽象方法一定存在于抽象类中，但是抽象类中不一定有抽象方法</li>
-<li>抽象类的子类必须全部重写抽象方法，如果只重写部分抽象方法，则该子类同样为抽象方法</li>
-<li>抽象类中不一定全部都是抽象方法，方法可以有方法体</li>
-<li>抽象类不可以实例化对象</li>
-<li>抽象类可以实现接口，因为接口的内容也都是抽象的</li>
-</ul>
-<h2 id="接口-多实现"><a href="#接口-多实现" class="headerlink" title="接口 - 多实现"></a>接口 - 多实现</h2><ul>
-<li>关键字为interface, implements, 被类所实现</li>
-<li>同样不可以被final修饰</li>
-<li>接口只允许三种成员存在：<ol>
-<li>公共的静态常量 public final static</li>
-<li>公共的抽象方法 public abstract</li>
-<li>静态内部类 static class</li>
+            <p>最近简单学了一个自定义 View 的小效果，本身代码并不算多，但是还是有些新东西，本着好记性不如烂笔头的想法，还是要记录下来备忘，说不上什么时候就会用到。</p>
+<a id="more"></a>
+<h3 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h3><p>整体效果大概如图示：</p>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190414212815.gif" alt=""></p>
+<h3 id="知识点概况"><a href="#知识点概况" class="headerlink" title="知识点概况"></a>知识点概况</h3><p>涉及到的知识点其实就那么几个，主要还是思路和编码风格问题；相同的效果用布局摆放，再加上监听 ViewPager 滚动完全可以实现，不过就是扩展性太差，健壮性不太好，也不满足封装的要求，本次实现基本完全使用自定义 View 实现，也是个不错的思路。</p>
+<p>需要注意的知识点如下：</p>
+<ol>
+<li>最初设计的时候就要考虑到封装，代码耦合性是不是足够低，扩展性是不是足够强；</li>
+<li>自定义 View 的生命周期，因为你需要确定 onMeasure 方法何时执行完毕，从而在合适的位置进行参数的初始化工作，保证测量完成，所以需要的空间都可以取到宽高信息；</li>
+<li>属性动画的基本使用；</li>
+<li>Canvas#drawColor 设置背景色</li>
+<li>Canvas#drawCircle 要注意圆心的位置是在屏幕的左上顶点，屏幕中心的位置需要自己确定；</li>
+<li>绘制圆环需要正确确定圆环的半径，同时要考虑到与屏幕相切的位置问题；</li>
+<li>如何拦截 View 的创建，并从中去解析自定义属性</li>
 </ol>
+<p>下面把整个自定义 View 拆解成几个部分来记录，大概也就是上面的知识点，也没什么好说的，都是熟能生巧的东西，practice makes perfect，没毛病。</p>
+<h3 id="旋转效果"><a href="#旋转效果" class="headerlink" title="旋转效果"></a>旋转效果</h3><p>先来分析一下这个效果</p>
+<ol>
+<li>六个小圆均匀分布在大圆上，每个扇形的角度相同，也就是 60°；</li>
+<li>整体围成一个大圆，不断旋转，大圆位于屏幕正中，直径为屏幕宽度的 1/2；</li>
+<li>六个圆不停的变换位置，但总体位置未发生变化，从而展现出围着大圆旋转的效果；</li>
+</ol>
+<p>分析完毕后，我们首先要对诸如画笔颜色，屏幕宽高信息等进行初始化，这个工作只需要执行一次，我们选择在 onLayout 方法中完成，因为需要获取 View 测量后的宽高信息。</p>
+<pre><code class="java">private void initParams(Context context) {
+
+    // 获取颜色列表
+    mColorArray = context.getResources().getIntArray(R.array.splash_circle_colors);
+
+    // 获取大圆、小圆的半径
+    mBigCircleRadius = getMeasuredWidth() / 4;
+    mSmallCircleRadius = mBigCircleRadius / 7;
+
+    // 初始化画笔
+    mPaint = new Paint();
+    mPaint.setDither(true);
+    mPaint.setAntiAlias(true);
+
+    // 获取屏幕中心位置的坐标
+    mCenterX = getMeasuredWidth() / 2;
+    mCenterY = getMeasuredHeight() / 2;
+
+}
+</code></pre>
+<p>初始化工作完成后，半径有了，画笔也有了，现在需要确定的是每个小圆圆心的位置：</p>
+<pre><code class="java">public void drawCircle(float cx, float cy, float radius, @NonNull Paint paint)
+</code></pre>
+<p>大家都学过三角函数，很明显小圆的圆心在大圆圆周上，那么大圆的半径是已知的，每个扇形的角度也是已知的，根据三角函数很容易就能求出来每个小圆圆心向直径做垂线所得到的距离，这个距离又是相对于大圆圆心的距离，大圆圆心坐标已知，很显然就能求得每个小圆的坐标信息。</p>
+<p>现在的问题是，怎么让这个小圆转起来？</p>
+<p>这里我们的解决办法是，利用一个属性动画，从 0 变化到 2π，也就是整个圆周，在这个过程中，不断地去重绘 View，然后在 onDraw 中更新每个小圆当前的位置，通过重绘来实现不断滚动效果。</p>
+<p>废话就不多说了，直接上代码了。</p>
+<pre><code class="java">private void setRotateAnimation() {
+    mValueAnimator = ObjectAnimator.ofFloat(0, (float) Math.PI * 2);
+    mValueAnimator.setRepeatCount(-1);
+    mValueAnimator.setDuration(ROTATION_ANIMATION_TIME);
+    mValueAnimator.setInterpolator(new LinearInterpolator());
+    mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            mRotatedAngle = (float) animation.getAnimatedValue();
+            invalidate();
+        }
+    });
+    mValueAnimator.start();
+}
+
+public void draw(Canvas canvas) {
+    // 先绘制整个背景为白色
+    canvas.drawColor(Color.WHITE);
+
+    // 得到每个扇形的弧度
+    double percentAngle = Math.PI * 2 / mColorArray.length;
+
+    for (int i = 0; i &lt; mColorArray.length; i++) {
+
+        mPaint.setColor(mColorArray[i]);
+
+        double currAngle = percentAngle * i + mRotatedAngle;
+
+        // x轴直角边 = 半径 * cos(角度)
+        float cx = mCenterX + (float) (mBigCircleRadius * Math.cos(currAngle));
+
+        // y轴直角边 = 半径 * sin(角度)
+        float cy = mCenterY + (float) (mBigCircleRadius * Math.sin(currAngle));
+
+        canvas.drawCircle(cx, cy, mSmallCircleRadius, mPaint);
+
+    }
+}
+</code></pre>
+<p>整个旋转效果基本上就是这些内容，主要还是一个思路的问题，高中数学的内容，算数过关，代码问题不大。</p>
+<h3 id="缩放效果"><a href="#缩放效果" class="headerlink" title="缩放效果"></a>缩放效果</h3><p>这个效果就更简单了，只是一个很简单的平移动画，怕的是把问题想复杂，比如纠结做出的先放大再缩小是怎么实现的，实际上<strong>那只是属性动画的一个差值器</strong>而已。</p>
+<p>本质上这就是每个小圆都从圆周上平移到了圆心处，就是这么简单。只不过在它不是简单的缩放，而是不断的在更改大圆的半径，让整个大圆在慢慢变小。</p>
+<pre><code class="java">private void setMergeAnimation() {
+    // 从大圆半径长变化到 0，记录变化的值，并将其作为各个小圆绘制位置的参考值
+    mValueAnimator = ObjectAnimator.ofFloat(mBigCircleRadius, 0);
+    mValueAnimator.setDuration(ROTATION_ANIMATION_TIME / 2);
+    mValueAnimator.setInterpolator(new AnticipateInterpolator(5f));
+    mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            mCurrBigCircleRadius = (float) animation.getAnimatedValue();
+            invalidate();
+        }
+    });
+    mValueAnimator.start();
+}
+
+public void draw(Canvas canvas) {
+    canvas.drawColor(Color.WHITE);
+    double percentAngle = Math.PI * 2 / mColorArray.length;
+    for (int i = 0; i &lt; mColorArray.length; i++) {
+        mPaint.setColor(mColorArray[i]);
+        double currAngle = percentAngle * i + mRotatedAngle;
+        // 使用 mCurrBigCircleRadius 代替固定的 大圆半径，从而实现向中心靠拢的效果
+        float cx = mCenterX + (float) (mCurrBigCircleRadius * Math.cos(currAngle));
+        float cy = mCenterY + (float) (mCurrBigCircleRadius * Math.sin(currAngle));
+
+        canvas.drawCircle(cx, cy, mSmallCircleRadius, mPaint);
+    }
+}
+</code></pre>
+<h3 id="水波纹效果"><a href="#水波纹效果" class="headerlink" title="水波纹效果"></a>水波纹效果</h3><p>其实水波纹也就是个视觉效果，本质上就是又画了个圆，只不过这个圆有点大，把整个屏幕都包含进去了，也就是说，整个屏幕本质上是这个圆的内切矩形，即屏幕的对角线是这个圆形的直径。</p>
+<p>这里需要注意的是，这个画的并不是个普通的圆，而是一个圆环。具体如图。</p>
+<pre><code class="java">private void setMergeAnimation() {
+      // mExtendRadius = (int) Math.sqrt(Math.pow(mCenterX, 2) + Math.pow(mCenterX, 2));
+    // mExtendRadius 屏幕对角线的一半，即圆的半径
+    mValueAnimator = ObjectAnimator.ofFloat(0, mExtendRadius);
+    mValueAnimator.setDuration(ROTATION_ANIMATION_TIME / 2);
+    mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            mCurrBigCircleRadius = (float) animation.getAnimatedValue();
+            invalidate();
+        }
+    });
+    mValueAnimator.start();
+}
+
+public void draw(Canvas canvas) {
+        // mCurrBigCircleRadius 不停变大的半径值
+      // mExtendRadius - mCurrBigCircleRadius -&gt; 圆环的宽度
+    float strokeWidth = mExtendRadius - mCurrBigCircleRadius;
+    mPaint.setStrokeWidth(strokeWidth);
+    mPaint.setStyle(Paint.Style.STROKE); // 设置圆环
+    mPaint.setColor(Color.WHITE);
+        // 圆环真正的半径
+    float radius = strokeWidth / 2 + mCurrBigCircleRadius;
+    canvas.drawCircle(mCenterX, mCenterY, radius, mPaint);
+}
+
+</code></pre>
+<h3 id="ViewPager-滚动视差效果"><a href="#ViewPager-滚动视差效果" class="headerlink" title="ViewPager 滚动视差效果"></a>ViewPager 滚动视差效果</h3><p>动画结束，下面来简单介绍一下视差效果。个别控件可以跟随 ViewPager 滚动而变化，本来也可以直接监听 ViewPager 滚动，去遍历需要移动的控件来实现同样的效果，但是由于复用性、扩展性都比较差，这里使用自定义属性的方式来实现。<strong>这种方式的重点在于拦截系统 View 的创建，然后解析自定义的属性，从而实现想要的效果。</strong></p>
+<ul>
+<li>拦截View的创建</li>
+</ul>
+<p>需要使用 LayoutInflater 的 setFactory 方法，具体就不多做介绍了，不了解的自己去了解一下： <a href="https://blog.csdn.net/lmj623565791/article/details/51503977" target="_blank" rel="noopener">Android 探究 LayoutInflater setFactory</a></p>
+<p>需要</p>
+<ul>
+<li><p>解析自定义属性</p>
+<p>我们为系统控件扩展了自定义属性，在 attrs 中声明：</p>
+<pre><code class="xml">&lt;resources&gt;
+    &lt;!-- X方向上的位移 --&gt;
+    &lt;attr name=&quot;translationXIn&quot; format=&quot;float&quot; /&gt;
+    &lt;attr name=&quot;translationXOut&quot; format=&quot;float&quot; /&gt;
+    &lt;!-- Y方向上的位移 --&gt;
+    &lt;attr name=&quot;translationYIn&quot; format=&quot;float&quot; /&gt;
+    &lt;attr name=&quot;translationYOut&quot; format=&quot;float&quot; /&gt;
+&lt;/resources&gt;
+</code></pre>
+<p>然后我们拦截到系统的 View 后，尝试从中去解析这些自定义的 View；解析到对应的自定义属性后，通过给 View 设置 tag 的方式，将用户设置的信息进行保存：</p>
+<pre><code class="xml">&lt;resources&gt;
+    &lt;item name=&quot;parallax_tag&quot; type=&quot;id&quot;/&gt;
+&lt;/resources&gt;
+</code></pre>
+<pre><code class="java"> private int[] mParallaxAttrs = new int[]{
+            R.attr.translationXIn, R.attr.translationXOut,
+            R.attr.translationYIn, R.attr.translationYOut
+    };
+
+private void analysisAttrs(View view, Context context, AttributeSet attrs) {
+    TypedArray array = context.obtainStyledAttributes(attrs, mParallaxAttrs);
+
+    // 主动去解析自定义的几个属性，如果能够拿到，就去遍历解析
+    if (array != null &amp;&amp; array.getIndexCount() != 0) {
+
+        ParallaxTag parallaxTag = new ParallaxTag();
+        for (int i = 0; i &lt; array.getIndexCount(); i++) {
+
+            int arrayIndex = array.getIndex(i);
+
+            switch (arrayIndex) {
+                case 0:
+                    parallaxTag.setxIn(array.getFloat(arrayIndex, 0f));
+                    break;
+                case 1:
+                    parallaxTag.setxOut(array.getFloat(arrayIndex, 0f));
+                    break;
+                case 2:
+                    parallaxTag.setyIn(array.getFloat(arrayIndex, 0f));
+                    break;
+                case 3:
+                    parallaxTag.setyOut(array.getFloat(arrayIndex, 0f));
+                    break;
+            }
+
+            // 要紧的问题是，解析到了以后怎么存 -&gt; 给 View 设置 tag
+            view.setTag(R.id.parallax_tag, parallaxTag);
+
+            // 将准备操作的 View 放入集合中
+            mParallaxViews.add(view);
+        }
+
+        array.recycle();
+    }
+}
+</code></pre>
 </li>
-<li>由上可知，接口的作用域必须为public</li>
-<li>接口的抽象方法也必须全部被实现类所重写，否则实现类为抽象类</li>
-<li>不同的接口之间为继承关系，而且可以多继承</li>
-<li>接口不可以实例化对象</li>
-<li>接口不可以继承抽象类，因为抽象类中有可能存在非抽象方法，与接口的概念相悖</li>
 </ul>
-<h2 id="二者区别"><a href="#二者区别" class="headerlink" title="二者区别"></a>二者区别</h2><ul>
-<li>每个类只能继承一个抽象类，但是可以实现多个接口</li>
-<li>抽象类可以有非抽象方法，接口全部为抽象方法</li>
-<li>从作用域角度看，抽象类中抽象方法不能为private，而接口强制为public abstract</li>
-<li>抽象类可以实现接口，但是接口不能继承抽象类</li>
-<li>不同的接口可以多继承，但是不同的抽象类只能单继承</li>
-</ul>
-<p>以上。</p>
+<p>以上动作在 ViewPager 关联的 Fragment 中实现，这样只需要在 ViewPager 的滑动监听中去取到当前 Fragment 的 View 集合，然后分别为左右两侧的 Fragment 设置进入和划出效果即可。</p>
+<pre><code class="java">addOnPageChangeListener(new OnPageChangeListener() {
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        // 同时设置左右两侧的 fragment，左边退出，右边进入
+        ParallaxFragment outFragment = mFragments.get(position);
+
+
+        List&lt;View&gt; outFragmentParallaxViews = outFragment.getParallaxViews();
+        for (View view : outFragmentParallaxViews) {
+            ParallaxTag parallaxTag = (ParallaxTag) view.getTag(R.id.parallax_tag);
+            view.setTranslationX(( -positionOffsetPixels) * parallaxTag.getxOut());
+            view.setTranslationY(( -positionOffsetPixels) * parallaxTag.getyOut());
+        }
+
+        try {
+            ParallaxFragment inFragment = mFragments.get(position + 1);
+            outFragmentParallaxViews = inFragment.getParallaxViews();
+            for (View view : outFragmentParallaxViews) {
+                ParallaxTag parallaxTag = (ParallaxTag) view.getTag(R.id.parallax_tag);
+                view.setTranslationX(
+                  (getMeasuredWidth() - positionOffsetPixels) * parallaxTag.getxIn());
+                view.setTranslationY(
+                  (getMeasuredWidth() - positionOffsetPixels) * parallaxTag.getyIn());
+            }
+        } catch (Exception e) {}
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+});
+</code></pre>
+<p>好啦，说到这里就差不多结束了，完结撒花~</p>
 
             
                 <blockquote>
@@ -505,7 +732,7 @@
                             转载请注明出处
                         
                         <br>
-                        Link to this article:  http://joeljt.top/2018/03/09/differ-of-abstract-interface/
+                        Link to this article:  http://joeljt.top/2019/04/15/custom-view-parallax/
                     </p>
                 </blockquote>
             
@@ -529,21 +756,13 @@
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
-        <a href="/2018/03/09/polymorphism-of-java/" id="post_nav-newer" class="prev-content">
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
-                <i class="material-icons">arrow_back</i>
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Newer
-        </a>
-    
 
     <!-- Section Spacer -->
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
     
-        <a href="/2018/03/07/TextView/" id="post_nav-older" class="next-content">
+        <a href="/2019/04/10/Android-MeasureSpec/" id="post_nav-older" class="next-content">
             Older
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
