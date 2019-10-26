@@ -45,7 +45,7 @@
     
     <title>
         
-            tags | 
+            Android 系统中的线程 | 
         
         Joe&#39;s blog
     </title>
@@ -55,8 +55,10 @@
     <link rel="icon" href="/img/favicon.png">
 
     <meta name="format-detection" content="telephone=no">
-    <meta name="description" itemprop="description" content="慢慢来，比较快。">
-    <meta name="keywords" content="">
+    <meta name="description" itemprop="description" content="
+Efficient.Android.Threading 第三章读书笔记
+">
+    <meta name="keywords" content=",读书笔记,Efficient.Android.Threading">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -221,7 +223,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Joe&#39;s blog">
-    <meta name="msapplication-starturl" content="http://joeljt.top/tags/">
+    <meta name="msapplication-starturl" content="http://joeljt.top/2018/08/29/Efficient-Android-Threading-chapter-3/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Joe&#39;s blog">
@@ -236,13 +238,18 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://joeljt.top/tags/">
+    <meta property="og:url" content="http://joeljt.top/2018/08/29/Efficient-Android-Threading-chapter-3/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="tags | Joe&#39;s blog">
+    <meta property="og:title" content="Android 系统中的线程 | Joe&#39;s blog">
     <meta property="og:image" content="/img/favicon.png">
-    <meta property="og:description" content="慢慢来，比较快。">
-    
+    <meta property="og:description" content="
+Efficient.Android.Threading 第三章读书笔记
+">
+    <meta property="og:article:tag" content="读书笔记"> <meta property="og:article:tag" content="Efficient.Android.Threading"> 
 
+    
+        <meta property="article:published_time" content="Wed Aug 29 2018 00:00:00 GMT+0800">
+        <meta property="article:modified_time" content="Thu Mar 21 2019 18:53:39 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -250,13 +257,45 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://joeljt.top/tags/index.html">
+        <link rel="canonical" href="http://joeljt.top/2018/08/29/Efficient-Android-Threading-chapter-3/index.html">
     
 
     <!-- Structured-data for SEO -->
     
         
 
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "http://joeljt.top/2018/08/29/Efficient-Android-Threading-chapter-3/index.html",
+    "headline": "Android 系统中的线程",
+    "datePublished": "Wed Aug 29 2018 00:00:00 GMT+0800",
+    "dateModified": "Thu Mar 21 2019 18:53:39 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "joe",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/portrait.jpeg"
+        },
+        "description": "慢慢来，比较快。"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Joe&#39;s blog",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": ",读书笔记,Efficient.Android.Threading",
+    "description": "
+Efficient.Android.Threading 第三章读书笔记
+",
+}
+</script>
 
 
     
@@ -386,60 +425,183 @@
 
                     <!-- Post TOC -->
 
+    
+
+
 
 <!-- Layouts -->
 
-    <!-- Tags Cloud -->
-    <style>
-    #bottom{
-        position: relative;
-    }
+    <!-- Post Module -->
+    <div class="material-post_container">
 
-    @media screen and (max-width: 480px) {
-        .material-tagscloud{
-            margin: 6em 2em 0;
-        }
-    }
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
 
-    .material-tagscloud a{
-        text-decoration:none;
-        padding: 1px 9px;
-        margin: 9px 1px;
-        line-height: 40px;
-        white-space: nowrap;
-        transition: .6s;
-        opacity: .85;
-    }
+                <!-- Post Header(Thumbnail & Title) -->
+                
 
-    .material-tagscloud a:hover{
-        transition: .6s;
-        opacity: 1;
-        background: #FAFAFA;
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
-    }
-</style>
 
-<div class=" material-tagscloud">
-    <div class="material-post mdl-grid">
-        <a href="/tags/Android/" style="font-size: 35px; color: #212121">Android</a> <a href="/tags/Efficient-Android-Threading/" style="font-size: 30.25px; color: #363636">Efficient.Android.Threading</a> <a href="/tags/android/" style="font-size: 16px; color: #757575">android</a> <a href="/tags/design-pattern/" style="font-size: 25.5px; color: #4b4b4b">design-pattern</a> <a href="/tags/java基础/" style="font-size: 20.75px; color: #606060">java基础</a> <a href="/tags/源码解析/" style="font-size: 16px; color: #757575">源码解析</a> <a href="/tags/读书笔记/" style="font-size: 30.25px; color: #363636">读书笔记</a>
-    </div>
+    <!-- Isolation Post Header -->
+    <!-- Post thumbnail -->
+    
+        <!-- Post Header Info -->
+        <div class="post-header_info with-thumbnail">
+            <!-- Author Avatar & Name -->
+            <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
+            <span class="name-span">joe</span>
+        </div>
+
+        <!-- Custom thumbnail -->
+        <div class="post_thumbnail-custom">
+            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321185255.png">
+    
+        </div>
+
+
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+
+    
+        <div class="post-content_wrapper">
+            <p class="post-title">
+                Android 系统中的线程
+            </p>
+            <blockquote>
+<p>Efficient.Android.Threading 第三章读书笔记</p>
+</blockquote>
+<a id="more"></a>
+<p>每个 Android 应用程序都会运行着很多线程，这些线程一般都与 Linux 进程绑定，并且通过 Dalvik VM 来管理各线程的内部执行。应用主要包括 UI 线程，binder 线程，以及自己按需创建的后台线程，本章主要讨论方向：</p>
+<ul>
+<li>UI 线程，binder 线程，后台线程的区别</li>
+<li>Linux thread coupling</li>
+<li>应用程序排名会对线程的执行造成怎样的影响</li>
+<li>执行 Linux 线程</li>
+</ul>
+<h3 id="Android-应用层线程"><a href="#Android-应用层线程" class="headerlink" title="Android 应用层线程"></a>Android 应用层线程</h3><p>Android 应用层主要包括 UI 线程，binder 线程，以及自己按需创建的后台线程。</p>
+<h4 id="UI-线程"><a href="#UI-线程" class="headerlink" title="UI 线程"></a>UI 线程</h4><p>UI 线程在应用启动时启动，生命周期与应用相同。作为 Android 应用的主线程，UI 线程主要负责 Android 组件和界面 UI 的绘制与更新。当用户尝试在其他线程更新 UI 时，系统则会抛出异常。尽管这个处理方式看上去很不友好，但却是非常必要的。因为 Android UI Toolkit 不是线程安全的，所以为了规避不必要的麻烦，runtime 只能有一个线程来操作 UI 。</p>
+<p>UI 线程是基于消息机制的，按照事件的顺序依次执行。所有的线程都可以通过 Handler 将事件发送到 UI 线程，如果当前线程正在做着排在前面的事件，则该事件会入队等待。</p>
+<h4 id="Binder-线程"><a href="#Binder-线程" class="headerlink" title="Binder 线程"></a>Binder 线程</h4><p>Binder 线程主要是用来为不同进程之间提供通信的。每个进程都维护一个线程池，不会频繁的新建和销毁线程，而是不断复用现有的几个线程来协同工作。Binder 线程处理来自其他进程的请求，具体包括系统服务，intents, content providers, services。大部分涉及不到进程间通信的场景，消息都是通过 UI 线程来进行处理的。一个例外是，当前应用可能提供了一个 <code>Service</code> ，其通过 AIDL 接口与其他进程实现了绑定。</p>
+<h4 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h4><p>一个应用程序中，所有需要调用者显式声明的线程，都是后台线程。一般来讲，后台线程是用户手动声明的，也就是说其默认没有任何实现，全部的工作都由调用者来定义。后台线程本质上属于 UI 线程的后代，所以它继承了一部分 UI 线程的特性，比如优先级。</p>
+<p>在 Android 应用层，UI 线程与后台线程处理的工作是完全不同的；但是在 Linux 系统层面，二者是没有任何区别的。UI 界面的更新只能通过 UI 线程来进行，并不是被 Linux 限定的，而是通过 Application Framework 层的 Window Manager 来限制的。</p>
+<h3 id="Linux-进程与线程"><a href="#Linux-进程与线程" class="headerlink" title="Linux 进程与线程"></a>Linux 进程与线程</h3><p>Android 系统是基于 Linux 内核的，每个应用程序实际上都是一个 Linux 程序。Android 系统的每个应用都有一个隐藏的 Linux 进程，其 fork 自 Zygote 进程，有以下几个值得注意的属性：</p>
+<ul>
+<li><p>User ID(UID)</p>
+<p>Linux 系统是多用户系统，在 Android 系统中，每个应用就代表一个用户，当应用安装到系统中时，会被指定一个 User ID</p>
+</li>
+<li><p>Process identifier (PID)</p>
+<p>当前进程的唯一标识</p>
+</li>
+<li><p>Parent process identifier  (PPID)</p>
+<p>系统启动后，每个进程都是依附于其他进程而创建的。因此，所有正在运行中的进程会构成一个进程树，所有每个应用都有一个父亲进程。就 Android 系统来讲，所有进程的父进程都是 Zygote 进程</p>
+</li>
+<li><p>Stack</p>
+<p>存储本地方法的变量和指针</p>
+</li>
+<li><p>Heap</p>
+<p>当前进程私有化的地址数据信息，无法被其他进程获取到</p>
+</li>
+</ul>
+<p>进程和线程一个很重要的区别就是，不同进程之间无法共享地址数据，但是同一进程的不同线程可以共享数据。这就直接导致了，线程间通信速度比进程间通信速度快得多。进程间通信需要进行一些远程操作调用，而这个过程开销比较大。</p>
+<p>一般来讲，应用启动以后，会创建不超过十个线程；第一个创建的线程便是我们所熟知的 UI 线程，之后所有的线程都是 UI 线程繁衍出来的。具体表现在，UI 线程的 PID 是 4257，之后所有线程的 PPID 都是 UI 线程的 PID：</p>
+<p><img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321182600.jpg" alt="adb shell ps"></p>
+<h4 id="线程的调度"><a href="#线程的调度" class="headerlink" title="线程的调度"></a>线程的调度</h4><p>Linux 中线程为最小调度单元，而并非进程。一个程序中的某个线程需要和其他所有线程进行执行机会的争夺，在 Android 程序中，线程的调度都是直接交给 Linux 内核来处理的，而并非 Dalvik 虚拟机，也就是说每个线程都要和整个系统中的所有应用的所有线程做资源的争夺。</p>
+<p>Linux 的线程调度器又被称为完全公平调度程序 <code>completely fair scheduler</code> ，原因就在于它执行调度时不只根据优先级，还会参考具体线程的执行时间来做判断。如果某个线程之前很少有机会被处理器执行，那么即使它优先级很低，那它也会优先得到执行；如果某个线程很少需要执行，那 CFS 会降低它的优先级，以保证它不会过分争抢资源。</p>
+<p>Linux 平台主要有两种方式来影响线程的调度：</p>
+<ol>
+<li>更改线程优先级</li>
+<li>更改 Android 专有的控制组 <code>control group</code></li>
+</ol>
+<h5 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h5><p>线程的优先级在 Linux 中被称为友善度 <code>niceness</code> / <code>nicevalue</code> ，指的是当前线程对其他线程的友善程度。也就是说，友善度越低，即越不友善，则优先级越高。在 Android 中，Linux 线程的友善度从低到高为 -20 到 19，默认值为 0。</p>
+<p>某个线程的优先级与初始化该线程所在的线程优先级相同，除非其被系统显式修改。一个应用可以通过以下两种方式更改线程的优先级：</p>
+<ul>
+<li>java.lang.Thread</li>
+</ul>
+<pre><code class="java">// Java 线程优先级，从 0 到 10 依次递增
+setPriority(int priority);
+</code></pre>
+<ul>
+<li>android.os.Process</li>
+</ul>
+<pre><code class="java">Process.setThreadPriority(int priority);
+Process.setThreadPriority(int threadId, int priority);
+</code></pre>
+<h5 id="控制组"><a href="#控制组" class="headerlink" title="控制组"></a>控制组</h5><p>Android 平台不是单纯依赖 Linux 的 CFS 调度系统的，还对所有的线程进行控制组控制。所谓控制组，实际上是一个 Linux 容器，该容器用来管理当前容器中所有执行线程的处理器执行时间。一个应用中创建的所有线程都会属于某一个控制组。</p>
+<p>Android 系统中定义了很多控制组，但是最重要的是前台组和后台组。</p>
+<p>其中，前台组相较于后台组会得到更多的执行机会，后台组中所有的线程加一起，也得不到超过 10% 的执行时间，Android 系统就是利用这个特点来保证前台进程会得到更多的执行机会，从而保证性能和效果。</p>
+<p>具体某个线程是否展示在前台，则与其所在进程的级别和类型有关系：</p>
+<p><img src="http://p5zd0id9p.bkt.clouddn.com/18-8-30/70891310.jpg" alt=""></p>
+<p>如图所示，如果某个进程执行在前台页面或者其他前台进程中，那么该进程创建的线程就会属于前台组，同时得到绝大部分的执行时间；而剩下的时间就会被分配给后台组来执行任务。</p>
+<p>当用户进行应用切换操作时，某个线程的控制组也会实时跟着更新：按下 Home 键时，原本的前台进程会退居后台，其内部线程也会进入后台控制组；而原来的后台组也会来到前台，占据大部分的 cpu 执行时间。</p>
+<p>这种方式极大的提高了前台应用的执行效率，一定程度上也降低了后台应用抢占系统资源的可能性，从而提高应用的性能。</p>
+<p>尽管控制组可以一定程度上避免后台应用进程过分抢占资源，但是用户仍然可以在后台进程中创建大量线程来和 UI 线程抢占 cpu 资源。由于其在主线程创建，所以那些子线程与 UI 线程有着同样的优先级和控制组，所以这部分线程会极大的威胁到 UI 线程的正确执行。因此，有时候用户创建大量的后台进程来处理任务，本意可能是不影响 UI 线程正常工作，但是很有可能会适得其反。</p>
+<p>像我们之前说到的，前台组和后台组是根据当前应用是否处于用户可见来界定划分的，也就是说，用户可见的应用程序中的后台线程，也是属于前台组的，会获得大部分的执行机会。在这种情况下，大量的后台线程就会影响到 UI 线程的工作，为解决这个问题，开发者可以通过将后台线程与其创建时的控制组，也就是 UI 线程所在的控制组，进行解耦分离。这个过程可以通过给线程设置足够低的优先级来实现，这样一来，这些后台线程会永远属于后台控制组，即使是其所在的进程当前是处于前台界面展示的。</p>
+<pre><code class="java">// 这个方法不但可以降低优先级；
+// 还能保证当前线程与进程解耦分离，保证其永远处于后台控制组
+Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+</code></pre>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Android 系统中所有的线程类型：UI，binder，后台，本质上都属于 Linux Posix 线程。其中，UI 线程和 binder 线程是在应用启动时自动创建的，后台线程则完全是开发者按需创建的。Android 中所有的组件任务都是默认执行在 UI 线程的，但是为了避免界面效果卡顿以及 ANR 异常，长时间的耗时操作应该在后台进程中执行。尽管 UI 线程是最重要的执行线程，但是由于系统并不知道谁是 UI 线程，所以应该在开发时就明确注意，不要让后台线程喧宾夺主，扰乱 UI 线程的工作。这个效果通常来讲有两种实现方式，一是降低优先级，二是让不是那么重要的后台线程进入后台控制组执行。</p>
+
+            
+                <blockquote>
+                    <p>
+                         
+                            转载请注明出处
+                        
+                        <br>
+                        Link to this article:  http://joeljt.top/2018/08/29/Efficient-Android-Threading-chapter-3/
+                    </p>
+                </blockquote>
+            
+        </div>
+    
 </div>
 
 
-<script type="text/ls-javascript" id="page-tagcloud-script">
-    var adjustFooter = function() {
-        if( ($('#bottom').offset().top + $('#bottom').outerHeight() ) < $(window).height() ) {
-            var footerBottom = $(window).height() - $('#bottom').outerHeight() - $('#bottom').offset().top;
-            $('#bottom').css('bottom', '-' + footerBottom + 'px');
-        }
-    };
+                
+                    <!-- Paradox Post Info -->
+                    
+                
 
-    $(document).ready(function() {
-        adjustFooter();
-    });
-</script>
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
 
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2018/09/09/Efficient-Android-Threading-chapter-4-1/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
 
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2018/08/25/Efficient-Android-Threading-chapter-2/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
 
 
 

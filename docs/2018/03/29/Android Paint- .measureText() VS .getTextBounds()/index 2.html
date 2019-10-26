@@ -45,7 +45,7 @@
     
     <title>
         
-            tags | 
+            Android Paint .measureText() VS .getTextBounds() | 
         
         Joe&#39;s blog
     </title>
@@ -55,7 +55,7 @@
     <link rel="icon" href="/img/favicon.png">
 
     <meta name="format-detection" content="telephone=no">
-    <meta name="description" itemprop="description" content="慢慢来，比较快。">
+    <meta name="description" itemprop="description" content="两个方法可以用来测量文字宽高信息的，只不过 .getTextBounds() 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 .measureText() 则只是返回宽度信息。">
     <meta name="keywords" content="">
     <meta name="theme-color" content="#0097A7">
 
@@ -221,7 +221,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Joe&#39;s blog">
-    <meta name="msapplication-starturl" content="http://joeljt.top/tags/">
+    <meta name="msapplication-starturl" content="http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Joe&#39;s blog">
@@ -236,13 +236,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://joeljt.top/tags/">
+    <meta property="og:url" content="http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="tags | Joe&#39;s blog">
+    <meta property="og:title" content="Android Paint .measureText() VS .getTextBounds() | Joe&#39;s blog">
     <meta property="og:image" content="/img/favicon.png">
-    <meta property="og:description" content="慢慢来，比较快。">
+    <meta property="og:description" content="两个方法可以用来测量文字宽高信息的，只不过 .getTextBounds() 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 .measureText() 则只是返回宽度信息。">
     
 
+    
+        <meta property="article:published_time" content="Thu Mar 29 2018 00:00:00 GMT+0800">
+        <meta property="article:modified_time" content="Mon Nov 26 2018 18:43:06 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -250,13 +253,43 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://joeljt.top/tags/index.html">
+        <link rel="canonical" href="http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/index.html">
     
 
     <!-- Structured-data for SEO -->
     
         
 
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/index.html",
+    "headline": "Android Paint .measureText() VS .getTextBounds()",
+    "datePublished": "Thu Mar 29 2018 00:00:00 GMT+0800",
+    "dateModified": "Mon Nov 26 2018 18:43:06 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "joe",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/portrait.jpeg"
+        },
+        "description": "慢慢来，比较快。"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Joe&#39;s blog",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": "",
+    "description": "两个方法可以用来测量文字宽高信息的，只不过 .getTextBounds() 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 .measureText() 则只是返回宽度信息。",
+}
+</script>
 
 
     
@@ -386,60 +419,144 @@
 
                     <!-- Post TOC -->
 
+    
+
+
 
 <!-- Layouts -->
 
-    <!-- Tags Cloud -->
-    <style>
-    #bottom{
-        position: relative;
-    }
+    <!-- Post Module -->
+    <div class="material-post_container">
 
-    @media screen and (max-width: 480px) {
-        .material-tagscloud{
-            margin: 6em 2em 0;
-        }
-    }
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
 
-    .material-tagscloud a{
-        text-decoration:none;
-        padding: 1px 9px;
-        margin: 9px 1px;
-        line-height: 40px;
-        white-space: nowrap;
-        transition: .6s;
-        opacity: .85;
-    }
+                <!-- Post Header(Thumbnail & Title) -->
+                
 
-    .material-tagscloud a:hover{
-        transition: .6s;
-        opacity: 1;
-        background: #FAFAFA;
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
-    }
-</style>
 
-<div class=" material-tagscloud">
-    <div class="material-post mdl-grid">
-        <a href="/tags/Android/" style="font-size: 35px; color: #212121">Android</a> <a href="/tags/Efficient-Android-Threading/" style="font-size: 30.25px; color: #363636">Efficient.Android.Threading</a> <a href="/tags/android/" style="font-size: 16px; color: #757575">android</a> <a href="/tags/design-pattern/" style="font-size: 25.5px; color: #4b4b4b">design-pattern</a> <a href="/tags/java基础/" style="font-size: 20.75px; color: #606060">java基础</a> <a href="/tags/源码解析/" style="font-size: 16px; color: #757575">源码解析</a> <a href="/tags/读书笔记/" style="font-size: 30.25px; color: #363636">读书笔记</a>
-    </div>
+    <!-- Isolation Post Header -->
+    <!-- Post thumbnail -->
+    
+        <!-- Post Header Info -->
+        <div class="post-header_info without-thumbnail">
+            <!-- Author Avatar & Name -->
+            <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
+            <span class="name-span">joe</span>
+        </div>
+
+        <!-- Null Thumbnail -->
+        <div class="post_thumbnail-null">
+    
+        </div>
+
+
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+
+    
+        <div class="post-content_wrapper">
+            <p class="post-title">
+                Android Paint .measureText() VS .getTextBounds()
+            </p>
+            <p>两个方法可以用来测量文字宽高信息的，只不过 <strong>.getTextBounds()</strong> 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 <strong>.measureText()</strong> 则只是返回宽度信息。</p>
+<a id="more"></a>
+<p>具体使用方法如下：</p>
+<pre><code class="java">final String someText = &quot;Hello. I&#39;m some text!&quot;;
+
+Paint mPaint = new Paint();
+
+// .measureText()
+float measuredWidth = mPaint.measureText(someText);
+
+// .getTextBounds()
+Rect mBounds = new Rect();
+mPaint.getTextBounds(someText, 0, someText.length, mBounds);
+int measuredWidth = mBounds.width();
+int measuredHeight = mBounds.height();
+
+</code></pre>
+<p>但是，当我们把两个结果打印出来，我们会发现，对于同一个文本信息，使用两个方法得到的宽度是不同的：</p>
+<pre><code class="java">// 打印宽度信息
+Log.d(&quot;Test&quot;, String.format(
+        &quot;Text is &#39;%s&#39;, measureText %f, getTextBounds %d&quot;,
+        someText,
+        measuredWidth,
+        mBounds.width())
+    );
+
+// 打印结果如下
+// Text is &#39;Hello. I&#39;m some text!&#39;, measureText 115.000000, getTextBounds 105
+</code></pre>
+<p>经过一系列的探究和资料查看，最后得到的结论是：</p>
+<blockquote>
+<p>二者返回结果确实不同，且 measureText() 返回结果会略微大于 getTextBounds() 所得到的宽度信息</p>
+<p>measureText() 会在文本的左右两侧加上一些额外的宽度，这部分额外的宽度叫做 Glyph’s AdvanceX （具体应该是属于字型方面的范畴，我猜测这部分宽度是类似字间距之类的东西）</p>
+<p>getTextBounds() 返回的则是当前文本所需要的最小宽度，也就是整个文本外切矩形的宽度</p>
+</blockquote>
+<p>实际上，这两个方法在具体调用时虽然都是不同的方法，但在 native 层的测量算法都是一致的，只不过在最后返回时，measureText() 会在左右两侧加上一些额外的宽度值，而 getTextBounds() 则是返回需要的最小宽度而已。</p>
+
+            
+                <blockquote>
+                    <p>
+                         
+                            转载请注明出处
+                        
+                        <br>
+                        Link to this article:  http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/
+                    </p>
+                </blockquote>
+            
+        </div>
+    
 </div>
 
 
-<script type="text/ls-javascript" id="page-tagcloud-script">
-    var adjustFooter = function() {
-        if( ($('#bottom').offset().top + $('#bottom').outerHeight() ) < $(window).height() ) {
-            var footerBottom = $(window).height() - $('#bottom').outerHeight() - $('#bottom').offset().top;
-            $('#bottom').css('bottom', '-' + footerBottom + 'px');
-        }
-    };
+                
+                    <!-- Paradox Post Info -->
+                    
+                
 
-    $(document).ready(function() {
-        adjustFooter();
-    });
-</script>
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
 
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2018/05/28/bug-of-mysql/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
 
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2018/03/19/TrackColorTextView/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
 
 
 

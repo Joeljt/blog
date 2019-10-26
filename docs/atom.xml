@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joeljt.top/"/>
-  <updated>2019-10-26T07:42:15.935Z</updated>
+  <updated>2019-10-26T09:01:48.879Z</updated>
   <id>http://joeljt.top/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Builder 设计模式</title>
+    <link href="http://joeljt.top/2019/10/26/design-pattern-builder/"/>
+    <id>http://joeljt.top/2019/10/26/design-pattern-builder/</id>
+    <published>2019-10-25T16:00:00.000Z</published>
+    <updated>2019-10-26T09:01:48.879Z</updated>
+    
+    <content type="html"><![CDATA[<p>哎呀，你说的这个我知道，Builder 设计模式不就是链式调用嘛！</p><a id="more"></a><p>其实 Builder 设计模式还是比较常用的一个设计模式，我们平时的开发中偶尔也经常用到。</p><p>Builder 设计模式，又称为建造者设计模式，主要的目标是将参数构建过程和对象表现过程进行分离，让参数的构建过程更加直观和易用。</p><p>具体是示例有 OkHttp，系统的 AlertDialog 都是 Builder 设计模式。Builder 设计模式最直观的表现是，在创建某个对象时不是直接 new 该类的对象，而是通过该类的静态内部类 Builder 来构建，并通过最终的 build 方法来完成对象的实例化。</p><p>来一个简单的调用例子：</p><pre><code class="java">PosAlertDialog backAlertDialog = new PosAlertDialog.Builder(mContext)                    .setRemindText(&quot;确定要中断盘点吗？&quot;)                    .setPrimaryText(&quot;继续盘点&quot;)                    .setSecondaryText(&quot;中断盘点&quot;)                    .setUseLoadingButton(false)                    .setOnCancelClickListener(new PosAlertDialog.OnCancelClickListener() {                        @Override                        public void onCancelClick(View view, Dialog dialog) {                        }                    })                    .build();backAlertDialog.show();</code></pre><p>我们可以看到，通过 Builder 的方法，对弹窗的具体属性、点击事件等进行声明，并在最终通过 build 方法真正创建并返回 PosAlertDialog 的实例，较为流畅地完成整个弹窗的初始化及展示逻辑。</p><h3 id="Builder-设计模式-VS-链式调用"><a href="#Builder-设计模式-VS-链式调用" class="headerlink" title="Builder 设计模式 VS 链式调用"></a>Builder 设计模式 VS 链式调用</h3><p>那回到最初的问题，Builder 设计模式就是链式调用吗？毕竟在我们的例子中也是使用了链式调用。答案是否定的。Builder 设计模式是一种设计模式，目的在于整合多参数的声明，拆分参数声明和对象创建的过程，使得整个过程更加直观、易用；而链式调用只不过是一种调用方式，只要开发者喜欢，基本上任何方法都可以使用链式调用的方式。比如下面这个例子：</p><pre><code class="java">public class AppVersionEntity {  private String version;  private String smVersion;  private String updateInfo;  public void setUpdateInfo(String updateInfo) {    this.updateInfo = updateInfo;    return this;  }  public void setVersion(String version) {    this.version = version;    return this;  }  public void setSmVersion(String smVersion) {    this.smVersion = smVersion;    return this;  }}AppVersionEntity entity = new AppVersionEntity()           .setUpdateInfo(&quot;1&quot;)           .setVersion(&quot;1&quot;)           .setSmVersion(&quot;1&quot;);</code></pre><p>我们可以看到，这只是一个非常普通的 Java bean，但是我们却可以使用链式调用的方式，一次性为属性批量赋值，但是这很明显不是 Builder 设计模式。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;哎呀，你说的这个我知道，Builder 设计模式不就是链式调用嘛！&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="design-pattern" scheme="http://joeljt.top/tags/design-pattern/"/>
+    
+  </entry>
   
   <entry>
     <title>Message 入队过程分析</title>
@@ -33,6 +53,26 @@
     
     
       <category term="Android" scheme="http://joeljt.top/tags/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>单例设计模式</title>
+    <link href="http://joeljt.top/2019/10/26/design-pattern-singleton/"/>
+    <id>http://joeljt.top/2019/10/26/design-pattern-singleton/</id>
+    <published>2019-10-25T16:00:00.000Z</published>
+    <updated>2019-10-26T08:11:02.086Z</updated>
+    
+    <content type="html"><![CDATA[<p>茴香的「茴」字有几种写法？</p><a id="more"></a><p>单例模式有很多种写法，都不复杂，大概梳理一下。</p><h4 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h4><p>私有化构造器，提供共有方法获取实例对象，没什么多说的。静态对象和类一起加载，耗费资源，不推荐。</p><pre><code class="java">class Singleton {    public static Singleton sInstance = new Singleton();    private Singleton() {}    public static Singleton getInstance() {        return sInstance;    }}</code></pre><h4 id="懒汉式"><a href="#懒汉式" class="headerlink" title="懒汉式"></a>懒汉式</h4><p>最简单的懒汉单例，但是会有线程安全的问题，需要完善。</p><pre><code class="java">class Singleton {    public static Singleton sInstance;    private Singleton() {}    public static Singleton getInstance() {          if(sInstance == null){           sInstance = new Singleton();        }        return sInstance;    }}</code></pre><h4 id="双重校验锁懒汉单例"><a href="#双重校验锁懒汉单例" class="headerlink" title="双重校验锁懒汉单例"></a>双重校验锁懒汉单例</h4><p>有几个需要注意的地方：</p><ol><li><p>单例对象加上 <code>volatile</code> 关键字，防止重排序，保证多线程可见性</p></li><li><p>两个判空都不能省略，第一个 if 用来提升效率，有对象后不再创建；第二个 if 用来保证线程安全。</p><blockquote><p>如果没有第二个 if，虽然被 synchronized 锁在了外面，但是等第一个线程创建完对象，第二个线程还是可以继续往下执行</p></blockquote></li><li><p>synchronized 的锁不可以为 new Object(), 锁必须保证唯一性</p></li></ol><pre><code class="java">class Singleton {    public static volatile Singleton sInstance;    private Singleton() {}    public static Singleton getInstance() {      if(sInstance == null){        synchronized (Singleton.class) {          if(sInstance == null){            sInstance = new Singleton();          }        }      }      return sInstance;    }}</code></pre><h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><p>静态内部类也是个比较推崇的方式了，当一个 Java 类第一次被真正使用到的时候才会去加载静态资源。Java 类加载和初始化的过程都是线程安全的。</p><pre><code class="java">class Singleton {    private Singleton() {}    public Singleton getInstance() {        return Holder.mInstance;    }    private static class Holder {        private static Singleton sInstance = new Singleton();    }}</code></pre><h4 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h4><p>枚举单例即为简洁，且无偿提供序列化机制，绝对防止多次实例化，即便用反射都不行。单元素的枚举类型是目前实现 Singleton 的最佳方法。</p><pre><code class="java">enum Singleton{  INSTANCE}</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;茴香的「茴」字有几种写法？&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="design-pattern" scheme="http://joeljt.top/tags/design-pattern/"/>
     
   </entry>
   
@@ -370,6 +410,24 @@
   </entry>
   
   <entry>
+    <title>解决可视化工具对于 MySQL 8.0 + 无法连接的问题</title>
+    <link href="http://joeljt.top/2018/05/28/bug-of-mysql/"/>
+    <id>http://joeljt.top/2018/05/28/bug-of-mysql/</id>
+    <published>2018-05-27T16:00:00.000Z</published>
+    <updated>2018-08-14T10:11:51.791Z</updated>
+    
+    <content type="html"><![CDATA[<p>MySQL 8.0 版本去除了 password 字段，改用 authentication_string 字段，导致网上可以搜到的各种问题的各种解决方法完全没有效果。</p><a id="more"></a><p>同时还更改了加密方式，之前版本的加密方式是「mysql_native_password」，8.0 之后的加密规则更改为「caching_sha2_password 」，这里需要把用户密码加密规则更改为原来的加密方式即可。</p><p>具体方法步骤如下，记录备忘：</p><blockquote><p> 打开终端，输入命令</p></blockquote><pre><code class="mysql">mysql -u root -p</code></pre><blockquote><p>需要注意的是，MySQL 设置的密码中必须至少包含一个大写字母、一个小写字母、一个特殊符号、一个数字，至少 8 个字符；密码是在最开始安装 MySQL 的时候设置的，如果忘记了，上网查询解决方法。</p></blockquote><blockquote><p>输入密码后，进入 &gt;mysql 的命令行模式</p></blockquote><pre><code class="mysql"># 切换到 mysql 数据库use mysql;# 设置用户密码永不过期alter user &#39;root&#39;@&#39;localhost&#39; identified by &#39;your pwd&#39; password expire never;# 用「mysql_native_password」加密方式更新 root 用户密码alter user &#39;root&#39;@&#39;localhost&#39; identified with mysql_native_password by &#39;your pwd&#39;;# 刷新flush privileges;</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;MySQL 8.0 版本去除了 password 字段，改用 authentication_string 字段，导致网上可以搜到的各种问题的各种解决方法完全没有效果。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Canvas.drawPath() 简单使用记录</title>
     <link href="http://joeljt.top/2018/05/28/Canvas.drawPath()/"/>
     <id>http://joeljt.top/2018/05/28/Canvas.drawPath()/</id>
@@ -393,67 +451,6 @@
     
     
       <category term="Android" scheme="http://joeljt.top/tags/Android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>解决可视化工具对于 MySQL 8.0 + 无法连接的问题</title>
-    <link href="http://joeljt.top/2018/05/28/bug-of-mysql/"/>
-    <id>http://joeljt.top/2018/05/28/bug-of-mysql/</id>
-    <published>2018-05-27T16:00:00.000Z</published>
-    <updated>2018-08-14T10:11:51.791Z</updated>
-    
-    <content type="html"><![CDATA[<p>MySQL 8.0 版本去除了 password 字段，改用 authentication_string 字段，导致网上可以搜到的各种问题的各种解决方法完全没有效果。</p><a id="more"></a><p>同时还更改了加密方式，之前版本的加密方式是「mysql_native_password」，8.0 之后的加密规则更改为「caching_sha2_password 」，这里需要把用户密码加密规则更改为原来的加密方式即可。</p><p>具体方法步骤如下，记录备忘：</p><blockquote><p> 打开终端，输入命令</p></blockquote><pre><code class="mysql">mysql -u root -p</code></pre><blockquote><p>需要注意的是，MySQL 设置的密码中必须至少包含一个大写字母、一个小写字母、一个特殊符号、一个数字，至少 8 个字符；密码是在最开始安装 MySQL 的时候设置的，如果忘记了，上网查询解决方法。</p></blockquote><blockquote><p>输入密码后，进入 &gt;mysql 的命令行模式</p></blockquote><pre><code class="mysql"># 切换到 mysql 数据库use mysql;# 设置用户密码永不过期alter user &#39;root&#39;@&#39;localhost&#39; identified by &#39;your pwd&#39; password expire never;# 用「mysql_native_password」加密方式更新 root 用户密码alter user &#39;root&#39;@&#39;localhost&#39; identified with mysql_native_password by &#39;your pwd&#39;;# 刷新flush privileges;</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;MySQL 8.0 版本去除了 password 字段，改用 authentication_string 字段，导致网上可以搜到的各种问题的各种解决方法完全没有效果。&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Android Paint .measureText() VS .getTextBounds()</title>
-    <link href="http://joeljt.top/2018/03/29/Android%20Paint-%20.measureText()%20VS%20.getTextBounds()/"/>
-    <id>http://joeljt.top/2018/03/29/Android Paint- .measureText() VS .getTextBounds()/</id>
-    <published>2018-03-28T16:00:00.000Z</published>
-    <updated>2018-11-26T10:43:06.981Z</updated>
-    
-    <content type="html"><![CDATA[<p>两个方法可以用来测量文字宽高信息的，只不过 <strong>.getTextBounds()</strong> 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 <strong>.measureText()</strong> 则只是返回宽度信息。</p><a id="more"></a><p>具体使用方法如下：</p><pre><code class="java">final String someText = &quot;Hello. I&#39;m some text!&quot;;Paint mPaint = new Paint();// .measureText()float measuredWidth = mPaint.measureText(someText);// .getTextBounds()Rect mBounds = new Rect();mPaint.getTextBounds(someText, 0, someText.length, mBounds);int measuredWidth = mBounds.width();int measuredHeight = mBounds.height();</code></pre><p>但是，当我们把两个结果打印出来，我们会发现，对于同一个文本信息，使用两个方法得到的宽度是不同的：</p><pre><code class="java">// 打印宽度信息Log.d(&quot;Test&quot;, String.format(        &quot;Text is &#39;%s&#39;, measureText %f, getTextBounds %d&quot;,        someText,        measuredWidth,        mBounds.width())    );// 打印结果如下// Text is &#39;Hello. I&#39;m some text!&#39;, measureText 115.000000, getTextBounds 105</code></pre><p>经过一系列的探究和资料查看，最后得到的结论是：</p><blockquote><p>二者返回结果确实不同，且 measureText() 返回结果会略微大于 getTextBounds() 所得到的宽度信息</p><p>measureText() 会在文本的左右两侧加上一些额外的宽度，这部分额外的宽度叫做 Glyph’s AdvanceX （具体应该是属于字型方面的范畴，我猜测这部分宽度是类似字间距之类的东西）</p><p>getTextBounds() 返回的则是当前文本所需要的最小宽度，也就是整个文本外切矩形的宽度</p></blockquote><p>实际上，这两个方法在具体调用时虽然都是不同的方法，但在 native 层的测量算法都是一致的，只不过在最后返回时，measureText() 会在左右两侧加上一些额外的宽度值，而 getTextBounds() 则是返回需要的最小宽度而已。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;两个方法可以用来测量文字宽高信息的，只不过 &lt;strong&gt;.getTextBounds()&lt;/strong&gt; 还可以获得高度信息，因为其使用一个 Rect 对象对宽高信息进行存储；而 &lt;strong&gt;.measureText()&lt;/strong&gt; 则只是返回宽度信息。&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>字体变色效果实现分析</title>
-    <link href="http://joeljt.top/2018/03/19/TrackColorTextView/"/>
-    <id>http://joeljt.top/2018/03/19/TrackColorTextView/</id>
-    <published>2018-03-18T16:00:00.000Z</published>
-    <updated>2018-11-26T10:40:37.000Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>主要技术点：Canvas.clipRect()</p></blockquote><p>实际上，这个方法可以理解成裁剪画布；</p><p>方法接收一个 Rect 对象，而 Rect 对象同样接收左上顶点和右下顶点两个坐标作为参数，用于确认一块区域；</p><p>而这块区域，就是接下来将要进行绘制的区域。</p><p>通过对画布进行不断的裁剪，同时对左右两侧使用不同颜色的画笔对相同的文字进行绘制，来实现一个文本两种颜色的效果。</p><pre><code class="java">@Overrideprotected void onDraw(Canvas canvas) {    // 绘制前一半内容    drawText(canvas, mChangePaint, 0, getWidth()/2);    // 使用另一颜色的画笔绘制后一半内容    drawText(canvas, mOriginPaint, getWidth() / 2, getWidth());}private void drawText(Canvas canvas, Paint paint, int start, int end) {    paint.setTextSize(getTextSize());    // 保存当前画布状态    canvas.save();    // 使用 .clipRect() 方法切割画布，然后使用不同颜色的画笔对目标文字进行绘制    Rect rect = new Rect(start, 0, end, getHeight());    canvas.clipRect(rect);    // 获取文字的基本宽高信息    String text = getText().toString();    Rect textBounds = new Rect();    paint.getTextBounds(text, 0, text.length(), textBounds);    Paint.FontMetricsInt metrics = paint.getFontMetricsInt();    // 获取起始位置    int x = getWidth() / 2 - textBounds.width() / 2;    int y = getHeight() / 2 + (metrics.bottom - metrics.top) / 2 - metrics.bottom;    canvas.drawText(text, x, y, paint);    // 清空画布属性，方便接下来绘制变色的部分    canvas.restore();}</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;blockquote&gt;
-&lt;p&gt;主要技术点：Canvas.clipRect()&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;实际上，这个方法可以理解成裁剪画布；&lt;/p&gt;
-&lt;p&gt;方法接收一个 Rect 对象，而 Rect 对象同样接收左上顶点和右下顶点两个坐标作为参数，用于确认一块区
-      
-    
-    </summary>
-    
     
   </entry>
   
