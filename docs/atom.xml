@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://joeljt.top/"/>
-  <updated>2019-10-26T09:01:48.879Z</updated>
+  <updated>2019-10-29T09:04:45.657Z</updated>
   <id>http://joeljt.top/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>工厂设计模式</title>
+    <link href="http://joeljt.top/2019/10/29/design-pattern-factory/"/>
+    <id>http://joeljt.top/2019/10/29/design-pattern-factory/</id>
+    <published>2019-10-28T16:00:00.000Z</published>
+    <updated>2019-10-29T09:04:45.657Z</updated>
+    
+    <content type="html"><![CDATA[<p>为什么你们一讲工厂设计模式，就非要弄个工厂生产小汽车？？？</p><a id="more"></a><h4 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h4><p>定义一个创建对象的公共接口（意味着不同类之间会有共性），让子类决定实例化哪个类，而对象的创建统一交由工厂完成，有良好的封装性，既做到了解耦，也保证了最少知识原则。调用者不会了解到具体子类的实现，但是能通过工厂方法做到想做的事情。</p><p>工厂模式主要有几种实现方式，分别为简单工厂、工厂方法和抽象工厂。看过太多博客，都是弄个 Factory 就开始生产汽车，我是真的不想生产汽车啊。。</p><p>我们这里以数据存储为例，我们可以根据项目需求动态的选择是通过 SharedPreferences 的方式存储到本地，还是利用 LruCache 将数据缓存到内存中，而具体的实现方式就是工厂设计模式的应用。废话不多说，开始吧。</p><h4 id="简单工厂"><a href="#简单工厂" class="headerlink" title="简单工厂"></a>简单工厂</h4><p>顾名思义，简单工厂就是较为简单的工厂模式。</p><pre><code class="java">enum IOHandlerFactory {    INSTANCE;    enum IOType{        MEMORY, SP    }    public IOHandler createIOHandler(IOType type) {        switch (type) {            case MEMORY:                return new MemoryIOHandler();            case SP:                return new SPIOHandler();        }        return null;    }}IOHandlerFactory.INSTANCE.createIOHandler(IOType.SP);</code></pre><p>基本就是提供一个方法，方法面向接口，根据不同的 IOType 返回不同的 IOHandler 接口实例对象，但是这种方法的问题在于，一旦有新增加的 IOType，那就要变动很多地方，可维护性不强。</p><h4 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h4><p>这种模式在于为每一种 type 都提供一个工厂方法，直接返回目标对象。</p><pre><code class="java">public interface IOFactory {    IOHandler createIOHandler();}public class MemoryIOFactoty implements IOFactory {    @Override    public IOHandler createIOHandler() {        return new MemoryIOHandler();    }}public class SPIOFactoty implements IOFactory {    @Override    public IOHandler createIOHandler() {        return new SpIOHandler(null);    }}new MemoryIOFactoty().createIOHandler();</code></pre><p>这种方式的优点在于清晰明了，通过工厂接口去创建目标对象，但是缺点在于涉及到的类太多，而且逻辑基本相同，代码冗余严重。</p><h4 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h4><p>定义和 BitmapFactory 比较像，和简单工厂也比较像，但是通过泛型和反射机制简化代码。</p><pre><code class="java">enum IOHandlerFactory {    INSTANCE;    public IOHandler createIOHandler(Class&lt;? extends IOHandler&gt; ioHandlerClass) {        try {            return ioHandlerClass.newInstance();        } catch (Exception e) {            e.printStackTrace();        }        return null;    }    public IOHandler getMemoryIOHandler() {        return createIOHandler(MemoryIOHandler.class);    }    public IOHandler getSPIOHandler() {        return createIOHandler(SpIOHandler.class);    }    public IOHandler getDefaultIOHandler() {        return getSPIOHandler();    }}IOHandlerFactory.INSTANCE.getDefaultIOHandler();</code></pre><p>这种方式和简单工厂差不多，代码简单，没有太多的类，也利用反射机制避免了每次新增类型时频繁变更代码，是比较推崇的方式。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;为什么你们一讲工厂设计模式，就非要弄个工厂生产小汽车？？？&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="design-pattern" scheme="http://joeljt.top/tags/design-pattern/"/>
+    
+  </entry>
   
   <entry>
     <title>Builder 设计模式</title>
@@ -28,6 +48,26 @@
     <summary type="html">
     
       &lt;p&gt;哎呀，你说的这个我知道，Builder 设计模式不就是链式调用嘛！&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="design-pattern" scheme="http://joeljt.top/tags/design-pattern/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>单例设计模式</title>
+    <link href="http://joeljt.top/2019/10/26/design-pattern-singleton/"/>
+    <id>http://joeljt.top/2019/10/26/design-pattern-singleton/</id>
+    <published>2019-10-25T16:00:00.000Z</published>
+    <updated>2019-10-26T08:11:02.086Z</updated>
+    
+    <content type="html"><![CDATA[<p>茴香的「茴」字有几种写法？</p><a id="more"></a><p>单例模式有很多种写法，都不复杂，大概梳理一下。</p><h4 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h4><p>私有化构造器，提供共有方法获取实例对象，没什么多说的。静态对象和类一起加载，耗费资源，不推荐。</p><pre><code class="java">class Singleton {    public static Singleton sInstance = new Singleton();    private Singleton() {}    public static Singleton getInstance() {        return sInstance;    }}</code></pre><h4 id="懒汉式"><a href="#懒汉式" class="headerlink" title="懒汉式"></a>懒汉式</h4><p>最简单的懒汉单例，但是会有线程安全的问题，需要完善。</p><pre><code class="java">class Singleton {    public static Singleton sInstance;    private Singleton() {}    public static Singleton getInstance() {          if(sInstance == null){           sInstance = new Singleton();        }        return sInstance;    }}</code></pre><h4 id="双重校验锁懒汉单例"><a href="#双重校验锁懒汉单例" class="headerlink" title="双重校验锁懒汉单例"></a>双重校验锁懒汉单例</h4><p>有几个需要注意的地方：</p><ol><li><p>单例对象加上 <code>volatile</code> 关键字，防止重排序，保证多线程可见性</p></li><li><p>两个判空都不能省略，第一个 if 用来提升效率，有对象后不再创建；第二个 if 用来保证线程安全。</p><blockquote><p>如果没有第二个 if，虽然被 synchronized 锁在了外面，但是等第一个线程创建完对象，第二个线程还是可以继续往下执行</p></blockquote></li><li><p>synchronized 的锁不可以为 new Object(), 锁必须保证唯一性</p></li></ol><pre><code class="java">class Singleton {    public static volatile Singleton sInstance;    private Singleton() {}    public static Singleton getInstance() {      if(sInstance == null){        synchronized (Singleton.class) {          if(sInstance == null){            sInstance = new Singleton();          }        }      }      return sInstance;    }}</code></pre><h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><p>静态内部类也是个比较推崇的方式了，当一个 Java 类第一次被真正使用到的时候才会去加载静态资源。Java 类加载和初始化的过程都是线程安全的。</p><pre><code class="java">class Singleton {    private Singleton() {}    public Singleton getInstance() {        return Holder.mInstance;    }    private static class Holder {        private static Singleton sInstance = new Singleton();    }}</code></pre><h4 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h4><p>枚举单例即为简洁，且无偿提供序列化机制，绝对防止多次实例化，即便用反射都不行。单元素的枚举类型是目前实现 Singleton 的最佳方法。</p><pre><code class="java">enum Singleton{  INSTANCE}</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;茴香的「茴」字有几种写法？&lt;/p&gt;
     
     </summary>
     
@@ -53,26 +93,6 @@
     
     
       <category term="Android" scheme="http://joeljt.top/tags/Android/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>单例设计模式</title>
-    <link href="http://joeljt.top/2019/10/26/design-pattern-singleton/"/>
-    <id>http://joeljt.top/2019/10/26/design-pattern-singleton/</id>
-    <published>2019-10-25T16:00:00.000Z</published>
-    <updated>2019-10-26T08:11:02.086Z</updated>
-    
-    <content type="html"><![CDATA[<p>茴香的「茴」字有几种写法？</p><a id="more"></a><p>单例模式有很多种写法，都不复杂，大概梳理一下。</p><h4 id="饿汉式"><a href="#饿汉式" class="headerlink" title="饿汉式"></a>饿汉式</h4><p>私有化构造器，提供共有方法获取实例对象，没什么多说的。静态对象和类一起加载，耗费资源，不推荐。</p><pre><code class="java">class Singleton {    public static Singleton sInstance = new Singleton();    private Singleton() {}    public static Singleton getInstance() {        return sInstance;    }}</code></pre><h4 id="懒汉式"><a href="#懒汉式" class="headerlink" title="懒汉式"></a>懒汉式</h4><p>最简单的懒汉单例，但是会有线程安全的问题，需要完善。</p><pre><code class="java">class Singleton {    public static Singleton sInstance;    private Singleton() {}    public static Singleton getInstance() {          if(sInstance == null){           sInstance = new Singleton();        }        return sInstance;    }}</code></pre><h4 id="双重校验锁懒汉单例"><a href="#双重校验锁懒汉单例" class="headerlink" title="双重校验锁懒汉单例"></a>双重校验锁懒汉单例</h4><p>有几个需要注意的地方：</p><ol><li><p>单例对象加上 <code>volatile</code> 关键字，防止重排序，保证多线程可见性</p></li><li><p>两个判空都不能省略，第一个 if 用来提升效率，有对象后不再创建；第二个 if 用来保证线程安全。</p><blockquote><p>如果没有第二个 if，虽然被 synchronized 锁在了外面，但是等第一个线程创建完对象，第二个线程还是可以继续往下执行</p></blockquote></li><li><p>synchronized 的锁不可以为 new Object(), 锁必须保证唯一性</p></li></ol><pre><code class="java">class Singleton {    public static volatile Singleton sInstance;    private Singleton() {}    public static Singleton getInstance() {      if(sInstance == null){        synchronized (Singleton.class) {          if(sInstance == null){            sInstance = new Singleton();          }        }      }      return sInstance;    }}</code></pre><h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><p>静态内部类也是个比较推崇的方式了，当一个 Java 类第一次被真正使用到的时候才会去加载静态资源。Java 类加载和初始化的过程都是线程安全的。</p><pre><code class="java">class Singleton {    private Singleton() {}    public Singleton getInstance() {        return Holder.mInstance;    }    private static class Holder {        private static Singleton sInstance = new Singleton();    }}</code></pre><h4 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h4><p>枚举单例即为简洁，且无偿提供序列化机制，绝对防止多次实例化，即便用反射都不行。单元素的枚举类型是目前实现 Singleton 的最佳方法。</p><pre><code class="java">enum Singleton{  INSTANCE}</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;茴香的「茴」字有几种写法？&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="design-pattern" scheme="http://joeljt.top/tags/design-pattern/"/>
     
   </entry>
   
@@ -424,33 +444,6 @@
     
     </summary>
     
-    
-  </entry>
-  
-  <entry>
-    <title>Canvas.drawPath() 简单使用记录</title>
-    <link href="http://joeljt.top/2018/05/28/Canvas.drawPath()/"/>
-    <id>http://joeljt.top/2018/05/28/Canvas.drawPath()/</id>
-    <published>2018-05-27T16:00:00.000Z</published>
-    <updated>2019-03-21T10:55:48.335Z</updated>
-    
-    <content type="html"><![CDATA[<a id="more"></a><blockquote><p>Path类将多种复合路径（多个轮廓，如直线段、二次曲线、立方曲线）封装在其内部的几何路径。</p><p>也就是说，我们可以使用 drawPath() 来绘制一个多边形或者不规则图形。</p></blockquote><p>下面以等边三角形为例：</p><pre><code class="java">// 假设在固定大小内绘制一个等边三角形private void drawTriangle(Canvas canvas, Paint paint) {    Path mPath = new Path();    // moveTo 移动到某一点，用于确定下笔坐标    mPath.moveTo(getWidth() / 2, 0);    // 连线到某一点，开始绘制，目标点 y 坐标是长直角边的长度    // 等边三角形，从顶点向下做高，短直角边:斜边:长直角边 = 1:2:√3    mPath.lineTo(0, getWidth() / 2 * Math.sqrt(3)));    mPath.lineTo(getWidth(), getWidth() / 2 * Math.sqrt(3)));    // 闭合多边形，即连线回到起始点，完成绘制    mPath.close();    canvas.drawPath(mPath, mPaint);}</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Path类将多种复合路径（多个轮廓，如直线段、二次曲线、立方曲线）封装在其内部的几何路径。&lt;/p&gt;
-&lt;p&gt;也就是说，我们可以使用 drawPath() 来绘制一个多边形或者不规则图形。&lt;/p&gt;
-&lt;/blockqu
-      
-    
-    </summary>
-    
-    
-      <category term="Android" scheme="http://joeljt.top/tags/Android/"/>
     
   </entry>
   
