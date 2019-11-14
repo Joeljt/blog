@@ -45,7 +45,7 @@
     
     <title>
         
-            Tag: design-pattern | 
+            装饰者设计模式 | 
         
         Joe&#39;s blog
     </title>
@@ -55,8 +55,8 @@
     <link rel="icon" href="/img/favicon.png">
 
     <meta name="format-detection" content="telephone=no">
-    <meta name="description" itemprop="description" content="慢慢来，比较快。">
-    <meta name="keywords" content="">
+    <meta name="description" itemprop="description" content="今天说一下装饰者。">
+    <meta name="keywords" content=",design-pattern">
     <meta name="theme-color" content="#0097A7">
 
     <!-- Disable Fucking Bloody Baidu Tranformation -->
@@ -221,7 +221,7 @@
     <!-- WebAPP Icons -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Joe&#39;s blog">
-    <meta name="msapplication-starturl" content="http://joeljt.top/tags/design-pattern/">
+    <meta name="msapplication-starturl" content="http://joeljt.top/2019/11/01/design-pattern-decoration/">
     <meta name="msapplication-navbutton-color" content="#0097A7">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Joe&#39;s blog">
@@ -236,13 +236,16 @@
     
 
     <!-- The Open Graph protocol -->
-    <meta property="og:url" content="http://joeljt.top/tags/design-pattern/">
+    <meta property="og:url" content="http://joeljt.top/2019/11/01/design-pattern-decoration/">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="Tag: design-pattern | Joe&#39;s blog">
+    <meta property="og:title" content="装饰者设计模式 | Joe&#39;s blog">
     <meta property="og:image" content="/img/favicon.png">
-    <meta property="og:description" content="慢慢来，比较快。">
-    
+    <meta property="og:description" content="今天说一下装饰者。">
+    <meta property="og:article:tag" content="design-pattern"> 
 
+    
+        <meta property="article:published_time" content="Fri Nov 01 2019 00:00:00 GMT+0800">
+        <meta property="article:modified_time" content="Fri Nov 01 2019 11:22:40 GMT+0800">
     
 
     <!-- The Twitter Card protocol -->
@@ -250,13 +253,43 @@
 
     <!-- Add canonical link for SEO -->
     
-        <link rel="canonical" href="http://joeljt.top/tags/design-pattern/index.html">
+        <link rel="canonical" href="http://joeljt.top/2019/11/01/design-pattern-decoration/index.html">
     
 
     <!-- Structured-data for SEO -->
     
         
 
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "http://joeljt.top/2019/11/01/design-pattern-decoration/index.html",
+    "headline": "装饰者设计模式",
+    "datePublished": "Fri Nov 01 2019 00:00:00 GMT+0800",
+    "dateModified": "Fri Nov 01 2019 11:22:40 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "joe",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/portrait.jpeg"
+        },
+        "description": "慢慢来，比较快。"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Joe&#39;s blog",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": ",design-pattern",
+    "description": "今天说一下装饰者。",
+}
+</script>
 
 
     
@@ -384,25 +417,29 @@
 
                     
 
-                    <!-- Index Module -->
-<div class="material-index mdl-grid">
-    
-    <div class="locate-thumbnail-symbol"></div>
+                    <!-- Post TOC -->
 
-    <!-- Pin on top -->
     
 
-    <!-- Normal Post -->
-    
-        
-            
-            
-                <!-- Isolation Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post_entry Header -->
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+
+
+    <!-- Isolation Post Header -->
+    <!-- Post thumbnail -->
     
         <!-- Post Header Info -->
-        <div class="post_entry-header_info with-thumbnail">
+        <div class="post-header_info with-thumbnail">
             <!-- Author Avatar & Name -->
             <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
             <span class="name-span">joe</span>
@@ -414,411 +451,184 @@
     
         </div>
 
-    <!-- Post_entry Content -->
-    <div class="post_entry-content mdl-color-text--grey-600 mdl-card__supporting-text">
-        <!-- Post Title -->
-        <p class="post_entry-title">
-            <a href="/2019/11/08/design-pattern-strategy/">策略设计模式</a>
-        </p>
 
-        <!-- Post Excerpt -->
-        <p class="post_entry-excerpt">
-            
-                上班坐公交还是坐地铁？这就是两种不同的策略。
-            
-            &nbsp;&nbsp;&nbsp;
-            <span>
-                <a href="/2019/11/08/design-pattern-strategy/" target="_self">Read more</a>
-            </span>
-        </p>
 
-        <!-- Post Tags -->
-        <ul class="post_entry-tags-list"><li class="post_entry-tags-list-item"><a class="post_entry-tags-list-link" href="/tags/design-pattern/">design-pattern</a></li></ul>
-    </div>
-
-    <!-- Post_entry Footer -->
-    <div class="post_entry-footer">
-        <div class="post_entry-footer-border"></div>
-        <div class="post_entry-footer-info">
-            <div class="post_entry-footer-date">
-                Nov 08, 2019
-            </div>
-            <div class="post_entry-footer-comment">
                 
-                
-            </div>
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+
+    
+        <div class="post-content_wrapper">
+            <p class="post-title">
+                装饰者设计模式
+            </p>
+            <p>今天说一下装饰者。</p>
+<a id="more"></a>
+<h4 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h4><p>一般来讲，我们扩展某个类的功能可以使用继承或者接口实现的方式，装饰者模式则是第三种扩展方式，可以动态扩展某个对象的功能。</p>
+<p>简单来说就是，在不使用接口或者继承的前提下，以最小侵入性对某个对象的功能进行扩展，使其获得原本不具备的能力。</p>
+<p>这里我们通过分析系统源码，来看看 ListView 是怎么优先于 RecyclerView，拥有自己的 addHeaderView() 方法为例，进行装饰者模式的说明。</p>
+<h4 id="ListView-addHeaderView"><a href="#ListView-addHeaderView" class="headerlink" title="ListView#addHeaderView"></a>ListView#addHeaderView</h4><p>有过开发经验的人都知道，尽管 RecyclerView 在各方面都领先于 ListView，但是有一点却不如 ListView，那就是 ListView 支持添加头部布局，而 RecyclerView 却并不支持。</p>
+<p>当我们从 ListView#addHeaderView 的源码入手，看一看 ListView 是怎么实现添加头布局的时候，就会发现 ListView 本身也是不支持添加头部的，系统源码也是使用了装饰者模式，来为 ListView 进行了功能扩展。</p>
+<p>下面我们来看一下 ListView#addHeaderView 的源码。</p>
+<pre><code class="java">public void addHeaderView(View v, Object data, boolean isSelectable) {
+  // Wrap the adapter if it wasn&#39;t already wrapped.
+  if (mAdapter != null) {
+    if (!(mAdapter instanceof HeaderViewListAdapter)) {
+      wrapHeaderListAdapterInternal();
+    }
+
+    // In the case of re-adding a header view, or adding one later on,
+    // we need to notify the observer.
+    if (mDataSetObserver != null) {
+      mDataSetObserver.onChanged();
+    }
+  }
+}
+</code></pre>
+<p>在方法内部判断中，我们会发现如果 adapter 不是 HeaderViewListAdapter 的实例的话，会调用 <code>wrapHeaderListAdapterInternal()</code> 将它变成该类的实例，然后通过一个观察者来进行 onChanged 更新。再看这个类的名字 HeaderViewListAdapter，很明显 ListView 添加头部和它少不了干系。</p>
+<pre><code class="java">public class HeaderViewListAdapter implements WrapperListAdapter, Filterable {
+
+    private final ListAdapter mAdapter;
+
+    ArrayList&lt;ListView.FixedViewInfo&gt; mHeaderViewInfos;
+    ArrayList&lt;ListView.FixedViewInfo&gt; mFooterViewInfos;
+
+    public HeaderViewListAdapter(ArrayList&lt;ListView.FixedViewInfo&gt; headerViewInfos,
+                                 ArrayList&lt;ListView.FixedViewInfo&gt; footerViewInfos,
+                                 ListAdapter adapter) {
+        mAdapter = adapter;
+
+    }
+
+    public int getHeadersCount() {
+        return mHeaderViewInfos.size();
+    }
+
+    public int getFootersCount() {
+        return mFooterViewInfos.size();
+    }
+
+    public int getCount() {
+        if (mAdapter != null) {
+            return getFootersCount() + getHeadersCount() + mAdapter.getCount();
+        } else {
+            return getFootersCount() + getHeadersCount();
+        }
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent) {
+        // Header (negative positions will throw an IndexOutOfBoundsException)
+        int numHeaders = getHeadersCount();
+        if (position &lt; numHeaders) {
+            return mHeaderViewInfos.get(position).view;
+        }
+
+        // Adapter
+        final int adjPosition = position - numHeaders;
+        int adapterCount = 0;
+        if (mAdapter != null) {
+            adapterCount = mAdapter.getCount();
+            if (adjPosition &lt; adapterCount) {
+                return mAdapter.getView(adjPosition, convertView, parent);
+            }
+        }
+
+        // Footer (off-limits positions will throw an IndexOutOfBoundsException)
+        return mFooterViewInfos.get(adjPosition - adapterCount).view;
+    }
+
+}
+</code></pre>
+<p>上面是我将 HeaderViewListAdapter 类的代码进行适当删减后留下的样子。我们认真观察后会发现，所谓的头部和底部，都是在这个类中声明的，而原本的 ListAdapter 也是通过此类的构造器传入的。</p>
+<ol>
+<li><p>在 getCount 方法中，正常我们是返回列表集合数据的大小；而在这个带头部底部添加功能的装饰 adapter 中，getCount 的返回值是头部数据 + 列表数据 + 底部数据；</p>
+</li>
+<li><p>在 getView 方法中，通过对当前位置以及头部集合大小、底部集合大小的对比和校正，来返回适合的数据：</p>
+<ul>
+<li><p>如果当前位置小于头部元素集合，说明当前是头部位置，返回对应的头部元素</p>
+<blockquote>
+<p>return mHeaderViewInfos.get(position).view;</p>
+</blockquote>
+</li>
+<li><p>利用头部元素集合大小和 adapter 元素大小来做数据校准：当前位置 - 头部大小 = 列表元素位置，列表元素的位置有上限，即 头部元素 + 列表元素总和；</p>
+<p>满足这个区间的数据，都是 adapter 的列表数据，应该由 adapter 自己去处理</p>
+<blockquote>
+<p>return mAdapter.getView(adjPosition, convertView, parent);</p>
+</blockquote>
+</li>
+<li><p>超出这个范围的，应该都是用户手动添加的底部元素</p>
+<blockquote>
+<p>return mFooterViewInfos.get(adjPosition - adapterCount).view;</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>同理，我们也可以仿照系统源码来对 RecyclerView 进行添加头部和底部的扩展。</p>
+<p>装饰者模式可以非常灵活地为目标对象添加方法，添加新的行为动作，但是相应的，也需要进行更多的代码维护和判断，来保证代码的兼容性和可用性。</p>
+<p>举个很简单的例子，我们在上边简单的分析中没有提到，在平时使用的时候，我们一般都是 listView.addHeaderView(), 但是我们会发现在上边的分析中，addHeaderView 的动作是 adapter，而且是 wrapper 类 adapter 来实现的，那我们怎么保证使用 listView 来进行调用，这就是上边我们简单提到的观察者的作用了。</p>
+<p>所以很明显，尽管我们为原始的对象添加了功能，但是也因此导致了很多原本不需要的兼容和维护工作。</p>
+
+            
+                <blockquote>
+                    <p>
+                         
+                            转载请注明出处
+                        
+                        <br>
+                        Link to this article:  http://joeljt.top/2019/11/01/design-pattern-decoration/
+                    </p>
+                </blockquote>
+            
         </div>
-    </div>
+    
 </div>
 
-            
-        
-    
-        
-            
-            
-                <!-- Isolation Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post_entry Header -->
-    
-        <!-- Post Header Info -->
-        <div class="post_entry-header_info with-thumbnail">
-            <!-- Author Avatar & Name -->
-            <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
-            <span class="name-span">joe</span>
-        </div>
 
-        <!-- Custom thumbnail -->
-        <div class="post_thumbnail-custom">
-            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190415172255.jpg">
-    
-        </div>
-
-    <!-- Post_entry Content -->
-    <div class="post_entry-content mdl-color-text--grey-600 mdl-card__supporting-text">
-        <!-- Post Title -->
-        <p class="post_entry-title">
-            <a href="/2019/11/06/design-pattern-template/">模板设计模式</a>
-        </p>
-
-        <!-- Post Excerpt -->
-        <p class="post_entry-excerpt">
-            
-                可能说 base 层封装更好理解一些。
-            
-            &nbsp;&nbsp;&nbsp;
-            <span>
-                <a href="/2019/11/06/design-pattern-template/" target="_self">Read more</a>
-            </span>
-        </p>
-
-        <!-- Post Tags -->
-        <ul class="post_entry-tags-list"><li class="post_entry-tags-list-item"><a class="post_entry-tags-list-link" href="/tags/design-pattern/">design-pattern</a></li></ul>
-    </div>
-
-    <!-- Post_entry Footer -->
-    <div class="post_entry-footer">
-        <div class="post_entry-footer-border"></div>
-        <div class="post_entry-footer-info">
-            <div class="post_entry-footer-date">
-                Nov 06, 2019
-            </div>
-            <div class="post_entry-footer-comment">
                 
+                    <!-- Paradox Post Info -->
+                    
+                
+
+                <!-- Post Comments -->
+                
+                    
                 
             </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2019/11/06/design-pattern-template/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2019/10/29/design-pattern-factory/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
         </div>
     </div>
-</div>
 
-            
-        
-    
-        
-            
-            
-                <!-- Isolation Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post_entry Header -->
-    
-        <!-- Post Header Info -->
-        <div class="post_entry-header_info with-thumbnail">
-            <!-- Author Avatar & Name -->
-            <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
-            <span class="name-span">joe</span>
-        </div>
-
-        <!-- Custom thumbnail -->
-        <div class="post_thumbnail-custom">
-            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190415172255.jpg">
-    
-        </div>
-
-    <!-- Post_entry Content -->
-    <div class="post_entry-content mdl-color-text--grey-600 mdl-card__supporting-text">
-        <!-- Post Title -->
-        <p class="post_entry-title">
-            <a href="/2019/11/01/design-pattern-decoration/">装饰者设计模式</a>
-        </p>
-
-        <!-- Post Excerpt -->
-        <p class="post_entry-excerpt">
-            
-                今天说一下装饰者。
-            
-            &nbsp;&nbsp;&nbsp;
-            <span>
-                <a href="/2019/11/01/design-pattern-decoration/" target="_self">Read more</a>
-            </span>
-        </p>
-
-        <!-- Post Tags -->
-        <ul class="post_entry-tags-list"><li class="post_entry-tags-list-item"><a class="post_entry-tags-list-link" href="/tags/design-pattern/">design-pattern</a></li></ul>
-    </div>
-
-    <!-- Post_entry Footer -->
-    <div class="post_entry-footer">
-        <div class="post_entry-footer-border"></div>
-        <div class="post_entry-footer-info">
-            <div class="post_entry-footer-date">
-                Nov 01, 2019
-            </div>
-            <div class="post_entry-footer-comment">
-                
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-            
-        
-    
-        
-            
-            
-                <!-- Isolation Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post_entry Header -->
-    
-        <!-- Post Header Info -->
-        <div class="post_entry-header_info with-thumbnail">
-            <!-- Author Avatar & Name -->
-            <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
-            <span class="name-span">joe</span>
-        </div>
-
-        <!-- Custom thumbnail -->
-        <div class="post_thumbnail-custom">
-            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190415172255.jpg">
-    
-        </div>
-
-    <!-- Post_entry Content -->
-    <div class="post_entry-content mdl-color-text--grey-600 mdl-card__supporting-text">
-        <!-- Post Title -->
-        <p class="post_entry-title">
-            <a href="/2019/10/29/design-pattern-factory/">工厂设计模式</a>
-        </p>
-
-        <!-- Post Excerpt -->
-        <p class="post_entry-excerpt">
-            
-                为什么你们一讲工厂设计模式，就非要弄个工厂生产小汽车？？？
-            
-            &nbsp;&nbsp;&nbsp;
-            <span>
-                <a href="/2019/10/29/design-pattern-factory/" target="_self">Read more</a>
-            </span>
-        </p>
-
-        <!-- Post Tags -->
-        <ul class="post_entry-tags-list"><li class="post_entry-tags-list-item"><a class="post_entry-tags-list-link" href="/tags/design-pattern/">design-pattern</a></li></ul>
-    </div>
-
-    <!-- Post_entry Footer -->
-    <div class="post_entry-footer">
-        <div class="post_entry-footer-border"></div>
-        <div class="post_entry-footer-info">
-            <div class="post_entry-footer-date">
-                Oct 29, 2019
-            </div>
-            <div class="post_entry-footer-comment">
-                
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-            
-        
-    
-        
-            
-            
-                <!-- Isolation Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post_entry Header -->
-    
-        <!-- Post Header Info -->
-        <div class="post_entry-header_info with-thumbnail">
-            <!-- Author Avatar & Name -->
-            <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
-            <span class="name-span">joe</span>
-        </div>
-
-        <!-- Custom thumbnail -->
-        <div class="post_thumbnail-custom">
-            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190415172255.jpg">
-    
-        </div>
-
-    <!-- Post_entry Content -->
-    <div class="post_entry-content mdl-color-text--grey-600 mdl-card__supporting-text">
-        <!-- Post Title -->
-        <p class="post_entry-title">
-            <a href="/2019/10/26/design-pattern-builder/">Builder 设计模式</a>
-        </p>
-
-        <!-- Post Excerpt -->
-        <p class="post_entry-excerpt">
-            
-                哎呀，你说的这个我知道，Builder 设计模式不就是链式调用嘛！
-            
-            &nbsp;&nbsp;&nbsp;
-            <span>
-                <a href="/2019/10/26/design-pattern-builder/" target="_self">Read more</a>
-            </span>
-        </p>
-
-        <!-- Post Tags -->
-        <ul class="post_entry-tags-list"><li class="post_entry-tags-list-item"><a class="post_entry-tags-list-link" href="/tags/design-pattern/">design-pattern</a></li></ul>
-    </div>
-
-    <!-- Post_entry Footer -->
-    <div class="post_entry-footer">
-        <div class="post_entry-footer-border"></div>
-        <div class="post_entry-footer-info">
-            <div class="post_entry-footer-date">
-                Oct 26, 2019
-            </div>
-            <div class="post_entry-footer-comment">
-                
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-            
-        
-    
-        
-            
-            
-                <!-- Isolation Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post_entry Header -->
-    
-        <!-- Post Header Info -->
-        <div class="post_entry-header_info with-thumbnail">
-            <!-- Author Avatar & Name -->
-            <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
-            <span class="name-span">joe</span>
-        </div>
-
-        <!-- Custom thumbnail -->
-        <div class="post_thumbnail-custom">
-            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190415172255.jpg">
-    
-        </div>
-
-    <!-- Post_entry Content -->
-    <div class="post_entry-content mdl-color-text--grey-600 mdl-card__supporting-text">
-        <!-- Post Title -->
-        <p class="post_entry-title">
-            <a href="/2019/10/26/design-pattern-singleton/">单例设计模式</a>
-        </p>
-
-        <!-- Post Excerpt -->
-        <p class="post_entry-excerpt">
-            
-                茴香的「茴」字有几种写法？
-            
-            &nbsp;&nbsp;&nbsp;
-            <span>
-                <a href="/2019/10/26/design-pattern-singleton/" target="_self">Read more</a>
-            </span>
-        </p>
-
-        <!-- Post Tags -->
-        <ul class="post_entry-tags-list"><li class="post_entry-tags-list-item"><a class="post_entry-tags-list-link" href="/tags/design-pattern/">design-pattern</a></li></ul>
-    </div>
-
-    <!-- Post_entry Footer -->
-    <div class="post_entry-footer">
-        <div class="post_entry-footer-border"></div>
-        <div class="post_entry-footer-info">
-            <div class="post_entry-footer-date">
-                Oct 26, 2019
-            </div>
-            <div class="post_entry-footer-comment">
-                
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-            
-        
-    
-        
-            
-            
-                <!-- Isolation Thumbnail -->
-                <div class="post_entry-module mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col fade out">
-    <!-- Post_entry Header -->
-    
-        <!-- Post Header Info -->
-        <div class="post_entry-header_info with-thumbnail">
-            <!-- Author Avatar & Name -->
-            <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
-            <span class="name-span">joe</span>
-        </div>
-
-        <!-- Custom thumbnail -->
-        <div class="post_thumbnail-custom">
-            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190415172255.jpg">
-    
-        </div>
-
-    <!-- Post_entry Content -->
-    <div class="post_entry-content mdl-color-text--grey-600 mdl-card__supporting-text">
-        <!-- Post Title -->
-        <p class="post_entry-title">
-            <a href="/2019/08/14/java-proxy-pattern/">Java 代理模式简单探讨</a>
-        </p>
-
-        <!-- Post Excerpt -->
-        <p class="post_entry-excerpt">
-            
-                动态代理是 Hook 技术的基础技能，下一篇暂定 activity 的启动流程，这篇先来搞一下这个代理设计模式吧。
-            
-            &nbsp;&nbsp;&nbsp;
-            <span>
-                <a href="/2019/08/14/java-proxy-pattern/" target="_self">Read more</a>
-            </span>
-        </p>
-
-        <!-- Post Tags -->
-        <ul class="post_entry-tags-list"><li class="post_entry-tags-list-item"><a class="post_entry-tags-list-link" href="/tags/design-pattern/">design-pattern</a></li></ul>
-    </div>
-
-    <!-- Post_entry Footer -->
-    <div class="post_entry-footer">
-        <div class="post_entry-footer-border"></div>
-        <div class="post_entry-footer-info">
-            <div class="post_entry-footer-date">
-                Aug 14, 2019
-            </div>
-            <div class="post_entry-footer-comment">
-                
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-            
-        
-    
-
-    
-
-    
-</div>
 
 
                     
