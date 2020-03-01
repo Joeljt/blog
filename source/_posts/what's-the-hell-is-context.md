@@ -1,6 +1,6 @@
 ---
 thumbnail: https://raw.githubusercontent.com/Joeljt/BlogImage/master/20190321181407.jpg
-title: What's the fuck is Context?
+title: What's the hell is Context?
 tags: [Android]
 date: 2019-11-14
 ---
@@ -21,7 +21,7 @@ Context 是 Android API 中最糟糕的设计之一。
 
 
 
-###写在开始
+### 写在开始
 
 ![](https://raw.githubusercontent.com/Joeljt/BlogImage/master/20191114182421.png)
 
