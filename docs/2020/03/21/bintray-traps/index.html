@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html style="display: none;" lang="en">
+    <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.5.2 -->
+    <script>
+        window.materialVersion = "1.5.2"
+        // Delete localstorage with these tags
+        window.oldVersion = [
+            'codestartv1',
+            '1.3.4',
+            '1.4.0',
+            '1.4.0b1',
+            '1.5.0'
+        ]
+    </script>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- Title -->
+    
+    <title>
+        
+            Bintray 集成里边那些坑 | 
+        
+        Joe&#39;s blog
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" href="/img/favicon.png">
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" itemprop="description" content="最近工作上开始涉猎 SDK 开发的领域。
+这段时间工作下来的感受就是，SDK 开发实际上就是开发开源软件。">
+    <meta name="keywords" content=",Android">
+    <meta name="theme-color" content="#0097A7">
+
+    <!-- Disable Fucking Bloody Baidu Tranformation -->
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(a){try{localStorage.removeItem(a)}catch(b){}};lsloader.setLS=function(a,c){try{localStorage.setItem(a,c)}catch(b){}};lsloader.getLS=function(a){var c="";try{c=localStorage.getItem(a)}catch(b){c=""}return c};versionString="/*"+(window.materialVersion||"unknownVersion")+"*/";lsloader.clean=function(){try{var b=[];for(var a=0;a<localStorage.length;a++){b.push(localStorage.key(a))}b.forEach(function(e){var f=lsloader.getLS(e);if(window.oldVersion){var d=window.oldVersion.reduce(function(g,h){return g||f.indexOf("/*"+h+"*/")!==-1},false);if(d){lsloader.removeLS(e)}}})}catch(c){}};lsloader.clean();lsloader.load=function(f,a,b,d){if(typeof b==="boolean"){d=b;b=undefined}d=d||false;b=b||function(){};var e;e=this.getLS(f);if(e&&e.indexOf(versionString)===-1){this.removeLS(f);this.requestResource(f,a,b,d);return}if(e){var c=e.split(versionString)[0];if(c!=a){console.log("reload:"+a);this.removeLS(f);this.requestResource(f,a,b,d);return}e=e.split(versionString)[1];if(d){this.jsRunSequence.push({name:f,code:e});this.runjs(a,f,e)}else{document.getElementById(f).appendChild(document.createTextNode(e));b()}}else{this.requestResource(f,a,b,d)}};lsloader.requestResource=function(b,e,a,c){var d=this;if(c){this.iojs(e,b,function(h,f,g){d.setLS(f,h+versionString+g);d.runjs(h,f,g)})}else{this.iocss(e,b,function(f){document.getElementById(b).appendChild(document.createTextNode(f));d.setLS(b,e+versionString+f)},a)}};lsloader.iojs=function(d,b,g){var a=this;a.jsRunSequence.push({name:b,code:""});try{var f=new XMLHttpRequest();f.open("get",d,true);f.onreadystatechange=function(){if(f.readyState==4){if((f.status>=200&&f.status<300)||f.status==304){if(f.response!=""){g(d,b,f.response);return}}a.jsfallback(d,b)}};f.send(null)}catch(c){a.jsfallback(d,b)}};lsloader.iocss=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.iofonts=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.runjs=function(f,c,e){if(!!c&&!!e){for(var b in this.jsRunSequence){if(this.jsRunSequence[b].name==c){this.jsRunSequence[b].code=e}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var a=document.createElement("script");a.appendChild(document.createTextNode(this.jsRunSequence[0].code));a.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(a);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else{if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var d=this;var a=document.createElement("script");a.src=this.jsRunSequence[0].path;a.type="text/javascript";this.jsRunSequence[0].status="loading";a.onload=function(){d.jsRunSequence.shift();if(d.jsRunSequence.length>0){d.runjs()}};document.body.appendChild(a)}}};lsloader.tagLoad=function(b,a){this.jsRunSequence.push({name:a,code:"",path:b,status:"failed"});this.runjs()};lsloader.jsfallback=function(c,b){if(!!this.jsnamemap[b]){return}else{this.jsnamemap[b]=b}for(var a in this.jsRunSequence){if(this.jsRunSequence[a].name==b){this.jsRunSequence[a].code="";this.jsRunSequence[a].status="failed";this.jsRunSequence[a].path=c}}this.runjs()};lsloader.cssfallback=function(e,c,b){if(!!this.cssnamemap[c]){return}else{this.cssnamemap[c]=1}var d=document.createElement("link");d.type="text/css";d.href=e;d.rel="stylesheet";d.onload=d.onerror=b;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(d,a)};lsloader.runInlineScript=function(c,b){var a=document.getElementById(b).innerText;this.jsRunSequence.push({name:c,code:a});this.runjs()}})();</script>
+
+    <!-- Import queue -->
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Import CSS -->
+    
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/material.min.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/style.min.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+        
+
+    
+
+    
+        
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/fontawesome.min.css">
+        
+    
+
+    <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    overflow-x: hidden !important;
+  }
+  
+  code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+<!-- Import Roboto -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+<!-- Import Material Icons -->
+
+
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/css/material-icons.css",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+
+
+
+    <!-- Import jQuery -->
+    
+        <script>lsloader.load("jq_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/jquery.min.js", true)</script>
+    
+
+    <!-- WebAPP Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Joe&#39;s blog">
+    <meta name="msapplication-starturl" content="http://joeljt.top/2020/03/21/bintray-traps/">
+    <meta name="msapplication-navbutton-color" content="#0097A7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Joe&#39;s blog">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!-- Site Verification -->
+    
+    
+
+    <!-- RSS -->
+    
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://joeljt.top/2020/03/21/bintray-traps/">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Bintray 集成里边那些坑 | Joe&#39;s blog">
+    <meta property="og:image" content="/img/favicon.png">
+    <meta property="og:description" content="最近工作上开始涉猎 SDK 开发的领域。
+这段时间工作下来的感受就是，SDK 开发实际上就是开发开源软件。">
+    <meta property="og:article:tag" content="Android"> 
+
+    
+        <meta property="article:published_time" content="Sat Mar 21 2020 00:00:00 GMT+0800">
+        <meta property="article:modified_time" content="Sat Mar 21 2020 20:01:51 GMT+0800">
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="http://joeljt.top/2020/03/21/bintray-traps/index.html">
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "http://joeljt.top/2020/03/21/bintray-traps/index.html",
+    "headline": "Bintray 集成里边那些坑",
+    "datePublished": "Sat Mar 21 2020 00:00:00 GMT+0800",
+    "dateModified": "Sat Mar 21 2020 20:01:51 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "joe",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/portrait.jpeg"
+        },
+        "description": "慢慢来，比较快。"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Joe&#39;s blog",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": ",Android",
+    "description": "最近工作上开始涉猎 SDK 开发的领域。
+这段时间工作下来的感受就是，SDK 开发实际上就是开发开源软件。",
+}
+</script>
+
+
+    
+
+    <!-- Analytics -->
+    
+    
+    
+
+    <!-- Custom Head -->
+    
+
+</head>
+
+
+    
+        <body id="scheme-Isolation" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+                    <!-- Isolation Header -->
+                    <header class="header">
+    <div class="header-wrapper">
+        <!-- Header Copyright -->
+        <div class="header-copyright">
+            <div class="header-site">
+                ©&nbsp;
+                <script type="text/javascript">
+                    var fd = new Date();
+                    document.write(fd.getFullYear());
+                </script>
+                &nbsp;Joe's blog
+            </div>
+            <!--
+            I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+            It will not impact the appearance and can give developers a lot of support :)
+
+            很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+            它不会影响美观并可以给开发者很大的支持。 :)
+            -->
+            <div>
+                Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a>
+                <br>
+                Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a>
+            </div>
+        </div>
+
+        <!-- Header Title -->
+        <span class="header-title header-item">
+            <a href="/" title="Joe&#39;s blog">
+                Joe&#39;s blog
+            </a>
+        </span>
+
+        <p class="header-slogan header-item">
+        
+            
+                慢慢来，比较快。
+            
+        
+        </p>
+
+        <!-- Header Nav -->
+        <nav class="header-nav header-item">
+            <span class="header-nav-item">
+                <a href="/" title="Home">
+                    <span>Home</span>
+                </a>
+            </span>
+
+            <!-- Pages  -->
+            
+                <span class="header-nav-item">
+                    <a href="/tags" title="归档">
+                        <span>归档</span>
+                    </a>
+                </span>
+            
+            
+        </nav>
+
+        <!-- Header SNS -->
+        <div class="header-item header-sns_list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Joeljt" target="_blank">
+            <i class="fa fa-github fa-lg" aria-hidden="true"></i>
+        </a>
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+    </div>
+</header>
+
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+
+                    <!-- Post TOC -->
+
+    
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+
+
+    <!-- Isolation Post Header -->
+    <!-- Post thumbnail -->
+    
+        <!-- Post Header Info -->
+        <div class="post-header_info with-thumbnail">
+            <!-- Author Avatar & Name -->
+            <img src="/img/portrait.jpeg" class="avatar-img" width="44px" height="44px" alt="joe's avatar">
+            <span class="name-span">joe</span>
+        </div>
+
+        <!-- Custom thumbnail -->
+        <div class="post_thumbnail-custom">
+            <img src="https://raw.githubusercontent.com/Joeljt/BlogImage/master/20200321200030.jpg">
+    
+        </div>
+
+
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+
+    
+        <div class="post-content_wrapper">
+            <p class="post-title">
+                Bintray 集成里边那些坑
+            </p>
+            <p>最近工作上开始涉猎 SDK 开发的领域。</p>
+<p>这段时间工作下来的感受就是，SDK 开发实际上就是开发开源软件。</p>
+<a id="more"></a>
+<p>以前做 App 是为用户写代码，现在做 SDK 是为程序员写代码，其实都是大同小异。</p>
+<p>但是毕竟隔行如隔山，很多东西都是以前没有接触过的，踩坑的过程里也积累了些经验。</p>
+<p>简单记录一些，这次先说说 bintray 托管。</p>
+<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><p>关于 bintray 具体使用网上很多文章，具体的注册流程我就不赘述了。就算是不看文章，自己上<a href="https://bintray.com/" target="_blank" rel="noopener">官网</a>也能鼓捣个七七八八。</p>
+<p>挑着捡着说说集成时候关于配置的注意点。</p>
+<p>首先说，不管使用传统的集成方式还是使用第三方工具，都需要配置大量的 gradle 信息。</p>
+<p>我不太习惯在 app.gradle 文件里添加大量代码，所以都会<strong>先抽离到 bintrayConfig.gradle 文件中，然后在 app.gradle 中添加依赖</strong>，这里先给大家说明一下。</p>
+<h3 id="传统方式配置"><a href="#传统方式配置" class="headerlink" title="传统方式配置"></a>传统方式配置</h3><p>1、在 project 的 gradle 文件中添加：</p>
+<pre><code class="xml"> classpath &#39;com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4&#39;
+ classpath &#39;com.github.dcendents:android-maven-gradle-plugin:1.4.1&#39;
+</code></pre>
+<p>2、之后在你想要发布的 module 的 gradle 文件中添加：</p>
+<pre><code>apply from: &#39;bintrayConfig.gradle&#39;
+</code></pre><p>3、然后创建这个 <code>bintrayConfig.gradle</code> 文件：</p>
+<pre><code>// 需要添加的依赖
+apply plugin: &#39;com.github.dcendents.android-maven&#39;
+apply plugin: &#39;com.jfrog.bintray&#39;
+
+version = &quot;1.0.0&quot;    //这个是版本号，必须填写
+def siteUrl = &#39;https://github.com/YourGitHubId/Repo&#39; // 项目的主页
+def gitUrl = &#39;https://github.com/YourGitHubId/Repo.git&#39; // Git仓库的url
+
+group = &quot;你的包名&quot; // 这里是groupId ,必须填写  一般填你唯一的包名
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging &#39;aar&#39;
+                // 项目描述，复制我的话，这里需要修改。
+                name &#39;测试 bintary 搭配 maven 上传&#39;   //项目描述
+                url siteUrl
+                // 软件开源协议，现在一般都是Apache License2.0吧，复制我的，这里不需要修改。
+                licenses {
+                    license {
+                        name &#39;The Apache Software License, Version 2.0&#39;
+                        url &#39;http://www.apache.org/licenses/LICENSE-2.0.txt&#39;
+                    }
+                }
+                //填写开发者基本信息，应该不是必填
+                developers {
+                    developer {
+                        id &#39;&#39;  
+                        name &#39;&#39;  
+                        email &#39;&#39; 
+                    }
+                }
+
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+// 生成jar包的task，不需要修改。
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = &#39;sources&#39;
+}
+// 生成javaDoc的jar，不需要修改
+task javadoc(type: Javadoc) {
+    options.encoding = &quot;UTF-8&quot;
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = &#39;javadoc&#39;
+    from javadoc.destinationDir
+}
+
+//下面设置编码格式，重点注意，如果不设置可能会在gradlew install的时候出现GBK编码映射错误
+javadoc {
+    options {
+        encoding &quot;UTF-8&quot;
+        charSet &#39;UTF-8&#39;
+        author true
+        version true
+        links &quot;http://docs.oracle.com/javase/7/docs/api&quot;
+        title &#39;这里是 javadoc 的标题，按需修改&#39;  
+    }
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+// 生成jar包
+task releaseJar(type: Copy) {
+    from( &#39;build/intermediates/bundles/release&#39;)
+    into( &#39;../jar&#39;)
+    include(&#39;classes.jar&#39;)
+    rename(&#39;classes.jar&#39;, &#39;test-sdk-&#39; + version + &#39;.jar&#39;)
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file(&#39;local.properties&#39;).newDataInputStream())
+bintray {
+
+    //从 local.properties 读取用户名和秘钥
+    user = properties.getProperty(&quot;bintray.user&quot;)
+    key = properties.getProperty(&quot;bintray.apiKey&quot;)
+
+    configurations = [&#39;archives&#39;]
+    pkg {
+        userOrg = &quot;你的 bintray 组织信息&quot;
+        repo = &quot;你在 bintray 创建的仓库名称&quot;  
+        name = &quot;发布到 bintray 后的文件名称&quot;
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = [&quot;Apache-2.0&quot;]
+        publish = true  // 是否是公开项目
+    }
+}
+</code></pre><p>用户名不说了，秘钥的获取方式是：用户名 -&gt; 编辑资料 -&gt; API KEY</p>
+<p>4、完成以后在终端执行：</p>
+<pre><code>./gradlew install
+</code></pre><p><code>install</code> 是上边 bintray.gradle 里边配置的方法，如果报找不到，就看看有没有配置好</p>
+<p>5、成功之后就会在 build/output 下看到 arr 文件，再执行：</p>
+<pre><code>./gradlew bintrayUpload
+</code></pre><p>搞定。</p>
+<h3 id="使用-bintray-release"><a href="#使用-bintray-release" class="headerlink" title="使用 bintray-release"></a>使用 bintray-release</h3><p>这个是 GitHub 上一个开源库，本来挺火的，配置简单。</p>
+<p>但是升级到 gradle tools 3.1.X, gradle version 4.6+ 后， <a href="https://github.com/novoda" target="_blank" rel="noopener">novoda</a>/<strong><a href="https://github.com/novoda/bintray-release" target="_blank" rel="noopener">bintray-release</a></strong>有个严重 bug，导致上传失败。</p>
+<p><a href="https://github.com/novoda/bintray-release/issues/216#issuecomment-404261875" target="_blank" rel="noopener">com.novoda.gradle.release.AndroidLibrary$LibraryUsage.getGlobalExcludes()Ljava/util/Set #216</a>。</p>
+<p>网上很多人说用降低 gradle 版本到 version 4.4，或者其他各种方式，但我怎么都搞不好。</p>
+<p><a href="https://github.com/StefMa/bintray-release" target="_blank" rel="noopener">好在找到了另一个方案</a>，亲测可行，测试版本 gradle tools 3.6.1，gradle version 5.6.4。</p>
+<p>下边简单记录一下。</p>
+<p>1、project 的 gradle 下添加：</p>
+<pre><code>buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        // The current version can be found here https://git.io/fNUnx
+        classpath &quot;guru.stefma.bintrayrelease:bintrayrelease:$bintrayReleaseVersion&quot;
+    }
+}
+</code></pre><p>2、之后在你想要发布的 module 的 gradle 文件中添加：</p>
+<pre><code>apply from: &#39;bintrayConfig.gradle&#39;
+</code></pre><p>3、同样的，创建这个 <code>bintrayConfig.gradle</code> 文件：</p>
+<pre><code>// 这里有前置依赖，可以是下面几个的其中一个，我们是在 library 库里引用的，所以没有问题
+// com.android.library, java-library, org.jetbrains.kotlin.jvm, kotlin
+apply plugin: &quot;guru.stefma.bintrayrelease&quot;
+
+version = &quot;1.0.5&quot;
+group = &quot;一般是包名&quot;
+androidArtifact { 
+    artifactId = &quot;别人添加你这个项目依赖的时候看到的名字&quot;
+}
+publish {
+    userOrg = &#39;你的 bintray 用户名&#39;
+    repoName = &#39;上传的 bintray 以后的名字&#39;
+    desc = &#39;this is a simple description&#39;
+    website = &#39;https://github.com/YourGithubID/Repo&#39;
+}
+</code></pre><p>那个 group 和 artifactId 我看了好多资料也没搞明白，最后自己试了几次才明白的：</p>
+<pre><code>implementation &#39;group:artifactId:version&#39; // 是这个结构的
+// 比如下边这个
+// 发布的时候 group 就是 androidx.core，artifactId 是 core-ktx，version 是 1.2.0
+implementation &#39;androidx.core:core-ktx:1.2.0&#39;
+</code></pre><p>4、配置完成以后，在终端执行：</p>
+<pre><code>./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
+</code></pre><h3 id="引入到项目中"><a href="#引入到项目中" class="headerlink" title="引入到项目中"></a>引入到项目中</h3><p>如果想直接在 gradle 引用，不做其他配置的话，你的账号应该需要是企业账号。</p>
+<p>在你第一次上传完成后，需要 add to JCenter 提交审核，像这样：</p>
+<p>[站外图片上传中…(image-4fc8bf-1584791702981)]</p>
+<p>过几个小时，通过 jcenter 那边的审核就会在 bintray 上收到 jcenter 那边的同意消息提醒。</p>
+<p>然后就可以直接引用了。</p>
+<p>如果没有提交到 jcenter 的话，那就需要在 project 的 gradle 下添加 maven 依赖：</p>
+<pre><code class="rust">maven { url &#39;https://你的用户名.bintray.com/你的 repo 目录&#39; }
+</code></pre>
+<p>之后再去 module 的 gradle 里边添加依赖，应该就没有问题啦。</p>
+<p>大概就这些内容，最后祝大家少出 bug 吧，哈哈。</p>
+<p>最后给自己打个广告。</p>
+<p><strong>不写代码的时候我偶尔写写公众号，「谈谈谈钱」，那儿是个完全不一样的世界。</strong></p>
+<p><strong>欢迎你来看看我，比心~~</strong></p>
+
+            
+                <blockquote>
+                    <p>
+                         
+                            转载请注明出处
+                        
+                        <br>
+                        Link to this article:  http://joeljt.top/2020/03/21/bintray-traps/
+                    </p>
+                </blockquote>
+            
+        </div>
+    
+</div>
+
+
+                
+                    <!-- Paradox Post Info -->
+                    
+                
+
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2019/11/14/what-the-hell-is-context/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+</footer>
+
+
+                    <!-- Import JS File -->
+
+    <script>lsloader.load("lazyload_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/lazyload.min.js", true)</script>
+
+
+
+    <script>lsloader.load("js_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/js.min.js", true)</script>
+
+
+
+    <script>lsloader.load("np_js","https://cdn.jsdelivr.net/gh/viosey/hexo-theme-material@latest/source/js/nprogress.js", true)</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Import prettify js  -->
+
+
+
+<!-- Window Load -->
+<!-- add class for prettify -->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+
+    
+    
+</script>
+
+<!-- MathJax Load-->
+
+
+<!-- Bing Background -->
+
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Custom Footer -->
+
+
+
+<script>
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.5.2 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>
