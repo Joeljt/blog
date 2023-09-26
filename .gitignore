@@ -5,7 +5,7 @@ node_cache
 dist
 .vitepress/cache
 .vitepress/temp
-package-lock.json
+# package-lock.json
 
 # local env files
 .env.local
