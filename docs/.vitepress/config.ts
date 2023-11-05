@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Joey's blog",
 
+  ignoreDeadLinks: true,
   // base: '/',
   // srcDir: 'src',
   // cleanUrls: true,
