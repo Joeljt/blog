@@ -3,23 +3,24 @@
 layout: home
 
 hero:
-  name: "Hi, there 👋"
-  text: ""
-  tagline: Welcome to my blog
+  name: Hi, there 👋
+  text: This is Joey, welcome to my blog
+  tagline: Inching along all the way up, gradually, slowly, then suddenly
+  image:
+    src: /portrait.jpg
   actions:
     - theme: brand
-      text: Markdown Examples
+      text: Take a look
       link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
-
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
 
+<style>
+:root {
+  --vp-home-hero-image-background-image: transparent;
+  --vp-home-hero-image-filter: blur(44px);
+}
+
+.image-src {
+  border-radius: 50%;
+}
+</style>
