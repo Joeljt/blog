@@ -13,14 +13,3 @@ hero:
       text: Take a look
       link: /markdown-examples
 ---
-
-<style>
-:root {
-  --vp-home-hero-image-background-image: transparent;
-  --vp-home-hero-image-filter: blur(44px);
-}
-
-.image-src {
-  border-radius: 50%;
-}
-</style>
